@@ -1,0 +1,20 @@
+# Python
+engine/.venv/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+
+# 数据缓存（原始下载不入库；engine/data/results.json 真实赛果状态要入库）
+engine/data/cache/
+
+# Node
+web/node_modules/
+web/dist/
+web/playwright-report/
+web/test-results/
+
+# 本地环境
+.env
+.env.local
