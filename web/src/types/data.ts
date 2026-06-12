@@ -2,6 +2,20 @@
 
 export type Stage = 'group' | 'r32' | 'r16' | 'qf' | 'sf' | 'third' | 'final'
 
+export interface BacktestYear {
+  n_matches: number
+  rps_baseline: number
+  rps_dc_elo: number
+  rps_dc_attack: number
+  rps_ensemble: number
+  logloss_dc_elo: number
+  calibration: number[][] // [[平均预测, 经验频率, 样本数], ...]
+}
+export interface Backtest {
+  best: { half_life_days: number; weight_dc_elo: number; weight_dc_attack: number; combined_rps: number }
+  years: Record<string, BacktestYear>
+}
+
 export interface Meta {
   run_id: string
   generated_at: string
@@ -10,7 +24,8 @@ export interface Meta {
   data: { martj42_rows: number; elo_through: string; results_count: number }
   models: {
     components: { id: string; name_zh: string; weight: number; params: Record<string, number | string> }[]
-    backtest: Record<string, unknown>
+    half_life_days: number
+    backtest: Backtest | Record<string, never>
   }
 }
 
@@ -59,6 +74,7 @@ export interface Match {
   away: string | null
   forecast?: Forecast
   slot_dist?: SlotDist
+  model_breakdown?: Record<string, { p_home: number; p_draw: number; p_away: number }>
 }
 
 export interface GroupTeam {
