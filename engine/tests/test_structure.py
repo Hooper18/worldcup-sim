@@ -11,6 +11,8 @@ from wcsim.tournament.structure import (
     STAGE_COUNTS,
     TEAMS,
     THIRD_SLOT_MATCHES,
+    has_host_advantage,
+    venue_country,
 )
 
 
@@ -121,6 +123,19 @@ def test_ko_chain_closure():
     # 每场胜者最多被一场后续比赛引用
     winner_refs = [src for srcs in KO_CHAIN.values() for src in srcs if src[0] == "W"]
     assert len(winner_refs) == len(set(winner_refs))
+
+
+def test_host_advantage():
+    # 三个东道主只在本国境内享主场加成
+    assert venue_country("Mexico City Stadium") == "MEX"
+    assert venue_country("Toronto Stadium") == "CAN"
+    assert venue_country("BC Place Vancouver") == "CAN"
+    assert venue_country("Atlanta Stadium") == "USA"
+    assert has_host_advantage("MEX", "Mexico City Stadium") is True
+    assert has_host_advantage("MEX", "Atlanta Stadium") is False  # 墨西哥客场美国
+    assert has_host_advantage("USA", "Seattle Stadium") is True
+    assert has_host_advantage("CAN", "BC Place Vancouver") is True
+    assert has_host_advantage("BRA", "Mexico City Stadium") is False  # 非东道主无加成
 
 
 def test_stage_windows_do_not_overlap():

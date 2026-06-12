@@ -144,6 +144,27 @@ KO_CHAIN: dict[int, tuple[Source, Source]] = {
 }
 
 # ---------------------------------------------------------------------------
+# 场馆 → 所在国（主办国在本国境内比赛才有主场加成；martj42 的 neutral 标记同口径）
+# ---------------------------------------------------------------------------
+_MEX_VENUES = {"Mexico City Stadium", "Guadalajara Stadium", "Monterrey Stadium"}
+_CAN_VENUES = {"Toronto Stadium", "BC Place Vancouver"}
+
+
+def venue_country(venue: str) -> str:
+    """场馆所在国的队伍代码（"MEX" / "CAN" / "USA"）。"""
+    if venue in _MEX_VENUES:
+        return "MEX"
+    if venue in _CAN_VENUES:
+        return "CAN"
+    return "USA"
+
+
+def has_host_advantage(team_code: str, venue: str) -> bool:
+    """该队在该场馆是否享有东道主主场加成。"""
+    return TEAMS[team_code].host and venue_country(venue) == team_code
+
+
+# ---------------------------------------------------------------------------
 # 组装 104 场完整结构：MATCHES[id] = {id, stage, group, kickoff_utc, venue, home, away}
 #   group  阶段：home/away 为队伍代码
 #   r32    阶段：home/away 为槽位记号（与 R32_SLOTS 一致）
