@@ -1,0 +1,47 @@
+name: 自动回填赛果
+
+on:
+  schedule:
+    # 覆盖北美比赛窗口（UTC）：北京时间约 03/07/10/13/16 点 5 班轮询
+    - cron: '0 19,23 * * *'
+    - cron: '0 2,5,8 * * *'
+  workflow_dispatch: # 手动兜底触发（关键场次可即时跑）
+
+concurrency:
+  group: update
+  cancel-in-progress: false # 不打断正在跑的模拟，排队即可
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: 安装 uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: '3.12'
+      - name: 安装依赖
+        working-directory: engine
+        run: uv sync
+      - name: 刷新赛果 + 条件重模拟 + 导出
+        working-directory: engine
+        run: uv run wcsim update -n 100000
+      - name: 提交数据（仅有变更时）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- web/public/data engine/data/results.json; then
+            echo "无数据变更，跳过提交"
+            exit 0
+          fi
+          git add web/public/data engine/data/results.json
+          PLAYED=$(python -c "import json;print(json.load(open('web/public/data/meta.json'))['matches_played'])")
+          git commit -m "自动回填：已完赛 ${PLAYED}/104，重模拟 10 万次"
+          git pull --rebase origin main || git rebase --abort
+          git push origin main
