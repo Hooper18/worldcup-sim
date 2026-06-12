@@ -27,13 +27,14 @@ engine/
     cli.py               # fetch/fit/simulate/export/update/backtest 子命令
     pipeline.py          # 端到端编排（抓数据→Elo→拟合→刷新赛果→条件模拟→导出）
     data/                # fetch（martj42+feed 缓存）/ normalize（双源队名归一）/ results_store
-    ratings/elo.py       # 全历史重放自算 Elo
-    models/              # poisson（比分矩阵+DC tau）/ dc_elo（加权 MLE 主模型）
+    ratings/             # elo（全历史重放自算）/ penalty（点球 Bradley-Terry）
+    models/              # poisson / dc_elo / dc_attack / score_model（融合接口）/ bundle / odds（去 overround）
     tournament/          # structure（赛制硬数据）/ annexe_c（495 行第三名落位）/
                          #   tiebreak（2026 头对头）/ third_place / simulate（蒙特卡洛）
+    backtest/            # runner（跨赛事 LOTO CV）/ metrics（RPS/Brier/ECE/可靠性）/ baselines（Elo-logistic）
     export/writer.py     # 写 7 类 JSON
   scripts/gen_static_data.py  # 一次性生成 fixtures_data.py + annexe_c_data.py（留档）
-  data/                  # results.json（真实赛果状态,入库）/ params.json（拟合参数,入库）/ cache/（gitignored）
+  data/                  # results.json（真实赛果状态,入库）/ params.json（拟合参数+诊断,入库）/ cache/（gitignored）
 web/
   public/data/*.json     # 引擎输出（入库）
   src/                   # pages / components / hooks / lib / types
@@ -46,11 +47,23 @@ web/
   - **纯攻防 DC**：每队独立 att/def（解析 Poisson 梯度 + 岭正则），不依赖 Elo，提供去相关信号。
   - **融合权重由 2018/2022 回测选优**：当前 H=1095 天、DC-Elo 0.3 / 攻防 0.7（约束在 [0.3,0.7]
     避免 128 场薄样本退化为单模型）。两模型回测 RPS 均优于基准（0.243→0.20/0.21）。
-- **Elo 随真实赛果更新**（每次重放到最新完赛）；**DC β/ρ、攻防参数、H、融合权重冻结在赛前**——
-  保证概率演变只反映赛果信息。
-- 融合后夺冠：西班牙 17.6% / 阿根廷 14.9% / 英格兰 9.6% / 法国 8.4%（比纯 Elo 更贴近博彩共识）。
+- **Elo 与点球能力随真实赛果更新**；**DC β/ρ、攻防参数、H、融合权重冻结在赛前**——只反映赛果信息。
+- **点球**：Bradley-Terry 能力评分（ratings/penalty.py，强岭收缩到近 50:50；德国/阿根廷强、英格兰/荷兰弱）替代硬编码 50:50。加时 λ×1/3（martj42 无分时段数据，保留理论值）。
 - **淘汰赛按中立场**（忽略东道主本土加成）；小组赛照常加 host。
-- `wcsim backtest --apply` 重跑回测并用最优参数重拟合。
+- 当前夺冠（融合 0.2/0.8 + 点球）：阿根廷 ~17.8% / 西班牙 ~16.5% / 英格兰 ~8.4%。
+
+### 科学性强化（2026-06-12 第二轮）
+- **回测 = 跨赛事 LOTO 交叉验证**：2014 年以来世界杯/欧洲杯/美洲杯/非洲杯/亚洲杯 20 届 895 场；
+  每折 (H,权重) 只在其余赛事选、留出赛事样本外评估（修掉旧版同集选参+评估的泄漏）。
+  样本外 RPS 0.189 ≈ 全量 0.188（无过拟合）；H=730 中 17/20 折、权重 0.2 中 20/20 折（稳定）。
+- **诚实基准**：Elo-logistic 两参数简单模型 RPS 0.192——融合模型 0.189 只小幅领先（不是 climatology 0.229 的虚高对照）。
+- **校准**：Brier/ECE/Wilson 可靠性图；样本外 ECE 0.019（已很校准）。
+- **参数不确定性**：`wcsim uncertainty` bootstrap → 夺冠概率置信区间（阿根廷 17.8% 实为 [9.3%,23.5%]）；
+  写 uncertainty.json，update 在有新赛果时刷新；前端夺冠条叠 95% 误差带。
+- **常数数据驱动**：RIDGE 经时序 CV 选定（0.005，模型对该值不敏感）；经验主场优势验证 Elo +100。
+- **赔率机械**：models/odds.py 去 overround（proportional/power/Shin）+ logit 共识，留插桩；
+  **默认不接实时赔率**（免费稳定的国家队大赛历史 1X2 赔率源不存在，不把脆弱爬虫塞进 cron）。
+- `wcsim backtest --apply`（约 1-2 分钟）重跑回测+选参重拟合；`wcsim uncertainty` 算区间。
 
 ## 赛制（已多源核验，写死进 structure.py / annexe_c.py）
 
