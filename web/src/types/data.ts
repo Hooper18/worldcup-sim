@@ -47,6 +47,11 @@ export interface Meta {
     components: { id: string; name_zh: string; weight: number; params: Record<string, number | string> }[]
     half_life_days: number
     backtest: Backtest | Record<string, never>
+    diagnostics?: {
+      selected_ridge: number
+      ridge_scan: Record<string, number>
+      empirical_home_advantage: { n: number; home_goal_diff: number; home_win_rate: number; log_lambda_adv: number }
+    }
   }
 }
 

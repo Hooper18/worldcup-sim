@@ -18,6 +18,7 @@ class ModelBundle:
     weight_dc_elo: float
     half_life_days: float
     backtest: dict = field(default_factory=dict)
+    diagnostics: dict = field(default_factory=dict)  # CV 选定的 ridge、经验主场优势等
 
     @property
     def weight_dc_attack(self) -> float:
@@ -30,6 +31,7 @@ class ModelBundle:
             "weight_dc_elo": self.weight_dc_elo,
             "half_life_days": self.half_life_days,
             "backtest": self.backtest,
+            "diagnostics": self.diagnostics,
         }
 
     @classmethod
@@ -40,6 +42,7 @@ class ModelBundle:
             weight_dc_elo=d["weight_dc_elo"],
             half_life_days=d["half_life_days"],
             backtest=d.get("backtest", {}),
+            diagnostics=d.get("diagnostics", {}),
         )
 
     def save(self, path: Path) -> None:

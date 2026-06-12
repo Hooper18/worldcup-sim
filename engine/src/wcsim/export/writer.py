@@ -250,6 +250,7 @@ def build_meta(
             ],
             "half_life_days": bundle.half_life_days,
             "backtest": bundle.backtest or {},
+            "diagnostics": bundle.diagnostics or {},
         },
     }
 

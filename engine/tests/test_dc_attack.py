@@ -59,6 +59,32 @@ def test_attack_predict_stronger_scores_more():
     assert lh > la
 
 
+def test_select_ridge_returns_grid_value():
+    df, _, _ = _synthetic_league(n_matches=6000)
+    grid = (0.01, 0.05, 0.2)
+    best, scan = dc_attack.select_ridge(df, cutoff="2026-01-01", ridge_grid=grid, half_life_days=1e9)
+    assert best in grid
+    assert set(scan) == set(grid)
+    assert all(v > 0 for v in scan.values())
+
+
+def test_empirical_home_advantage():
+    rows = [
+        # 主队都赢、都进更多球 → 明显主场优势
+        ("2025-01-01", "A", "B", 2, 0, "Friendly", False),
+        ("2025-02-01", "C", "D", 3, 1, "Friendly", False),
+        ("2025-03-01", "E", "F", 1, 0, "Friendly", True),  # 中立场，应被排除
+    ]
+    df = pd.DataFrame(
+        rows, columns=["date", "home_team", "away_team", "home_score", "away_score", "tournament", "neutral"]
+    ).assign(date=lambda d: pd.to_datetime(d["date"]))
+    diag = dc_attack.empirical_home_advantage(df)
+    assert diag["n"] == 2  # 中立场被排除
+    assert diag["home_win_rate"] == 1.0
+    assert diag["home_goal_diff"] == 2.0
+    assert diag["log_lambda_adv"] > 0
+
+
 def test_attack_unknown_team_uses_average():
     df, _, _ = _synthetic_league()
     params = dc_attack.fit(df, cutoff="2026-01-01", window_years=3)

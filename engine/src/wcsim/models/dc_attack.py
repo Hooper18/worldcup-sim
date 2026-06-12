@@ -71,11 +71,13 @@ def fit(
     window_years: float = config.FIT_WINDOW_YEARS,
     code_map: dict[str, str] | None = None,
     restrict_teams: list[str] | None = None,
+    ridge: float = RIDGE,
 ) -> DcAttackParams:
     """对 results（load_results 输出，martj42 队名）拟合攻防模型。
 
     code_map: martj42 队名 → 输出 key（如队伍代码）；未提供则用 martj42 原名。
     restrict_teams: 若给定，只保留至少一方在该集合内的比赛（聚焦 48 强相关对手，减小规模）。
+    ridge: 攻防参数岭惩罚强度（可由 select_ridge 交叉验证选定）。
     """
     cutoff_ts = pd.Timestamp(cutoff)
     lo = cutoff_ts - pd.Timedelta(days=window_years * 365.25)
@@ -120,7 +122,7 @@ def fit(
         lam_h = np.exp(eta_h)
         lam_a = np.exp(eta_a)
         nll = np.sum(w * (lam_h - yh * eta_h)) + np.sum(w * (lam_a - ya * eta_a))
-        nll += 0.5 * RIDGE * (np.sum(att**2) + np.sum(dff**2))
+        nll += 0.5 * ridge * (np.sum(att**2) + np.sum(dff**2))
 
         r_h = w * (lam_h - yh)
         r_a = w * (lam_a - ya)
@@ -132,8 +134,8 @@ def fit(
         np.add.at(g_att, a, r_a)  # att[away] in eta_a
         np.add.at(g_def, a, -r_h)  # -def[away] in eta_h
         np.add.at(g_def, h, -r_a)  # -def[home] in eta_a
-        g_att += RIDGE * att
-        g_def += RIDGE * dff
+        g_att += ridge * att
+        g_def += ridge * dff
         grad = np.concatenate([[g_mu, g_home], g_att, g_def])
         return nll, grad
 
@@ -201,3 +203,57 @@ def predict_lambdas(
     lam_h = float(np.exp(params.mu + ah - da + params.home_adv * host_home))
     lam_a = float(np.exp(params.mu + aa - dh + params.home_adv * host_away))
     return lam_h, lam_a
+
+
+def select_ridge(
+    results: pd.DataFrame,
+    *,
+    cutoff: str | pd.Timestamp,
+    ridge_grid: tuple[float, ...] = (0.005, 0.01, 0.02, 0.05, 0.1, 0.2),
+    val_days: int = 365,
+    half_life_days: float = config.TIME_DECAY_HALF_LIFE_DAYS,
+) -> tuple[float, dict[float, float]]:
+    """时序留出交叉验证选岭强度：在 cutoff 前一年训练、最后一年验证 W/D/L log-loss。
+
+    返回 (最优 ridge, {ridge: 验证 log-loss})。替代硬编码常数，让正则化强度由数据决定。
+    """
+    from .poisson import outcome_probs, score_matrix
+
+    cutoff_ts = pd.Timestamp(cutoff)
+    train_end = cutoff_ts - pd.Timedelta(days=val_days)
+    val = results[(results["date"] > train_end) & (results["date"] <= cutoff_ts)]
+
+    scan: dict[float, float] = {}
+    for ridge in ridge_grid:
+        params = fit(results, cutoff=train_end, half_life_days=half_life_days, ridge=ridge)
+        seen = set(params.teams)
+        v = val[val["home_team"].isin(seen) & val["away_team"].isin(seen)]
+        lls = []
+        for m in v.itertuples(index=False):
+            lh, la = predict_lambdas(params, m.home_team, m.away_team)
+            ph, pd_, pa = outcome_probs(score_matrix(lh, la, params.rho))
+            if m.home_score > m.away_score:
+                p = ph
+            elif m.home_score == m.away_score:
+                p = pd_
+            else:
+                p = pa
+            lls.append(-np.log(max(p, 1e-12)))
+        scan[ridge] = float(np.mean(lls)) if lls else float("inf")
+    best = min(scan, key=scan.get)
+    return best, scan
+
+
+def empirical_home_advantage(results: pd.DataFrame, *, since: str | None = None) -> dict:
+    """从非中立场比赛估计经验主场优势：净胜球、胜率、log-λ 优势（对照 home_adv / Elo+100）。"""
+    df = results[~results["neutral"].astype(bool)]
+    if since is not None:
+        df = df[df["date"] >= since]
+    hg = df["home_score"].to_numpy(dtype=float)
+    ag = df["away_score"].to_numpy(dtype=float)
+    return {
+        "n": int(len(df)),
+        "home_goal_diff": round(float((hg - ag).mean()), 3),
+        "home_win_rate": round(float((hg > ag).mean()), 3),
+        "log_lambda_adv": round(float(np.log(hg.mean()) - np.log(ag.mean())), 4),
+    }

@@ -87,13 +87,21 @@ def fit_bundle(
     H = half_life_days or config.TIME_DECAY_HALF_LIFE_DAYS
     _, hist = replay(df, with_history=True)
     elo_params = dc_elo.fit(hist, cutoff=CUTOFF, half_life_days=H)
-    att_params = dc_attack.fit(df, cutoff=CUTOFF, half_life_days=H)
+    # 岭强度由时序留出 CV 数据驱动选定（而非硬编码常数）
+    ridge, ridge_scan = dc_attack.select_ridge(df, cutoff=CUTOFF, half_life_days=H)
+    att_params = dc_attack.fit(df, cutoff=CUTOFF, half_life_days=H, ridge=ridge)
+    diagnostics = {
+        "selected_ridge": ridge,
+        "ridge_scan": {str(k): round(v, 4) for k, v in ridge_scan.items()},
+        "empirical_home_advantage": dc_attack.empirical_home_advantage(df, since="2016-01-01"),
+    }
     bundle = ModelBundle(
         dc_elo=elo_params,
         dc_attack=_attack_params_by_code(att_params),
         weight_dc_elo=weight_dc_elo,
         half_life_days=H,
         backtest=backtest or {},
+        diagnostics=diagnostics,
     )
     bundle.save(config.PARAMS_PATH)
     return bundle

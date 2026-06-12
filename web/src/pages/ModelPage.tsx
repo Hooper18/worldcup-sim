@@ -12,6 +12,7 @@ export default function ModelPage() {
   const comps = data.models.components
   const bt = data.models.backtest as Backtest
   const hasBacktest = bt && 'years' in bt
+  const diag = data.models.diagnostics
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
@@ -110,7 +111,13 @@ export default function ModelPage() {
       <section>
         <h2 className="mb-2 text-lg font-medium">口径与局限</h2>
         <ul className="space-y-1.5 text-sm text-ink-secondary">
-          <li>· Elo 随真实赛果更新；模型系数与融合权重冻结在赛前，保证概率变化只反映赛果信息。</li>
+          <li>· Elo 与点球能力随真实赛果更新；模型系数与融合权重冻结在赛前，保证概率变化只反映赛果信息。</li>
+          {diag && (
+            <li>
+              · 正则化强度由时序交叉验证选定（当前 {diag.selected_ridge}，模型对该值不敏感）；
+              经验主场优势（近 10 年非中立场净胜 {diag.empirical_home_advantage.home_goal_diff} 球）与 Elo +100 设定一致。
+            </li>
+          )}
           <li>· 纯历史/Elo 口径对近年强队更敏感，可能与博彩盘略有出入。</li>
           <li>· 淘汰赛按中立场建模；小组赛对东道主本土场次计入主场优势。</li>
           <li>· 不含伤病、阵容、临场状态等模型外信息。</li>
