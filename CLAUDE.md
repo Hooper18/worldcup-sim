@@ -41,15 +41,16 @@ web/
 
 ## 模型口径（重要）
 
-- **主模型 DC-on-Elo**：`log λ = β0 + β1·ΔElo/400 + γ·host`，Dixon-Coles 低比分 tau 修正，
-  近 8 年加权 MLE（时间衰减半衰期 730 天 × 赛事 K 权重），scipy L-BFGS-B 4 参数。
-  当前拟合：β0=0.10 β1=0.73 γ=0.23 ρ=-0.043（params.json）。
-- **Elo**：随真实赛果更新（每次重放到最新完赛）。
-- **DC 参数 β/ρ/H 冻结在赛前拟合值**——一届几十场重拟只引噪声；冻结保证概率演变曲线
-  只反映赛果信息。M1 加第二模型（纯攻防 DC）+ 融合 + 2018/2022 回测。
-- 纯历史/Elo 模型对西班牙较自信（夺冠 ~22%）、德国偏低（~3%），与 Zeileis 2026 博彩共识
-  （西班牙 14.5%）方向一致但更极端，属"纯战绩"口径特征；M1 融合会向共识靠拢。
-- **淘汰赛按中立场**（忽略东道主本土加成，世界杯传统视为中立）；小组赛照常加 host。
+- **融合模型**（params.json/ModelBundle）：DC-on-Elo 与纯攻防 Dixon-Coles 按比分矩阵加权融合。
+  - **DC-on-Elo**：`log λ = β0 + β1·ΔElo/400 + γ·host`，DC 低比分 tau 修正，加权 MLE 4 参数。
+  - **纯攻防 DC**：每队独立 att/def（解析 Poisson 梯度 + 岭正则），不依赖 Elo，提供去相关信号。
+  - **融合权重由 2018/2022 回测选优**：当前 H=1095 天、DC-Elo 0.3 / 攻防 0.7（约束在 [0.3,0.7]
+    避免 128 场薄样本退化为单模型）。两模型回测 RPS 均优于基准（0.243→0.20/0.21）。
+- **Elo 随真实赛果更新**（每次重放到最新完赛）；**DC β/ρ、攻防参数、H、融合权重冻结在赛前**——
+  保证概率演变只反映赛果信息。
+- 融合后夺冠：西班牙 17.6% / 阿根廷 14.9% / 英格兰 9.6% / 法国 8.4%（比纯 Elo 更贴近博彩共识）。
+- **淘汰赛按中立场**（忽略东道主本土加成）；小组赛照常加 host。
+- `wcsim backtest --apply` 重跑回测并用最优参数重拟合。
 
 ## 赛制（已多源核验，写死进 structure.py / annexe_c.py）
 
@@ -80,8 +81,8 @@ npm run dev / test / build
 
 ## 测试
 
-引擎 78 用例（test_structure/annexe_c/normalize/results_store/elo/poisson/dc_fit/tiebreak/simulate/export）；
-前端 vitest 7 用例（ProbBar 边界 + format）。
+引擎 85 用例（structure/annexe_c/normalize/results_store/elo/poisson/dc_fit/dc_attack/tiebreak/simulate/export）；
+前端 vitest 7 用例 + Playwright smoke 5 用例（page.route stub data，测真实构建产物）。CI 双 job 全绿。
 
 ## 坑位
 
@@ -98,7 +99,11 @@ npm run dev / test / build
 
 ## 进度
 
-- **M0 完成**（2026-06-12）：引擎全链路 + 前端 MVP（仪表盘/小组页/对阵树）+ 首版预测上线。
-  揭幕战墨西哥 2-0 南非已回填条件化。
-- **M1 待办**：第二模型 + 融合、2018/2022 回测、自动回填 GitHub Actions cron、
-  概率演变页 + 模型说明页 + 单场详情页、前端测试补全 + CI。
+- **M0 + M1 完成**（2026-06-12）：
+  - 引擎全链路：数据管道 → Elo → DC-on-Elo + 纯攻防双模型融合 → 蒙特卡洛 → 7 类 JSON
+  - 前端 6 页：仪表盘 / 小组（总览+详情）/ 对阵树 / 单场详情 / 概率演变 / 模型说明
+  - 2018/2022 回测选优；GitHub Actions CI（双 job）+ 自动回填 cron（5 班）
+  - 揭幕战墨西哥 2-0 南非已回填条件化；首版预测已生成
+  - GitHub: https://github.com/Hooper18/worldcup-sim
+- **待用户操作**：Vercel 导入仓库（root=`web/`）+ Cloudflare 子域名 CNAME。
+- **赛中可选增强**：历史快照浏览页、XGBoost 第三模型、API-Football 实时比分条、FIFA 排名字段。
