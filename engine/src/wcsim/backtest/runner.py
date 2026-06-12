@@ -20,7 +20,7 @@ import pandas as pd
 from ..models import dc_attack, dc_elo
 from ..models.poisson import outcome_probs, score_matrix
 from ..ratings.elo import replay
-from . import metrics
+from . import baselines, metrics
 
 # 纳入回测的洲际/世界决赛圈（martj42 tournament 字段值）
 TRACKED_TOURNAMENTS = [
@@ -105,12 +105,18 @@ def _outcomes(matches: pd.DataFrame) -> np.ndarray:
 
 
 def event_probs(results: pd.DataFrame, cutoff, matches: pd.DataFrame, H: float):
-    """在 cutoff 前拟合两模型，预测该赛事比赛的 W/D/L。返回 (elo_p, att_p, outcomes)。"""
+    """在 cutoff 前拟合模型，预测该赛事比赛 W/D/L。返回 (elo_p, att_p, outcomes, elo_baseline_p)。"""
     train = results[results["date"] <= pd.Timestamp(cutoff)]
     ratings, hist = replay(train, with_history=True)
     elo_params = dc_elo.fit(hist, cutoff=cutoff, half_life_days=H)
     att_params = dc_attack.fit(train, cutoff=cutoff, half_life_days=H)
-    return _elo_probs(elo_params, ratings, matches), _attack_probs(att_params, matches), _outcomes(matches)
+    b, c = baselines.fit(hist, cutoff=cutoff, half_life_days=H)
+    return (
+        _elo_probs(elo_params, ratings, matches),
+        _attack_probs(att_params, matches),
+        _outcomes(matches),
+        baselines.probs(b, c, ratings, matches),
+    )
 
 
 def build_cache(results: pd.DataFrame, events: list[dict], half_lives: list[float]) -> dict:
@@ -148,11 +154,11 @@ def loto_cv(cache, events, half_lives, weight_grid) -> dict:
     """留一届交叉验证：每折在其余赛事上选 (H,w)，留出赛事上样本外评估。"""
     names = [e["name"] for e in events]
     per_fold = []
-    oos_probs, oos_outc = [], []
+    oos_probs, oos_outc, oos_base = [], [], []
     for test in events:
         others = [n for n in names if n != test["name"]]
         H, w, _ = _best_hw(cache, others, half_lives, weight_grid)
-        elo_p, att_p, outc = cache[(test["name"], H)]
+        elo_p, att_p, outc, base_p = cache[(test["name"], H)]
         ens = w * elo_p + (1 - w) * att_p
         per_fold.append(
             {
@@ -165,19 +171,23 @@ def loto_cv(cache, events, half_lives, weight_grid) -> dict:
         )
         oos_probs.append(ens)
         oos_outc.append(outc)
+        oos_base.append(base_p)
     all_probs = np.vstack(oos_probs)
     all_outc = np.concatenate(oos_outc)
+    all_base = np.vstack(oos_base)
     sel_H = Counter(f["selected_H"] for f in per_fold)
     sel_w = Counter(f["selected_w"] for f in per_fold)
-    base = np.tile(BASE_RATE, (len(all_outc), 1))
+    clim = np.tile(BASE_RATE, (len(all_outc), 1))
     return {
         "oos_rps": round(metrics.rps(all_probs, all_outc), 4),
         "oos_logloss": round(metrics.log_loss(all_probs, all_outc), 4),
         "oos_brier": round(metrics.brier_score(all_probs, all_outc), 4),
         "oos_ece": round(metrics.ece(all_probs, all_outc), 4),
-        "baseline_logloss": round(metrics.log_loss(base, all_outc), 4),
-        "logloss_gain_vs_baseline": round(
-            metrics.log_loss(base, all_outc) - metrics.log_loss(all_probs, all_outc), 4
+        "climatology_rps": round(metrics.rps(clim, all_outc), 4),
+        "elo_baseline_rps": round(metrics.rps(all_base, all_outc), 4),
+        "elo_baseline_logloss": round(metrics.log_loss(all_base, all_outc), 4),
+        "logloss_gain_vs_elo": round(
+            metrics.log_loss(all_base, all_outc) - metrics.log_loss(all_probs, all_outc), 4
         ),
         "reliability": metrics.reliability_diagram(all_probs, all_outc),
         "n_folds": len(events),
@@ -226,13 +236,14 @@ def select_best(
     for dn in detail_events:
         if dn not in ev_by_name:
             continue
-        elo_p, att_p, outc = cache[(dn, H_star)]
+        elo_p, att_p, outc, base_p = cache[(dn, H_star)]
         ens = w_star * elo_p + (1 - w_star) * att_p
-        base = np.tile(BASE_RATE, (len(outc), 1))
+        clim = np.tile(BASE_RATE, (len(outc), 1))
         yr = ev_by_name[dn]["year"]
         years[str(yr)] = {
             "n_matches": int(len(outc)),
-            "rps_baseline": round(metrics.rps(base, outc), 4),
+            "rps_baseline": round(metrics.rps(clim, outc), 4),
+            "rps_elo_baseline": round(metrics.rps(base_p, outc), 4),
             "rps_dc_elo": round(metrics.rps(elo_p, outc), 4),
             "rps_dc_attack": round(metrics.rps(att_p, outc), 4),
             "rps_ensemble": round(metrics.rps(ens, outc), 4),
@@ -250,6 +261,7 @@ def select_best(
             "n_events": len(events),
             "n_matches": loto["n_matches"],
             "rps_baseline": round(metrics.rps(base_all, outc_all), 4),
+            "rps_elo_baseline": loto["elo_baseline_rps"],  # 更强的"简单 Elo 模型"基准
         },
         "years": years,
         "loto": loto,

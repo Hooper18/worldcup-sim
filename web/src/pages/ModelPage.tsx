@@ -54,11 +54,16 @@ export default function ModelPage() {
         {hasBacktest && bt.loto ? (
           <Card className="space-y-4 px-4 py-4">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <Stat label="样本外 RPS" value={bt.loto.oos_rps.toFixed(3)} hint={`基准 ${bt.best.rps_baseline.toFixed(3)}`} />
+              <Stat label="融合模型 RPS" value={bt.loto.oos_rps.toFixed(3)} hint="样本外，越低越好" />
+              <Stat label="简单 Elo 基准" value={bt.loto.elo_baseline_rps.toFixed(3)} hint={`弱基准 ${bt.loto.climatology_rps.toFixed(3)}`} />
               <Stat label="校准误差 ECE" value={bt.loto.oos_ece.toFixed(3)} hint="越接近 0 越可信" />
-              <Stat label="log-loss 增益" value={`+${bt.loto.logloss_gain_vs_baseline.toFixed(3)}`} hint="相对基准" />
               <Stat label="验证规模" value={`${bt.best.n_events} 届`} hint={`${bt.best.n_matches} 场`} />
             </div>
+            <p className="text-xs text-ink-faint">
+              诚实对标：融合模型（{bt.loto.oos_rps.toFixed(3)}）优于"只用 Elo 差的两参数简单模型"
+              （{bt.loto.elo_baseline_rps.toFixed(3)}），但领先幅度不大——这符合"简单模型很难被大幅超越"的足球预测共识；
+              两者都远好于永远报历史平均的弱基准（{bt.loto.climatology_rps.toFixed(3)}）。
+            </p>
 
             <div className="overflow-x-auto">
               <table className="w-full text-sm">

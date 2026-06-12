@@ -102,7 +102,8 @@ def _cmd_backtest(args: argparse.Namespace) -> int:
               f"DC-Elo={m['rps_dc_elo']}  攻防={m['rps_dc_attack']}  融合={m['rps_ensemble']}")
     print(f"[生产参数] H={best['half_life_days']} 天  权重 DC-Elo={best['weight_dc_elo']}/"
           f"攻防={best['weight_dc_attack']}（全量 pooled RPS={best['pooled_rps']}）")
-    print(f"[诚实性能] LOTO 留一届样本外 RPS={best['oos_rps']}（基准 climatology={best['rps_baseline']}）")
+    print(f"[诚实性能] LOTO 留一届样本外 RPS={best['oos_rps']}"
+          f"（climatology 基准={best['rps_baseline']}，更强的 Elo 基准={best['rps_elo_baseline']}）")
     print(f"[选择稳定性] 各折选中 H 分布={loto['selected_H_counts']}  权重分布={loto['selected_w_counts']}")
     if args.apply:
         pipeline.fit_bundle(

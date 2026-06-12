@@ -5,6 +5,7 @@ export type Stage = 'group' | 'r32' | 'r16' | 'qf' | 'sf' | 'third' | 'final'
 export interface BacktestYear {
   n_matches: number
   rps_baseline: number
+  rps_elo_baseline: number
   rps_dc_elo: number
   rps_dc_attack: number
   rps_ensemble: number
@@ -19,6 +20,7 @@ export interface Backtest {
     pooled_rps: number
     oos_rps: number // 留一届交叉验证的样本外 RPS（诚实 headline）
     rps_baseline: number
+    rps_elo_baseline: number
     n_events: number
     n_matches: number
   }
@@ -28,7 +30,9 @@ export interface Backtest {
     oos_logloss: number
     oos_brier: number
     oos_ece: number
-    logloss_gain_vs_baseline: number
+    climatology_rps: number
+    elo_baseline_rps: number
+    logloss_gain_vs_elo: number
     n_folds: number
     n_matches: number
     reliability: { p_pred: number; freq: number; ci_lo: number; ci_hi: number; n: number }[]

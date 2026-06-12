@@ -177,12 +177,14 @@
       "oos_rps": 0.1887,
       "n_events": 20,
       "n_matches": 895,
-      "rps_baseline": 0.2294
+      "rps_baseline": 0.2294,
+      "rps_elo_baseline": 0.1919
     },
     "years": {
       "2018": {
         "n_matches": 64,
         "rps_baseline": 0.2426,
+        "rps_elo_baseline": 0.2126,
         "rps_dc_elo": 0.2129,
         "rps_dc_attack": 0.2002,
         "rps_ensemble": 0.202,
@@ -233,6 +235,7 @@
       "2022": {
         "n_matches": 64,
         "rps_baseline": 0.234,
+        "rps_elo_baseline": 0.2155,
         "rps_dc_elo": 0.215,
         "rps_dc_attack": 0.2155,
         "rps_ensemble": 0.215,
@@ -291,8 +294,10 @@
       "oos_logloss": 0.9592,
       "oos_brier": 0.5704,
       "oos_ece": 0.0195,
-      "baseline_logloss": 1.0799,
-      "logloss_gain_vs_baseline": 0.1207,
+      "climatology_rps": 0.2294,
+      "elo_baseline_rps": 0.1919,
+      "elo_baseline_logloss": 0.9694,
+      "logloss_gain_vs_elo": 0.0102,
       "reliability": [
         {
           "p_pred": 0.071,
