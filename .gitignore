@@ -18,3 +18,6 @@ web/test-results/
 # 本地环境
 .env
 .env.local
+
+# Vercel 本地链接配置
+.vercel
