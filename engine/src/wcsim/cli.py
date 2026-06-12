@@ -26,9 +26,14 @@ def _cmd_fetch(args: argparse.Namespace) -> int:
 
 
 def _cmd_fit(args: argparse.Namespace) -> int:
-    params = pipeline.fit_params(force_fetch=args.force)
-    print(f"[fit] {params.n_matches} 场拟合：β0={params.beta0:.4f} β1={params.beta1:.4f} "
-          f"γ={params.gamma:.4f} ρ={params.rho:.4f} → {config.PARAMS_PATH}")
+    bundle = pipeline.fit_bundle(force_fetch=args.force)
+    e = bundle.dc_elo
+    print(f"[fit] DC-on-Elo（{e.n_matches} 场）β0={e.beta0:.4f} β1={e.beta1:.4f} "
+          f"γ={e.gamma:.4f} ρ={e.rho:.4f}")
+    print(f"[fit] 纯攻防（{bundle.dc_attack.n_matches} 场）μ={bundle.dc_attack.mu:.4f} "
+          f"host={bundle.dc_attack.home_adv:.4f} ρ={bundle.dc_attack.rho:.4f}")
+    print(f"[fit] 权重 DC-on-Elo={bundle.weight_dc_elo} 攻防={bundle.weight_dc_attack:.2f} "
+          f"H={bundle.half_life_days} → {config.PARAMS_PATH}")
     return 0
 
 
@@ -69,7 +74,27 @@ def _cmd_update(args: argparse.Namespace) -> int:
 
 
 def _cmd_backtest(args: argparse.Namespace) -> int:
-    print("[backtest] 将在 M1 实现（2018/2022 截断回测）")
+    """2018/2022 回测选最优 H 与融合权重，按需重拟合 2026 参数。"""
+    from .backtest import runner
+    from .data import fetch
+
+    df = fetch.load_results(force=args.force)
+    res = runner.select_best(df)
+    best = res["best"]
+    print("=== 回测结果（RPS 越低越好）===")
+    for year, m in res["years"].items():
+        print(f"[{year}] {m['n_matches']} 场  基准={m['rps_baseline']}  "
+              f"DC-Elo={m['rps_dc_elo']}  攻防={m['rps_dc_attack']}  融合={m['rps_ensemble']}")
+    print(f"[最优] H={best['half_life_days']} 天  权重 DC-Elo={best['weight_dc_elo']}/"
+          f"攻防={best['weight_dc_attack']}  合并 RPS={best['combined_rps']}")
+    if args.apply:
+        pipeline.fit_bundle(
+            force_fetch=False,
+            half_life_days=best["half_life_days"],
+            weight_dc_elo=best["weight_dc_elo"],
+            backtest=res,
+        )
+        print(f"[backtest] 已用最优参数重拟合并写入 {config.PARAMS_PATH}")
     return 0
 
 
@@ -94,8 +119,9 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("--force", action="store_true", help="强制重新下载数据")
         p.set_defaults(func=fn)
 
-    p_bt = sub.add_parser("backtest", help="回测")
-    p_bt.add_argument("--year", type=int, choices=[2018, 2022], required=True)
+    p_bt = sub.add_parser("backtest", help="2018/2022 回测 + 选最优 H/权重")
+    p_bt.add_argument("--apply", action="store_true", help="用最优参数重拟合并写 params.json")
+    p_bt.add_argument("--force", action="store_true", help="强制重新下载数据")
     p_bt.set_defaults(func=_cmd_backtest)
 
     args = parser.parse_args(argv)

@@ -17,8 +17,8 @@ from dataclasses import dataclass
 import numpy as np
 
 from .. import config
-from ..models.dc_elo import DcEloParams, predict_lambdas
-from ..models.poisson import score_matrix
+from ..models.dc_elo import DcEloParams
+from ..models.score_model import DcEloModel, ScoreModel
 from . import annexe_c
 from .structure import (
     GROUP_LETTERS,
@@ -61,30 +61,23 @@ class SimResult:
 
 
 class ScoreSampler:
-    """按 DC-on-Elo 参数与 Elo 评分生成比分。elo_by_code 的 key 为队伍代码。"""
+    """用任意 ScoreModel（DC-on-Elo / 攻防 / 融合）生成比分。"""
 
-    def __init__(self, params: DcEloParams, elo_by_code: dict[str, float]):
-        self.params = params
-        self.elo = elo_by_code
+    def __init__(self, model: ScoreModel):
+        self.model = model
         self._neutral_cdf: np.ndarray | None = None
         self._neutral_et_cdf: np.ndarray | None = None
-
-    def _lambdas(self, hc: str, ac: str, *, host_h: bool, host_a: bool) -> tuple[float, float]:
-        return predict_lambdas(
-            self.params, self.elo[hc], self.elo[ac], host_home=host_h, host_away=host_a
-        )
 
     def group_match_goals(
         self, match: dict, n: int, rng: np.random.Generator
     ) -> tuple[np.ndarray, np.ndarray]:
         hc, ac = match["home"], match["away"]
-        lh, la = self._lambdas(
+        mat = self.model.matrix(
             hc,
             ac,
-            host_h=has_host_advantage(hc, match["venue"]),
-            host_a=has_host_advantage(ac, match["venue"]),
-        )
-        mat = score_matrix(lh, la, self.params.rho).ravel()
+            host_home=has_host_advantage(hc, match["venue"]),
+            host_away=has_host_advantage(ac, match["venue"]),
+        ).ravel()
         flat = rng.choice(mat.size, size=n, p=mat / mat.sum())
         return flat // GRID, flat % GRID
 
@@ -93,8 +86,9 @@ class ScoreSampler:
         tensor = np.empty((48, 48, GRID * GRID))
         for i, ci in enumerate(CODES):
             for j, cj in enumerate(CODES):
-                lh, la = self._lambdas(ci, cj, host_h=False, host_a=False)
-                mat = score_matrix(lh * factor, la * factor, self.params.rho).ravel()
+                mat = self.model.matrix(
+                    ci, cj, host_home=False, host_away=False, factor=factor
+                ).ravel()
                 tensor[i, j] = np.cumsum(mat / mat.sum())
         return tensor
 
@@ -202,8 +196,8 @@ def _simulate_group(
 
 
 def simulate(
-    params: DcEloParams,
-    elo_by_code: dict[str, float],
+    model: ScoreModel | DcEloParams,
+    elo_by_code: dict[str, float] | None = None,
     *,
     n_sims: int = config.N_SIMS_DEFAULT,
     fixed_results: dict[int, dict] | None = None,
@@ -212,13 +206,17 @@ def simulate(
 ) -> SimResult:
     """跑 n_sims 次整届模拟。
 
+    model: ScoreModel（DC-on-Elo / 攻防 / 融合）。为向后兼容也接受 (DcEloParams, elo_by_code)。
     fixed_results: {match_id: {"h","a","after","pen_winner?"}}，已完赛场次固定不抽样。
     tiebreak_key: {code: 数值}，小组/第三名最终兜底（建议用赛前 Elo），缺省全 0。
     """
+    if isinstance(model, DcEloParams):
+        assert elo_by_code is not None, "传 DcEloParams 时需同时给 elo_by_code"
+        model = DcEloModel(model, elo_by_code)
     fixed = fixed_results or {}
     tiebreak_key = tiebreak_key or {}
     rng = np.random.default_rng(seed)
-    sampler = ScoreSampler(params, elo_by_code)
+    sampler = ScoreSampler(model)
     tk_by_global = np.array([tiebreak_key.get(c, 0.0) for c in CODES])
 
     first_idx: dict[str, np.ndarray] = {}

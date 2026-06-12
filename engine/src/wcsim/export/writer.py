@@ -13,8 +13,9 @@ from typing import Any
 import numpy as np
 
 from .. import config
-from ..models.dc_elo import DcEloParams, predict_lambdas
-from ..models.poisson import outcome_probs, score_matrix, top_scores
+from ..models.bundle import ModelBundle
+from ..models.poisson import outcome_probs, top_scores
+from ..models.score_model import DcAttackModel, DcEloModel, ScoreModel
 from ..tournament.simulate import CODES, SimResult
 from ..tournament.structure import (
     GROUP_LETTERS,
@@ -47,16 +48,15 @@ def _round(x: float, n: int = 4) -> float:
 
 
 def match_forecast(
-    params: DcEloParams,
-    elo: dict[str, float],
+    model: ScoreModel,
     home: str,
     away: str,
     *,
     host_home: bool = False,
     host_away: bool = False,
 ) -> dict:
-    lh, la = predict_lambdas(params, elo[home], elo[away], host_home=host_home, host_away=host_away)
-    mat = score_matrix(lh, la, params.rho)
+    lh, la = model.lambdas(home, away, host_home=host_home, host_away=host_away)
+    mat = model.matrix(home, away, host_home=host_home, host_away=host_away)
     ph, pd_, pa = outcome_probs(mat)
     return {
         "p_home": _round(ph),
@@ -71,6 +71,16 @@ def match_forecast(
             [_round(mat[h, a]) for a in range(DISPLAY_GRID)] for h in range(DISPLAY_GRID)
         ],
     }
+
+
+def _model_breakdown(
+    components: list[tuple[str, ScoreModel]], home: str, away: str, host_home: bool, host_away: bool
+) -> dict:
+    out = {}
+    for mid, m in components:
+        ph, pd_, pa = outcome_probs(m.matrix(home, away, host_home=host_home, host_away=host_away))
+        out[mid] = {"p_home": _round(ph), "p_draw": _round(pd_), "p_away": _round(pa)}
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -95,8 +105,8 @@ def build_teams(elo: dict[str, float], fifa_rank: dict[str, int] | None = None) 
 
 
 def build_matches(
-    params: DcEloParams,
-    elo: dict[str, float],
+    model: ScoreModel,
+    components: list[tuple[str, ScoreModel]],
     results: dict[int, dict],
     sim: SimResult,
 ) -> list[dict]:
@@ -114,13 +124,12 @@ def build_matches(
         }
         if m["stage"] == "group":
             hc, ac = m["home"], m["away"]
+            hh = has_host_advantage(hc, m["venue"])
+            ha = has_host_advantage(ac, m["venue"])
             entry["home"] = hc
             entry["away"] = ac
-            entry["forecast"] = match_forecast(
-                params, elo, hc, ac,
-                host_home=has_host_advantage(hc, m["venue"]),
-                host_away=has_host_advantage(ac, m["venue"]),
-            )
+            entry["forecast"] = match_forecast(model, hc, ac, host_home=hh, host_away=ha)
+            entry["model_breakdown"] = _model_breakdown(components, hc, ac, hh, ha)
         else:
             # 淘汰赛：占位记号 + 槽位归属分布（谁最可能占这个位置）
             entry["home"] = m["home"] if m["stage"] == "r32" else None
@@ -204,11 +213,11 @@ def build_meta(
     run_id: str,
     generated_at: str,
     sim: SimResult,
-    params: DcEloParams,
+    bundle: ModelBundle,
     results: dict[int, dict],
     data_info: dict,
-    backtest: dict | None = None,
 ) -> dict:
+    elo_p = bundle.dc_elo
     return {
         "run_id": run_id,
         "generated_at": generated_at,
@@ -220,11 +229,27 @@ def build_meta(
                 {
                     "id": "dc_elo",
                     "name_zh": "DC-on-Elo（Dixon-Coles × Elo）",
-                    "weight": 1.0,
-                    "params": params.to_dict(),
-                }
+                    "weight": _round(bundle.weight_dc_elo, 3),
+                    "params": {
+                        "beta0": _round(elo_p.beta0),
+                        "beta1": _round(elo_p.beta1),
+                        "gamma": _round(elo_p.gamma),
+                        "rho": _round(elo_p.rho),
+                    },
+                },
+                {
+                    "id": "dc_attack",
+                    "name_zh": "纯攻防 Dixon-Coles",
+                    "weight": _round(bundle.weight_dc_attack, 3),
+                    "params": {
+                        "mu": _round(bundle.dc_attack.mu),
+                        "home_adv": _round(bundle.dc_attack.home_adv),
+                        "rho": _round(bundle.dc_attack.rho),
+                    },
+                },
             ],
-            "backtest": backtest or {},
+            "half_life_days": bundle.half_life_days,
+            "backtest": bundle.backtest or {},
         },
     }
 
@@ -274,21 +299,25 @@ def export_all(
     *,
     run_id: str,
     generated_at: str,
-    params: DcEloParams,
+    bundle: ModelBundle,
     elo: dict[str, float],
     results: dict[int, dict],
     sim: SimResult,
     data_info: dict,
     fifa_rank: dict[str, int] | None = None,
-    backtest: dict | None = None,
     out_dir: Path | None = None,
 ) -> None:
     out_dir = out_dir or config.WEB_DATA_DIR
+    model = bundle.build_model(elo)
+    components: list[tuple[str, ScoreModel]] = [
+        ("dc_elo", DcEloModel(bundle.dc_elo, elo)),
+        ("dc_attack", DcAttackModel(bundle.dc_attack)),
+    ]
     teams = build_teams(elo, fifa_rank)
-    matches = build_matches(params, elo, results, sim)
+    matches = build_matches(model, components, results, sim)
     groups = build_groups(results, sim)
     knockout = build_knockout(sim)
-    meta = build_meta(run_id, generated_at, sim, params, results, data_info, backtest)
+    meta = build_meta(run_id, generated_at, sim, bundle, results, data_info)
 
     _write_json(out_dir / "meta.json", meta)
     _write_json(out_dir / "teams.json", teams)

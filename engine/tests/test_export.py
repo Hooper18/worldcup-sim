@@ -8,7 +8,10 @@ import numpy as np
 import pytest
 
 from wcsim.export import writer
+from wcsim.models.bundle import ModelBundle
+from wcsim.models.dc_attack import DcAttackParams
 from wcsim.models.dc_elo import DcEloParams
+from wcsim.models.score_model import DcEloModel
 from wcsim.tournament.simulate import CODES, simulate
 from wcsim.tournament.structure import GROUP_LETTERS, MATCHES, TEAMS
 
@@ -27,6 +30,23 @@ def elo():
 
 
 @pytest.fixture(scope="module")
+def bundle(params, elo):
+    att = DcAttackParams(
+        mu=0.1, home_adv=0.25, rho=-0.04,
+        att={c: 0.5 - 0.02 * i for i, c in enumerate(CODES)},
+        def_={c: -0.5 + 0.02 * i for i, c in enumerate(CODES)},
+        half_life_days=730, n_matches=7000, cutoff="2026-06-11", teams=CODES,
+    )
+    return ModelBundle(dc_elo=params, dc_attack=att, weight_dc_elo=0.6, half_life_days=730,
+                       backtest={"best": {"weight_dc_elo": 0.6}})
+
+
+@pytest.fixture(scope="module")
+def model(bundle, elo):
+    return bundle.build_model(elo)
+
+
+@pytest.fixture(scope="module")
 def sim(params, elo):
     tk = dict(elo)
     return simulate(params, elo, n_sims=2000, tiebreak_key=tk, seed=5)
@@ -40,8 +60,13 @@ def test_build_teams_complete(elo):
         assert t["name_zh"] == TEAMS[c].name_zh
 
 
-def test_build_matches_104_with_forecast(params, elo, sim):
-    matches = writer.build_matches(params, elo, {}, sim)
+def _components(bundle, elo):
+    from wcsim.models.score_model import DcAttackModel
+    return [("dc_elo", DcEloModel(bundle.dc_elo, elo)), ("dc_attack", DcAttackModel(bundle.dc_attack))]
+
+
+def test_build_matches_104_with_forecast(bundle, model, elo, sim):
+    matches = writer.build_matches(model, _components(bundle, elo), {}, sim)
     assert len(matches) == 104
     group_matches = [m for m in matches if m["stage"] == "group"]
     assert len(group_matches) == 72
@@ -50,15 +75,17 @@ def test_build_matches_104_with_forecast(params, elo, sim):
         assert abs(fc["p_home"] + fc["p_draw"] + fc["p_away"] - 1.0) < 1e-3
         assert len(fc["top_scores"]) == 8
         assert len(fc["score_matrix"]) == 6 and len(fc["score_matrix"][0]) == 6
+        # 双模型分解
+        assert set(m["model_breakdown"]) == {"dc_elo", "dc_attack"}
     # 淘汰赛有 slot_dist
     r32 = [m for m in matches if m["stage"] == "r32"]
     assert len(r32) == 16
     assert all("slot_dist" in m for m in r32)
 
 
-def test_build_matches_finished_status(params, elo, sim):
+def test_build_matches_finished_status(bundle, model, elo, sim):
     results = {1: {"h": 2, "a": 1, "after": "FT"}}
-    matches = writer.build_matches(params, elo, results, sim)
+    matches = writer.build_matches(model, _components(bundle, elo), results, sim)
     m1 = next(m for m in matches if m["id"] == 1)
     assert m1["status"] == "finished"
     assert m1["result"] == {"h": 2, "a": 1, "after": "FT"}
@@ -98,11 +125,11 @@ def test_build_knockout_monotonic(sim):
     assert len(ko["bracket"]) == 32
 
 
-def test_full_export_writes_all_files(params, elo, sim, tmp_path):
+def test_full_export_writes_all_files(bundle, elo, sim, tmp_path):
     writer.export_all(
         run_id="20260612T0000Z",
         generated_at="2026-06-12T00:00:00Z",
-        params=params,
+        bundle=bundle,
         elo=elo,
         results={},
         sim=sim,
@@ -131,8 +158,8 @@ def test_evolution_append_idempotent(sim, tmp_path):
     assert len(evo3["teams"]["ESP"]["champion"]) == 2
 
 
-def test_match_forecast_stronger_team_favored(params, elo):
+def test_match_forecast_stronger_team_favored(model):
     # CODES[0] 远强于 CODES[-1]
-    fc = writer.match_forecast(params, elo, CODES[0], CODES[-1])
+    fc = writer.match_forecast(model, CODES[0], CODES[-1])
     assert fc["p_home"] > fc["p_away"]
     assert fc["lambda_home"] > fc["lambda_away"]
