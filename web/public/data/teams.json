@@ -1,0 +1,434 @@
+{
+  "MEX": {
+    "name_zh": "墨西哥",
+    "name_en": "Mexico",
+    "group": "A",
+    "flag": "🇲🇽",
+    "elo": 1958,
+    "fifa_rank": null,
+    "host": true
+  },
+  "RSA": {
+    "name_zh": "南非",
+    "name_en": "South Africa",
+    "group": "A",
+    "flag": "🇿🇦",
+    "elo": 1662,
+    "fifa_rank": null,
+    "host": false
+  },
+  "KOR": {
+    "name_zh": "韩国",
+    "name_en": "Korea Republic",
+    "group": "A",
+    "flag": "🇰🇷",
+    "elo": 1879,
+    "fifa_rank": null,
+    "host": false
+  },
+  "CZE": {
+    "name_zh": "捷克",
+    "name_en": "Czechia",
+    "group": "A",
+    "flag": "🇨🇿",
+    "elo": 1801,
+    "fifa_rank": null,
+    "host": false
+  },
+  "CAN": {
+    "name_zh": "加拿大",
+    "name_en": "Canada",
+    "group": "B",
+    "flag": "🇨🇦",
+    "elo": 1898,
+    "fifa_rank": null,
+    "host": true
+  },
+  "BIH": {
+    "name_zh": "波黑",
+    "name_en": "Bosnia and Herzegovina",
+    "group": "B",
+    "flag": "🇧🇦",
+    "elo": 1650,
+    "fifa_rank": null,
+    "host": false
+  },
+  "QAT": {
+    "name_zh": "卡塔尔",
+    "name_en": "Qatar",
+    "group": "B",
+    "flag": "🇶🇦",
+    "elo": 1566,
+    "fifa_rank": null,
+    "host": false
+  },
+  "SUI": {
+    "name_zh": "瑞士",
+    "name_en": "Switzerland",
+    "group": "B",
+    "flag": "🇨🇭",
+    "elo": 1954,
+    "fifa_rank": null,
+    "host": false
+  },
+  "BRA": {
+    "name_zh": "巴西",
+    "name_en": "Brazil",
+    "group": "C",
+    "flag": "🇧🇷",
+    "elo": 2067,
+    "fifa_rank": null,
+    "host": false
+  },
+  "MAR": {
+    "name_zh": "摩洛哥",
+    "name_en": "Morocco",
+    "group": "C",
+    "flag": "🇲🇦",
+    "elo": 1984,
+    "fifa_rank": null,
+    "host": false
+  },
+  "HAI": {
+    "name_zh": "海地",
+    "name_en": "Haiti",
+    "group": "C",
+    "flag": "🇭🇹",
+    "elo": 1717,
+    "fifa_rank": null,
+    "host": false
+  },
+  "SCO": {
+    "name_zh": "苏格兰",
+    "name_en": "Scotland",
+    "group": "C",
+    "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+    "elo": 1843,
+    "fifa_rank": null,
+    "host": false
+  },
+  "USA": {
+    "name_zh": "美国",
+    "name_en": "USA",
+    "group": "D",
+    "flag": "🇺🇸",
+    "elo": 1822,
+    "fifa_rank": null,
+    "host": true
+  },
+  "PAR": {
+    "name_zh": "巴拉圭",
+    "name_en": "Paraguay",
+    "group": "D",
+    "flag": "🇵🇾",
+    "elo": 1916,
+    "fifa_rank": null,
+    "host": false
+  },
+  "AUS": {
+    "name_zh": "澳大利亚",
+    "name_en": "Australia",
+    "group": "D",
+    "flag": "🇦🇺",
+    "elo": 1900,
+    "fifa_rank": null,
+    "host": false
+  },
+  "TUR": {
+    "name_zh": "土耳其",
+    "name_en": "Türkiye",
+    "group": "D",
+    "flag": "🇹🇷",
+    "elo": 1968,
+    "fifa_rank": null,
+    "host": false
+  },
+  "GER": {
+    "name_zh": "德国",
+    "name_en": "Germany",
+    "group": "E",
+    "flag": "🇩🇪",
+    "elo": 2003,
+    "fifa_rank": null,
+    "host": false
+  },
+  "CUW": {
+    "name_zh": "库拉索",
+    "name_en": "Curaçao",
+    "group": "E",
+    "flag": "🇨🇼",
+    "elo": 1609,
+    "fifa_rank": null,
+    "host": false
+  },
+  "CIV": {
+    "name_zh": "科特迪瓦",
+    "name_en": "Côte d'Ivoire",
+    "group": "E",
+    "flag": "🇨🇮",
+    "elo": 1814,
+    "fifa_rank": null,
+    "host": false
+  },
+  "ECU": {
+    "name_zh": "厄瓜多尔",
+    "name_en": "Ecuador",
+    "group": "E",
+    "flag": "🇪🇨",
+    "elo": 2024,
+    "fifa_rank": null,
+    "host": false
+  },
+  "NED": {
+    "name_zh": "荷兰",
+    "name_en": "Netherlands",
+    "group": "F",
+    "flag": "🇳🇱",
+    "elo": 2009,
+    "fifa_rank": null,
+    "host": false
+  },
+  "JPN": {
+    "name_zh": "日本",
+    "name_en": "Japan",
+    "group": "F",
+    "flag": "🇯🇵",
+    "elo": 1991,
+    "fifa_rank": null,
+    "host": false
+  },
+  "SWE": {
+    "name_zh": "瑞典",
+    "name_en": "Sweden",
+    "group": "F",
+    "flag": "🇸🇪",
+    "elo": 1770,
+    "fifa_rank": null,
+    "host": false
+  },
+  "TUN": {
+    "name_zh": "突尼斯",
+    "name_en": "Tunisia",
+    "group": "F",
+    "flag": "🇹🇳",
+    "elo": 1738,
+    "fifa_rank": null,
+    "host": false
+  },
+  "BEL": {
+    "name_zh": "比利时",
+    "name_en": "Belgium",
+    "group": "G",
+    "flag": "🇧🇪",
+    "elo": 1954,
+    "fifa_rank": null,
+    "host": false
+  },
+  "EGY": {
+    "name_zh": "埃及",
+    "name_en": "Egypt",
+    "group": "G",
+    "flag": "🇪🇬",
+    "elo": 1810,
+    "fifa_rank": null,
+    "host": false
+  },
+  "IRN": {
+    "name_zh": "伊朗",
+    "name_en": "IR Iran",
+    "group": "G",
+    "flag": "🇮🇷",
+    "elo": 1896,
+    "fifa_rank": null,
+    "host": false
+  },
+  "NZL": {
+    "name_zh": "新西兰",
+    "name_en": "New Zealand",
+    "group": "G",
+    "flag": "🇳🇿",
+    "elo": 1731,
+    "fifa_rank": null,
+    "host": false
+  },
+  "ESP": {
+    "name_zh": "西班牙",
+    "name_en": "Spain",
+    "group": "H",
+    "flag": "🇪🇸",
+    "elo": 2217,
+    "fifa_rank": null,
+    "host": false
+  },
+  "CPV": {
+    "name_zh": "佛得角",
+    "name_en": "Cabo Verde",
+    "group": "H",
+    "flag": "🇨🇻",
+    "elo": 1653,
+    "fifa_rank": null,
+    "host": false
+  },
+  "KSA": {
+    "name_zh": "沙特阿拉伯",
+    "name_en": "Saudi Arabia",
+    "group": "H",
+    "flag": "🇸🇦",
+    "elo": 1697,
+    "fifa_rank": null,
+    "host": false
+  },
+  "URU": {
+    "name_zh": "乌拉圭",
+    "name_en": "Uruguay",
+    "group": "H",
+    "flag": "🇺🇾",
+    "elo": 1972,
+    "fifa_rank": null,
+    "host": false
+  },
+  "FRA": {
+    "name_zh": "法国",
+    "name_en": "France",
+    "group": "I",
+    "flag": "🇫🇷",
+    "elo": 2123,
+    "fifa_rank": null,
+    "host": false
+  },
+  "SEN": {
+    "name_zh": "塞内加尔",
+    "name_en": "Senegal",
+    "group": "I",
+    "flag": "🇸🇳",
+    "elo": 1913,
+    "fifa_rank": null,
+    "host": false
+  },
+  "IRQ": {
+    "name_zh": "伊拉克",
+    "name_en": "Iraq",
+    "group": "I",
+    "flag": "🇮🇶",
+    "elo": 1737,
+    "fifa_rank": null,
+    "host": false
+  },
+  "NOR": {
+    "name_zh": "挪威",
+    "name_en": "Norway",
+    "group": "I",
+    "flag": "🇳🇴",
+    "elo": 1970,
+    "fifa_rank": null,
+    "host": false
+  },
+  "ARG": {
+    "name_zh": "阿根廷",
+    "name_en": "Argentina",
+    "group": "J",
+    "flag": "🇦🇷",
+    "elo": 2190,
+    "fifa_rank": null,
+    "host": false
+  },
+  "ALG": {
+    "name_zh": "阿尔及利亚",
+    "name_en": "Algeria",
+    "group": "J",
+    "flag": "🇩🇿",
+    "elo": 1883,
+    "fifa_rank": null,
+    "host": false
+  },
+  "AUT": {
+    "name_zh": "奥地利",
+    "name_en": "Austria",
+    "group": "J",
+    "flag": "🇦🇹",
+    "elo": 1889,
+    "fifa_rank": null,
+    "host": false
+  },
+  "JOR": {
+    "name_zh": "约旦",
+    "name_en": "Jordan",
+    "group": "J",
+    "flag": "🇯🇴",
+    "elo": 1775,
+    "fifa_rank": null,
+    "host": false
+  },
+  "POR": {
+    "name_zh": "葡萄牙",
+    "name_en": "Portugal",
+    "group": "K",
+    "flag": "🇵🇹",
+    "elo": 2044,
+    "fifa_rank": null,
+    "host": false
+  },
+  "COD": {
+    "name_zh": "刚果（金）",
+    "name_en": "Congo DR",
+    "group": "K",
+    "flag": "🇨🇩",
+    "elo": 1763,
+    "fifa_rank": null,
+    "host": false
+  },
+  "UZB": {
+    "name_zh": "乌兹别克斯坦",
+    "name_en": "Uzbekistan",
+    "group": "K",
+    "flag": "🇺🇿",
+    "elo": 1820,
+    "fifa_rank": null,
+    "host": false
+  },
+  "COL": {
+    "name_zh": "哥伦比亚",
+    "name_en": "Colombia",
+    "group": "K",
+    "flag": "🇨🇴",
+    "elo": 2061,
+    "fifa_rank": null,
+    "host": false
+  },
+  "ENG": {
+    "name_zh": "英格兰",
+    "name_en": "England",
+    "group": "L",
+    "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "elo": 2089,
+    "fifa_rank": null,
+    "host": false
+  },
+  "CRO": {
+    "name_zh": "克罗地亚",
+    "name_en": "Croatia",
+    "group": "L",
+    "flag": "🇭🇷",
+    "elo": 1968,
+    "fifa_rank": null,
+    "host": false
+  },
+  "GHA": {
+    "name_zh": "加纳",
+    "name_en": "Ghana",
+    "group": "L",
+    "flag": "🇬🇭",
+    "elo": 1625,
+    "fifa_rank": null,
+    "host": false
+  },
+  "PAN": {
+    "name_zh": "巴拿马",
+    "name_en": "Panama",
+    "group": "L",
+    "flag": "🇵🇦",
+    "elo": 1839,
+    "fifa_rank": null,
+    "host": false
+  }
+}

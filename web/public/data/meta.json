@@ -1,0 +1,30 @@
+{
+  "run_id": "20260612T0138Z",
+  "generated_at": "2026-06-12T01:38:17Z",
+  "n_sims": 100000,
+  "matches_played": 1,
+  "data": {
+    "martj42_rows": 49405,
+    "elo_through": "2026-06-10",
+    "results_count": 1
+  },
+  "models": {
+    "components": [
+      {
+        "id": "dc_elo",
+        "name_zh": "DC-on-Elo（Dixon-Coles × Elo）",
+        "weight": 1.0,
+        "params": {
+          "beta0": 0.1023304287765366,
+          "beta1": 0.7328896508775131,
+          "gamma": 0.2278921022463627,
+          "rho": -0.043194808062220945,
+          "half_life_days": 730.0,
+          "n_matches": 7768,
+          "cutoff": "2026-06-11"
+        }
+      }
+    ],
+    "backtest": {}
+  }
+}

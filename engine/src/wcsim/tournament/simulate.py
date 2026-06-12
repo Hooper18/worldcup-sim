@@ -52,6 +52,8 @@ _KO_STAGE_OF = {
 class SimResult:
     n_sims: int
     group_rank_counts: dict[str, np.ndarray]  # 组 -> (4 队按 GROUPS 顺序, 4 名次)
+    group_exp_pts: dict[str, np.ndarray]  # 组 -> (4,) 期望积分（GROUPS 顺序）
+    group_exp_gd: dict[str, np.ndarray]  # 组 -> (4,) 期望净胜球
     advance_counts: dict[str, int]  # 进 32 强（前 2 + 最佳第三）
     third_advance_counts: dict[str, int]  # 作为最佳第三晋级
     stage_counts: dict[str, dict[str, int]]  # team -> {r32,r16,qf,sf,final,champion}
@@ -224,6 +226,8 @@ def simulate(
     third_idx: dict[str, np.ndarray] = {}
     third_stats: dict[str, tuple[np.ndarray, np.ndarray, np.ndarray]] = {}
     group_rank_counts: dict[str, np.ndarray] = {}
+    group_exp_pts: dict[str, np.ndarray] = {}
+    group_exp_gd: dict[str, np.ndarray] = {}
 
     rows = np.arange(n_sims)
     for g in GROUP_LETTERS:
@@ -234,6 +238,8 @@ def simulate(
         for i in range(4):
             rc[i] = np.bincount(placement[i], minlength=4)
         group_rank_counts[g] = rc
+        group_exp_pts[g] = pts.mean(axis=1)
+        group_exp_gd[g] = gd.mean(axis=1)
 
         glob = np.array([CODE_IDX[c] for c in teams])
         # placement[i,s]==r 的队 i：argmax 找每个 sim 在名次 r 的本地队号
@@ -296,6 +302,8 @@ def simulate(
     return SimResult(
         n_sims=n_sims,
         group_rank_counts=group_rank_counts,
+        group_exp_pts=group_exp_pts,
+        group_exp_gd=group_exp_gd,
         advance_counts={c: int(advance_arr[i]) for i, c in enumerate(CODES)},
         third_advance_counts={c: int(third_adv_arr[i]) for i, c in enumerate(CODES)},
         stage_counts=stage_counts,
