@@ -4,7 +4,7 @@
     "name_en": "Mexico",
     "group": "A",
     "flag": "🇲🇽",
-    "elo": 1958,
+    "elo": 1966,
     "fifa_rank": null,
     "host": true
   },
@@ -13,7 +13,7 @@
     "name_en": "South Africa",
     "group": "A",
     "flag": "🇿🇦",
-    "elo": 1662,
+    "elo": 1654,
     "fifa_rank": null,
     "host": false
   },
@@ -22,7 +22,7 @@
     "name_en": "Korea Republic",
     "group": "A",
     "flag": "🇰🇷",
-    "elo": 1879,
+    "elo": 1903,
     "fifa_rank": null,
     "host": false
   },
@@ -31,7 +31,7 @@
     "name_en": "Czechia",
     "group": "A",
     "flag": "🇨🇿",
-    "elo": 1801,
+    "elo": 1777,
     "fifa_rank": null,
     "host": false
   },
