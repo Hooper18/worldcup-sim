@@ -46,40 +46,56 @@ export default function ModelPage() {
       <section>
         <h2 className="mb-1 text-lg font-medium">回测验证</h2>
         <p className="mb-3 text-xs text-ink-faint">
-          用 2018 / 2022 世界杯检验：数据截断到开幕前拟合，再预测该届实际比赛。RPS 越低越准。
+          纳入 2014 年以来世界杯/欧洲杯/美洲杯/非洲杯/亚洲杯各届决赛圈，用<b>留一届交叉验证</b>：
+          每届的参数只在其余赛事上选、在该届做样本外预测，杜绝"同集选参又评估"的乐观偏置。RPS / log-loss 越低越准。
         </p>
-        {hasBacktest ? (
-          <Card className="overflow-x-auto px-4 py-3">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-xs text-ink-faint">
-                  <th className="py-1.5 text-left font-normal">届</th>
-                  <th className="py-1.5 text-right font-normal">基准</th>
-                  <th className="py-1.5 text-right font-normal">DC-Elo</th>
-                  <th className="py-1.5 text-right font-normal">攻防</th>
-                  <th className="py-1.5 text-right font-normal">融合</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(bt.years).map(([yr, m]) => (
-                  <tr key={yr} className="border-t border-line tabular-nums">
-                    <td className="py-2">{yr}</td>
-                    <td className="py-2 text-right text-ink-faint">{m.rps_baseline}</td>
-                    <td className="py-2 text-right text-ink-secondary">{m.rps_dc_elo}</td>
-                    <td className="py-2 text-right text-ink-secondary">{m.rps_dc_attack}</td>
-                    <td className="py-2 text-right font-medium text-accent">{m.rps_ensemble}</td>
+        {hasBacktest && bt.loto ? (
+          <Card className="space-y-4 px-4 py-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <Stat label="样本外 RPS" value={bt.loto.oos_rps.toFixed(3)} hint={`基准 ${bt.best.rps_baseline.toFixed(3)}`} />
+              <Stat label="校准误差 ECE" value={bt.loto.oos_ece.toFixed(3)} hint="越接近 0 越可信" />
+              <Stat label="log-loss 增益" value={`+${bt.loto.logloss_gain_vs_baseline.toFixed(3)}`} hint="相对基准" />
+              <Stat label="验证规模" value={`${bt.best.n_events} 届`} hint={`${bt.best.n_matches} 场`} />
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-xs text-ink-faint">
+                    <th className="py-1.5 text-left font-normal">世界杯届（样本内明细）</th>
+                    <th className="py-1.5 text-right font-normal">基准</th>
+                    <th className="py-1.5 text-right font-normal">DC-Elo</th>
+                    <th className="py-1.5 text-right font-normal">攻防</th>
+                    <th className="py-1.5 text-right font-normal">融合</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <p className="mt-3 text-xs text-ink-faint">
-              最优时间衰减半衰期 {bt.best.half_life_days} 天，融合权重 DC-Elo {(bt.best.weight_dc_elo * 100).toFixed(0)}% /
-              攻防 {(bt.best.weight_dc_attack * 100).toFixed(0)}%。两模型均显著优于「always 基础概率」基准。
+                </thead>
+                <tbody>
+                  {Object.entries(bt.years).map(([yr, m]) => (
+                    <tr key={yr} className="border-t border-line tabular-nums">
+                      <td className="py-2">{yr} 世界杯</td>
+                      <td className="py-2 text-right text-ink-faint">{m.rps_baseline}</td>
+                      <td className="py-2 text-right text-ink-secondary">{m.rps_dc_elo}</td>
+                      <td className="py-2 text-right text-ink-secondary">{m.rps_dc_attack}</td>
+                      <td className="py-2 text-right font-medium text-accent">{m.rps_ensemble}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p className="text-xs text-ink-faint">
+              生产参数：时间衰减半衰期 {bt.best.half_life_days} 天，融合权重 DC-Elo {(bt.best.weight_dc_elo * 100).toFixed(0)}% /
+              攻防 {(bt.best.weight_dc_attack * 100).toFixed(0)}%。
+              该选择在 {Object.values(bt.loto.selected_H_counts).reduce((a, b) => a + b, 0)} 折中高度一致
+              （样本外 RPS {bt.loto.oos_rps.toFixed(3)} ≈ 全量 {bt.best.pooled_rps.toFixed(3)}，说明没有过拟合）。
             </p>
-            {Object.entries(bt.years)[0]?.[1]?.calibration?.length > 0 && (
-              <div className="mt-4">
-                <div className="mb-1 text-xs text-ink-faint">校准曲线（{Object.keys(bt.years)[0]} 融合，点越贴近虚线越可信）</div>
-                <CalibrationSvg points={Object.entries(bt.years)[0][1].calibration} />
+
+            {bt.loto.reliability.length > 0 && (
+              <div>
+                <div className="mb-1 text-xs text-ink-faint">
+                  可靠性图（{bt.best.n_events} 届样本外，点贴对角线 + 区间窄 = 概率可信）
+                </div>
+                <CalibrationSvg points={bt.loto.reliability.map((d) => [d.p_pred, d.freq, d.n])} />
               </div>
             )}
           </Card>
@@ -99,6 +115,16 @@ export default function ModelPage() {
           <li>· 不含伤病、阵容、临场状态等模型外信息。</li>
         </ul>
       </section>
+    </div>
+  )
+}
+
+function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
+  return (
+    <div className="rounded-xl border border-line bg-white/40 px-3 py-2">
+      <div className="text-xs text-ink-faint">{label}</div>
+      <div className="mt-0.5 text-lg font-medium tabular-nums text-accent">{value}</div>
+      {hint && <div className="text-xs text-ink-faint">{hint}</div>}
     </div>
   )
 }

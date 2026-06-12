@@ -1,6 +1,6 @@
 {
-  "run_id": "20260612T0853Z",
-  "generated_at": "2026-06-12T08:53:03Z",
+  "run_id": "20260612T1011Z",
+  "generated_at": "2026-06-12T10:11:50Z",
   "n_sims": 100000,
   "matches_played": 2,
   "data": {
@@ -13,79 +13,83 @@
       {
         "id": "dc_elo",
         "name_zh": "DC-on-Elo（Dixon-Coles × Elo）",
-        "weight": 0.3,
+        "weight": 0.2,
         "params": {
-          "beta0": 0.0965,
-          "beta1": 0.737,
-          "gamma": 0.2311,
-          "rho": -0.0399
+          "beta0": 0.1023,
+          "beta1": 0.7331,
+          "gamma": 0.2276,
+          "rho": -0.0432
         }
       },
       {
         "id": "dc_attack",
         "name_zh": "纯攻防 Dixon-Coles",
-        "weight": 0.7,
+        "weight": 0.8,
         "params": {
-          "mu": 0.0958,
-          "home_adv": 0.2368,
-          "rho": -0.0459
+          "mu": 0.0991,
+          "home_adv": 0.2338,
+          "rho": -0.0509
         }
       }
     ],
-    "half_life_days": 1095.0,
+    "half_life_days": 730.0,
     "backtest": {
       "best": {
-        "half_life_days": 1095.0,
-        "weight_dc_elo": 0.3,
-        "weight_dc_attack": 0.7,
-        "combined_rps": 0.2082
+        "half_life_days": 730.0,
+        "weight_dc_elo": 0.2,
+        "weight_dc_attack": 0.8,
+        "pooled_rps": 0.1883,
+        "oos_rps": 0.1887,
+        "n_events": 20,
+        "n_matches": 895,
+        "rps_baseline": 0.2294
       },
       "years": {
         "2018": {
           "n_matches": 64,
           "rps_baseline": 0.2426,
-          "rps_dc_elo": 0.2128,
-          "rps_dc_attack": 0.1995,
-          "rps_ensemble": 0.2026,
-          "logloss_dc_elo": 0.9966,
+          "rps_dc_elo": 0.2129,
+          "rps_dc_attack": 0.2002,
+          "rps_ensemble": 0.202,
+          "logloss_dc_elo": 0.997,
           "calibration": [
             [
               0.0908,
-              0.2,
-              5
+              0.1667,
+              6
             ],
             [
-              0.1561,
-              0.12,
-              25
+              0.1565,
+              0.125,
+              24
             ],
             [
-              0.2555,
-              0.1967,
-              61
+              0.253,
+              0.1864,
+              59
             ],
             [
-              0.3323,
-              0.3462,
-              52
+              0.3321,
+              0.3396,
+              53
             ],
             [
-              0.4567,
-              0.45,
+              0.4464,
+              0.5,
               20
             ],
             [
-              0.5381,
-              0.8333,
-              12
+              0.5446,
+              0.7333,
+              15
             ],
             [
-              0.6395,
-              0.6154,
-              13
+              0.6536,
+              0.6364,
+              11
             ],
             [
-              0.719,
+              0.7211,
               0.75,
               4
             ]
@@ -95,58 +99,371 @@
           "n_matches": 64,
           "rps_baseline": 0.234,
           "rps_dc_elo": 0.215,
-          "rps_dc_attack": 0.2142,
-          "rps_ensemble": 0.2138,
-          "logloss_dc_elo": 1.0364,
+          "rps_dc_attack": 0.2155,
+          "rps_ensemble": 0.215,
+          "logloss_dc_elo": 1.0361,
           "calibration": [
             [
-              0.0744,
-              0.2,
-              10
+              0.0731,
+              0.1667,
+              12
             ],
             [
-              0.1611,
-              0.2,
-              35
+              0.1621,
+              0.2121,
+              33
             ],
             [
-              0.2556,
-              0.2742,
-              62
+              0.2543,
+              0.2787,
+              61
             ],
             [
-              0.332,
-              0.2414,
-              29
+              0.3337,
+              0.2581,
+              31
             ],
             [
-              0.458,
-              0.5,
-              16
+              0.4617,
+              0.4286,
+              14
             ],
             [
-              0.554,
+              0.5499,
               0.4211,
               19
             ],
             [
-              0.6364,
-              0.6923,
+              0.6337,
+              0.7692,
               13
             ],
             [
-              0.7384,
-              0.8571,
-              7
+              0.7391,
+              0.75,
+              8
             ],
             [
-              0.8466,
+              0.854,
               0.0,
               1
             ]
           ]
         }
-      }
+      },
+      "loto": {
+        "oos_rps": 0.1887,
+        "oos_logloss": 0.9592,
+        "oos_brier": 0.5704,
+        "oos_ece": 0.0195,
+        "baseline_logloss": 1.0799,
+        "logloss_gain_vs_baseline": 0.1207,
+        "reliability": [
+          {
+            "p_pred": 0.071,
+            "freq": 0.0593,
+            "ci_lo": 0.029,
+            "ci_hi": 0.1174,
+            "n": 118
+          },
+          {
+            "p_pred": 0.1549,
+            "freq": 0.1354,
+            "ci_lo": 0.1048,
+            "ci_hi": 0.1733,
+            "n": 384
+          },
+          {
+            "p_pred": 0.2573,
+            "freq": 0.2517,
+            "ci_lo": 0.2239,
+            "ci_hi": 0.2818,
+            "n": 862
+          },
+          {
+            "p_pred": 0.3358,
+            "freq": 0.3182,
+            "ci_lo": 0.282,
+            "ci_hi": 0.3567,
+            "n": 594
+          },
+          {
+            "p_pred": 0.4483,
+            "freq": 0.5167,
+            "ci_lo": 0.4572,
+            "ci_hi": 0.5758,
+            "n": 269
+          },
+          {
+            "p_pred": 0.5488,
+            "freq": 0.5459,
+            "ci_lo": 0.4796,
+            "ci_hi": 0.6106,
+            "n": 218
+          },
+          {
+            "p_pred": 0.6448,
+            "freq": 0.66,
+            "ci_lo": 0.581,
+            "ci_hi": 0.731,
+            "n": 150
+          },
+          {
+            "p_pred": 0.7394,
+            "freq": 0.8143,
+            "ci_lo": 0.7077,
+            "ci_hi": 0.8881,
+            "n": 70
+          },
+          {
+            "p_pred": 0.84,
+            "freq": 0.75,
+            "ci_lo": 0.505,
+            "ci_hi": 0.8982,
+            "n": 16
+          },
+          {
+            "p_pred": 0.9268,
+            "freq": 1.0,
+            "ci_lo": 0.5101,
+            "ci_hi": 1.0,
+            "n": 4
+          }
+        ],
+        "n_folds": 20,
+        "n_matches": 895,
+        "per_fold": [
+          {
+            "event": "FIFA World Cup 2014",
+            "n": 64,
+            "selected_H": 1095.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.198
+          },
+          {
+            "event": "AFC Asian Cup 2015",
+            "n": 32,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.187
+          },
+          {
+            "event": "African Cup of Nations 2015",
+            "n": 32,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.2117
+          },
+          {
+            "event": "Copa América 2015",
+            "n": 26,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.1932
+          },
+          {
+            "event": "Copa América 2016",
+            "n": 32,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.1796
+          },
+          {
+            "event": "UEFA Euro 2016",
+            "n": 51,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.2293
+          },
+          {
+            "event": "African Cup of Nations 2017",
+            "n": 32,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.1948
+          },
+          {
+            "event": "FIFA World Cup 2018",
+            "n": 64,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.202
+          },
+          {
+            "event": "AFC Asian Cup 2019",
+            "n": 51,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.172
+          },
+          {
+            "event": "Copa América 2019",
+            "n": 26,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.1493
+          },
+          {
+            "event": "African Cup of Nations 2019",
+            "n": 52,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.1828
+          },
+          {
+            "event": "UEFA Euro 2021",
+            "n": 51,
+            "selected_H": 1095.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.1826
+          },
+          {
+            "event": "Copa América 2021",
+            "n": 28,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.1566
+          },
+          {
+            "event": "African Cup of Nations 2022",
+            "n": 52,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.1987
+          },
+          {
+            "event": "FIFA World Cup 2022",
+            "n": 64,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.215
+          },
+          {
+            "event": "AFC Asian Cup 2024",
+            "n": 51,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.1695
+          },
+          {
+            "event": "African Cup of Nations 2024",
+            "n": 52,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.2096
+          },
+          {
+            "event": "UEFA Euro 2024",
+            "n": 51,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.192
+          },
+          {
+            "event": "Copa América 2024",
+            "n": 32,
+            "selected_H": 730.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.1565
+          },
+          {
+            "event": "African Cup of Nations 2025",
+            "n": 52,
+            "selected_H": 1095.0,
+            "selected_w": 0.2,
+            "oos_rps": 0.1454
+          }
+        ],
+        "selected_H_counts": {
+          "1095.0": 3,
+          "730.0": 17
+        },
+        "selected_w_counts": {
+          "0.2": 20
+        }
+      },
+      "events": [
+        {
+          "name": "FIFA World Cup 2014",
+          "n": 64
+        },
+        {
+          "name": "AFC Asian Cup 2015",
+          "n": 32
+        },
+        {
+          "name": "African Cup of Nations 2015",
+          "n": 32
+        },
+        {
+          "name": "Copa América 2015",
+          "n": 26
+        },
+        {
+          "name": "Copa América 2016",
+          "n": 32
+        },
+        {
+          "name": "UEFA Euro 2016",
+          "n": 51
+        },
+        {
+          "name": "African Cup of Nations 2017",
+          "n": 32
+        },
+        {
+          "name": "FIFA World Cup 2018",
+          "n": 64
+        },
+        {
+          "name": "AFC Asian Cup 2019",
+          "n": 51
+        },
+        {
+          "name": "Copa América 2019",
+          "n": 26
+        },
+        {
+          "name": "African Cup of Nations 2019",
+          "n": 52
+        },
+        {
+          "name": "UEFA Euro 2021",
+          "n": 51
+        },
+        {
+          "name": "Copa América 2021",
+          "n": 28
+        },
+        {
+          "name": "African Cup of Nations 2022",
+          "n": 52
+        },
+        {
+          "name": "FIFA World Cup 2022",
+          "n": 64
+        },
+        {
+          "name": "AFC Asian Cup 2024",
+          "n": 51
+        },
+        {
+          "name": "African Cup of Nations 2024",
+          "n": 52
+        },
+        {
+          "name": "UEFA Euro 2024",
+          "n": 51
+        },
+        {
+          "name": "Copa América 2024",
+          "n": 32
+        },
+        {
+          "name": "African Cup of Nations 2025",
+          "n": 52
+        }
+      ]
     }
   }
 }

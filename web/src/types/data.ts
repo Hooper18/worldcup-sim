@@ -12,8 +12,29 @@ export interface BacktestYear {
   calibration: number[][] // [[平均预测, 经验频率, 样本数], ...]
 }
 export interface Backtest {
-  best: { half_life_days: number; weight_dc_elo: number; weight_dc_attack: number; combined_rps: number }
+  best: {
+    half_life_days: number
+    weight_dc_elo: number
+    weight_dc_attack: number
+    pooled_rps: number
+    oos_rps: number // 留一届交叉验证的样本外 RPS（诚实 headline）
+    rps_baseline: number
+    n_events: number
+    n_matches: number
+  }
   years: Record<string, BacktestYear>
+  loto?: {
+    oos_rps: number
+    oos_logloss: number
+    oos_brier: number
+    oos_ece: number
+    logloss_gain_vs_baseline: number
+    n_folds: number
+    n_matches: number
+    reliability: { p_pred: number; freq: number; ci_lo: number; ci_hi: number; n: number }[]
+    selected_H_counts: Record<string, number>
+    selected_w_counts: Record<string, number>
+  }
 }
 
 export interface Meta {

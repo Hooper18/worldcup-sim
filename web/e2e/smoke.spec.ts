@@ -23,10 +23,11 @@ const META = {
       { id: 'dc_elo', name_zh: 'DC-on-Elo（x）', weight: 0.3, params: {} },
       { id: 'dc_attack', name_zh: '纯攻防 Dixon-Coles', weight: 0.7, params: {} },
     ],
-    half_life_days: 1095,
+    half_life_days: 730,
     backtest: {
-      best: { half_life_days: 1095, weight_dc_elo: 0.3, weight_dc_attack: 0.7, combined_rps: 0.208 },
-      years: { '2018': { n_matches: 64, rps_baseline: 0.243, rps_dc_elo: 0.213, rps_dc_attack: 0.2, rps_ensemble: 0.203, logloss_dc_elo: 0.95, calibration: [[0.1, 0.09, 50], [0.5, 0.52, 30]] } },
+      best: { half_life_days: 730, weight_dc_elo: 0.2, weight_dc_attack: 0.8, pooled_rps: 0.188, oos_rps: 0.189, rps_baseline: 0.229, n_events: 20, n_matches: 895 },
+      years: { '2018': { n_matches: 64, rps_baseline: 0.243, rps_dc_elo: 0.213, rps_dc_attack: 0.2, rps_ensemble: 0.202, logloss_dc_elo: 0.95, calibration: [[0.1, 0.09, 50], [0.5, 0.52, 30]] } },
+      loto: { oos_rps: 0.189, oos_logloss: 0.93, oos_brier: 0.57, oos_ece: 0.02, logloss_gain_vs_baseline: 0.12, n_folds: 20, n_matches: 895, reliability: [{ p_pred: 0.1, freq: 0.09, ci_lo: 0.06, ci_hi: 0.12, n: 50 }, { p_pred: 0.5, freq: 0.52, ci_lo: 0.45, ci_hi: 0.59, n: 30 }], selected_H_counts: { '730': 17, '1095': 3 }, selected_w_counts: { '0.2': 20 } },
     },
   },
 }
@@ -99,5 +100,6 @@ test('模型页显示回测对比表', async ({ page }) => {
   await page.goto('/model')
   await expect(page.getByText('回测验证')).toBeVisible()
   await expect(page.getByText('融合').first()).toBeVisible()
-  await expect(page.getByText('0.203')).toBeVisible() // 2018 融合 RPS
+  await expect(page.getByText('样本外 RPS').first()).toBeVisible() // LOTO 诚实指标卡
+  await expect(page.getByText('0.202')).toBeVisible() // 2018 融合 RPS
 })

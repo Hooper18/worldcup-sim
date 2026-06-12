@@ -38,23 +38,72 @@ def log_loss(probs: np.ndarray, outcomes: np.ndarray) -> float:
     return float(-np.mean(np.log(np.clip(p, 1e-12, None))))
 
 
-def calibration(probs: np.ndarray, outcomes: np.ndarray, bins: int = 10) -> list[list[float]]:
-    """把所有 (预测概率, 是否发生) 对分桶，返回 [[平均预测, 经验频率, 样本数], ...]。
+def brier_score(probs: np.ndarray, outcomes: np.ndarray) -> float:
+    """多类 Brier 评分（越低越好）：Σ (p_k − [y=k])² 的样本均值。
 
-    展开三类结果的每个概率为独立的二元事件。
+    与 RPS 不同，Brier 对类别无序惩罚——RPS 罚"差很远的预测"更重（有序性），
+    Brier 罚"概率离一热编码的距离"。两者互补：RPS 看序、Brier 看概率精度。
+    """
+    probs = np.asarray(probs, dtype=float)
+    onehot = np.zeros_like(probs)
+    onehot[np.arange(len(outcomes)), outcomes] = 1.0
+    return float(np.mean(np.sum((probs - onehot) ** 2, axis=1)))
+
+
+def _wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
+    """Wilson 二项比例置信区间（小样本下比正态近似可靠）。"""
+    if n == 0:
+        return 0.0, 1.0
+    p = k / n
+    denom = 1 + z * z / n
+    center = (p + z * z / (2 * n)) / denom
+    half = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / denom
+    return max(0.0, center - half), min(1.0, center + half)
+
+
+def reliability_diagram(probs: np.ndarray, outcomes: np.ndarray, bins: int = 10) -> list[dict]:
+    """可靠性图分桶：每桶 {平均预测概率, 经验频率, Wilson 95% 区间, 样本数}。
+
+    三类结果的每个预测概率展开为独立二元事件（预测 p、是否发生）。点越贴近对角线、
+    区间越窄，说明概率越可信。
     """
     probs = np.asarray(probs, dtype=float)
     n = len(outcomes)
     onehot = np.zeros_like(probs)
     onehot[np.arange(n), outcomes] = 1.0
     p_flat = probs.ravel()
-    y_flat = onehot.ravel()
+    y_flat = onehot.ravel().astype(int)
     edges = np.linspace(0, 1, bins + 1)
     idx = np.clip(np.digitize(p_flat, edges) - 1, 0, bins - 1)
     out = []
     for b in range(bins):
         m = idx == b
-        if m.sum() == 0:
+        cnt = int(m.sum())
+        if cnt == 0:
             continue
-        out.append([round(float(p_flat[m].mean()), 4), round(float(y_flat[m].mean()), 4), int(m.sum())])
+        k = int(y_flat[m].sum())
+        lo, hi = _wilson(k, cnt)
+        out.append(
+            {
+                "p_pred": round(float(p_flat[m].mean()), 4),
+                "freq": round(k / cnt, 4),
+                "ci_lo": round(lo, 4),
+                "ci_hi": round(hi, 4),
+                "n": cnt,
+            }
+        )
     return out
+
+
+def calibration(probs: np.ndarray, outcomes: np.ndarray, bins: int = 10) -> list[list[float]]:
+    """旧接口（兼容前端 ModelPage）：[[平均预测, 经验频率, 样本数], ...]。"""
+    return [[d["p_pred"], d["freq"], d["n"]] for d in reliability_diagram(probs, outcomes, bins)]
+
+
+def ece(probs: np.ndarray, outcomes: np.ndarray, bins: int = 10) -> float:
+    """Expected Calibration Error：各桶 |平均预测 − 经验频率| 按样本量加权平均（越低越校准）。"""
+    diag = reliability_diagram(probs, outcomes, bins)
+    total = sum(d["n"] for d in diag)
+    if total == 0:
+        return 0.0
+    return float(sum(d["n"] * abs(d["p_pred"] - d["freq"]) for d in diag) / total)
