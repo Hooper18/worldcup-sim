@@ -19,6 +19,7 @@ from .models import dc_attack, dc_elo
 from .models.bundle import ModelBundle
 from .models.dc_attack import DcAttackParams
 from .models.score_model import EnsembleModel
+from .ratings import penalty
 from .ratings.elo import replay
 from .tournament.simulate import CODES, SimResult, simulate
 
@@ -29,6 +30,7 @@ class PipelineContext:
     model: EnsembleModel
     elo_by_code: dict[str, float]
     tiebreak_key: dict[str, float]
+    penalty_theta: dict[str, float]
     results: dict[int, dict]
     data_info: dict
 
@@ -104,6 +106,11 @@ def build_context(*, force_fetch: bool = False, refresh_results: bool = True) ->
     elo_by_code = {c: ratings[code_to_martj42(c)] for c in CODES}
     tiebreak_key = dict(elo_by_code)
 
+    # 点球能力（Bradley-Terry，随历史更新，非冻结模型参数）
+    shootouts = fetch.load_shootouts(force=force_fetch)
+    pen_by_name = penalty.fit_penalty_ratings(shootouts)
+    penalty_theta = {c: pen_by_name.get(code_to_martj42(c), 0.0) for c in CODES}
+
     bundle = load_bundle()
     if bundle is None:
         bundle = fit_bundle(force_fetch=False)
@@ -128,7 +135,9 @@ def build_context(*, force_fetch: bool = False, refresh_results: bool = True) ->
         "elo_through": str(df["date"].max().date()),
         "results_count": len(results),
     }
-    return PipelineContext(bundle, model, elo_by_code, tiebreak_key, results, data_info)
+    return PipelineContext(
+        bundle, model, elo_by_code, tiebreak_key, penalty_theta, results, data_info
+    )
 
 
 def run_simulation(ctx: PipelineContext, *, n_sims: int, seed: int = 12345) -> SimResult:
@@ -138,6 +147,7 @@ def run_simulation(ctx: PipelineContext, *, n_sims: int, seed: int = 12345) -> S
         n_sims=n_sims,
         fixed_results=ctx.results,
         tiebreak_key=ctx.tiebreak_key,
+        penalty_theta=ctx.penalty_theta,
         seed=seed,
     )
 

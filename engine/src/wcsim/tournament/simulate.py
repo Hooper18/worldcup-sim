@@ -202,6 +202,7 @@ def simulate(
     n_sims: int = config.N_SIMS_DEFAULT,
     fixed_results: dict[int, dict] | None = None,
     tiebreak_key: dict[str, float] | None = None,
+    penalty_theta: dict[str, float] | None = None,
     seed: int = 12345,
 ) -> SimResult:
     """跑 n_sims 次整届模拟。
@@ -209,15 +210,18 @@ def simulate(
     model: ScoreModel（DC-on-Elo / 攻防 / 融合）。为向后兼容也接受 (DcEloParams, elo_by_code)。
     fixed_results: {match_id: {"h","a","after","pen_winner?"}}，已完赛场次固定不抽样。
     tiebreak_key: {code: 数值}，小组/第三名最终兜底（建议用赛前 Elo），缺省全 0。
+    penalty_theta: {code: θ}，点球能力（Bradley-Terry），缺省全 0=50:50。
     """
     if isinstance(model, DcEloParams):
         assert elo_by_code is not None, "传 DcEloParams 时需同时给 elo_by_code"
         model = DcEloModel(model, elo_by_code)
     fixed = fixed_results or {}
     tiebreak_key = tiebreak_key or {}
+    penalty_theta = penalty_theta or {}
     rng = np.random.default_rng(seed)
     sampler = ScoreSampler(model)
     tk_by_global = np.array([tiebreak_key.get(c, 0.0) for c in CODES])
+    pen_theta = np.array([penalty_theta.get(c, 0.0) for c in CODES])
 
     first_idx: dict[str, np.ndarray] = {}
     second_idx: dict[str, np.ndarray] = {}
@@ -282,7 +286,7 @@ def simulate(
         bc_a = np.bincount(a, minlength=48)
         match_side_counts[mid] = {"home": bc_h, "away": bc_a}
         stage_arr[stage] += bc_h + bc_a
-        winners[mid], losers[mid] = _decide(sampler, h, a, rng)
+        winners[mid], losers[mid] = _decide(sampler, h, a, rng, pen_theta)
 
     for mid in sorted(R32_SLOTS):
         play(mid, home_of[mid], away_of[mid], "r32")
@@ -315,9 +319,17 @@ def simulate(
 
 
 def _decide(
-    sampler: ScoreSampler, h: np.ndarray, a: np.ndarray, rng: np.random.Generator
+    sampler: ScoreSampler,
+    h: np.ndarray,
+    a: np.ndarray,
+    rng: np.random.Generator,
+    pen_theta: np.ndarray,
 ) -> tuple[np.ndarray, np.ndarray]:
-    """淘汰赛定胜负：90 分钟 → 平则加时 λ/3 → 仍平则点球 50:50。返回 (胜者, 负者)。"""
+    """淘汰赛定胜负：90 分钟 → 平则加时 λ/3 → 仍平则点球。返回 (胜者, 负者)。
+
+    点球胜率 = logistic(θ_home − θ_away)（Bradley-Terry 能力，强收缩到 0.5），
+    替代原硬编码 0.5。pen_theta 为按全局队 index 的 48 维 θ 向量。
+    """
     hg, ag = sampler.sample_neutral(h, a, rng)
     draw = hg == ag
     if draw.any():
@@ -326,7 +338,8 @@ def _decide(
         ag = ag + np.where(draw, eg_a, 0)
     home_win = hg > ag
     away_win = hg < ag
-    pen_home = rng.random(h.shape[0]) < config.PENALTY_WIN_PROB
+    p_home = 1.0 / (1.0 + np.exp(-(pen_theta[h] - pen_theta[a])))
+    pen_home = rng.random(h.shape[0]) < p_home
     w = np.where(home_win, h, np.where(away_win, a, np.where(pen_home, h, a)))
     return w, np.where(w == h, a, h)
 
