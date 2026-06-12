@@ -69,7 +69,20 @@ def _cmd_update(args: argparse.Namespace) -> int:
         return 0
     sim = pipeline.run_simulation(ctx, n_sims=args.n)
     rid = pipeline.export(ctx, sim)
-    print(f"[update] 新完赛 {len(new)} 场 {new}，run_id={rid} 重模拟 {args.n} 次完成")
+    # 有新赛果时一并刷新 bootstrap 不确定性区间（保持与点估计一致；约 1-2 分钟）
+    pipeline.bootstrap_uncertainty(n_boot=30, n_sims=4000, force_fetch=False)
+    print(f"[update] 新完赛 {len(new)} 场 {new}，run_id={rid} 重模拟 {args.n} 次 + 刷新不确定性完成")
+    return 0
+
+
+def _cmd_uncertainty(args: argparse.Namespace) -> int:
+    """bootstrap 参数不确定性 → 夺冠/晋级概率置信区间，写 uncertainty.json。"""
+    out = pipeline.bootstrap_uncertainty(n_boot=args.boot, n_sims=args.n, force_fetch=args.force)
+    top = sorted(out["teams"].items(), key=lambda kv: -kv[1]["champion"][1])[:6]
+    print(f"[uncertainty] {args.boot} 次 bootstrap × {args.n} 模拟。夺冠概率 中位数[95% 区间]：")
+    for c, t in top:
+        lo, med, hi = t["champion"]
+        print(f"  {c}: {med:.1%}  [{lo:.1%}, {hi:.1%}]")
     return 0
 
 
@@ -123,10 +136,16 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("--force", action="store_true", help="强制重新下载数据")
         p.set_defaults(func=fn)
 
-    p_bt = sub.add_parser("backtest", help="2018/2022 回测 + 选最优 H/权重")
+    p_bt = sub.add_parser("backtest", help="跨赛事回测 + LOTO 选最优 H/权重")
     p_bt.add_argument("--apply", action="store_true", help="用最优参数重拟合并写 params.json")
     p_bt.add_argument("--force", action="store_true", help="强制重新下载数据")
     p_bt.set_defaults(func=_cmd_backtest)
+
+    p_un = sub.add_parser("uncertainty", help="bootstrap 参数不确定性 → 概率置信区间")
+    p_un.add_argument("-n", type=int, default=5000, help="每次 bootstrap 的模拟次数")
+    p_un.add_argument("--boot", type=int, default=40, help="bootstrap 重抽次数")
+    p_un.add_argument("--force", action="store_true", help="强制重新下载数据")
+    p_un.set_defaults(func=_cmd_uncertainty)
 
     args = parser.parse_args(argv)
     return args.func(args)

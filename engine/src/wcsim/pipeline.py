@@ -18,7 +18,7 @@ from .data.normalize import code_to_martj42
 from .models import dc_attack, dc_elo
 from .models.bundle import ModelBundle
 from .models.dc_attack import DcAttackParams
-from .models.score_model import EnsembleModel
+from .models.score_model import DcAttackModel, DcEloModel, EnsembleModel
 from .ratings import penalty
 from .ratings.elo import replay
 from .tournament.simulate import CODES, SimResult, simulate
@@ -158,6 +158,76 @@ def run_simulation(ctx: PipelineContext, *, n_sims: int, seed: int = 12345) -> S
         penalty_theta=ctx.penalty_theta,
         seed=seed,
     )
+
+
+def bootstrap_uncertainty(
+    *, n_boot: int = 40, n_sims: int = 5000, force_fetch: bool = False, seed: int = 0
+) -> dict:
+    """参数不确定性：case-resampling bootstrap 重抽训练史、重拟 DC 两模型（Elo 固定为点估计），
+    每个 bootstrap 抽样跑一次模拟，统计夺冠/晋级概率在抽样间的分布 → 置信区间。
+
+    捕捉"若历史样本略有不同，参数(进而概率)会差多少"——这是点估计完全忽略的估计不确定性。
+    Elo（49k 场，远更稳）与点球能力固定为点估计；不确定性主要来自 DC 系数与 48 队攻防。
+    写 web/public/data/uncertainty.json。
+    """
+    import numpy as np
+
+    df = fetch.load_results(force=force_fetch)
+    ratings, hist = replay(df, with_history=True)
+    elo_by_code = {c: ratings[code_to_martj42(c)] for c in CODES}
+    tiebreak_key = dict(elo_by_code)
+    shootouts = fetch.load_shootouts(force=force_fetch)
+    pen_by_name = penalty.fit_penalty_ratings(shootouts)
+    penalty_theta = {c: pen_by_name.get(code_to_martj42(c), 0.0) for c in CODES}
+
+    bundle = load_bundle() or fit_bundle(force_fetch=False)
+    H = bundle.half_life_days
+    ridge = bundle.diagnostics.get("selected_ridge", dc_attack.RIDGE)
+    w_elo = bundle.weight_dc_elo
+    results = results_store.load_store()
+
+    champ = np.zeros((n_boot, 48))
+    advance = np.zeros((n_boot, 48))
+    for b in range(n_boot):
+        hist_b = hist.sample(frac=1.0, replace=True, random_state=b)
+        df_b = df.sample(frac=1.0, replace=True, random_state=10_000 + b)
+        elo_p = dc_elo.fit(hist_b, cutoff=CUTOFF, half_life_days=H)
+        att_p = _attack_params_by_code(dc_attack.fit(df_b, cutoff=CUTOFF, half_life_days=H, ridge=ridge))
+        model = EnsembleModel(
+            [(DcEloModel(elo_p, elo_by_code), w_elo), (DcAttackModel(att_p), 1 - w_elo)]
+        )
+        sim = simulate(
+            model, elo_by_code, n_sims=n_sims, fixed_results=results,
+            tiebreak_key=tiebreak_key, penalty_theta=penalty_theta, seed=b,
+        )
+        for i, c in enumerate(CODES):
+            champ[b, i] = sim.stage_counts[c]["champion"] / n_sims
+            advance[b, i] = sim.advance_counts[c] / n_sims
+
+    def ci(arr):
+        lo, med, hi = np.percentile(arr, [2.5, 50, 97.5], axis=0)
+        return lo, med, hi
+
+    c_lo, c_med, c_hi = ci(champ)
+    a_lo, a_med, a_hi = ci(advance)
+    teams = {
+        c: {
+            "champion": [round(float(c_lo[i]), 4), round(float(c_med[i]), 4), round(float(c_hi[i]), 4)],
+            "advance": [round(float(a_lo[i]), 4), round(float(a_med[i]), 4), round(float(a_hi[i]), 4)],
+        }
+        for i, c in enumerate(CODES)
+    }
+    out = {
+        "n_boot": n_boot,
+        "n_sims": n_sims,
+        "generated_at": _now_iso(),
+        "note": "bootstrap 重抽训练史重拟 DC 模型(Elo 固定)的参数不确定性,区间为 2.5/50/97.5 百分位",
+        "teams": teams,
+    }
+    path = config.WEB_DATA_DIR / "uncertainty.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    return out
 
 
 def export(ctx: PipelineContext, sim: SimResult) -> str:

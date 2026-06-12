@@ -1,5 +1,5 @@
 import { useData } from '../hooks/useData'
-import type { Knockout, Match, Meta } from '../types/data'
+import type { Knockout, Match, Meta, Uncertainty } from '../types/data'
 import { Loading, ErrorMsg } from '../components/Loading'
 import Card from '../components/Card'
 import ChampionBar from '../components/ChampionBar'
@@ -10,6 +10,7 @@ export default function Dashboard() {
   const meta = useData<Meta>('meta')
   const ko = useData<Knockout>('knockout')
   const matches = useData<Match[]>('matches')
+  const unc = useData<Uncertainty>('uncertainty')
 
   if (meta.loading || ko.loading || matches.loading) return <Loading />
   if (meta.error || ko.error || matches.error)
@@ -48,7 +49,12 @@ export default function Dashboard() {
         <section>
           <h2 className="mb-3 text-lg font-medium">夺冠概率</h2>
           <Card className="px-4 py-4">
-            <ChampionBar data={champTop} />
+            <ChampionBar data={champTop} ci={unc.data?.teams && mapCi(unc.data, 'champion')} />
+            {unc.data?.teams && (
+              <p className="mt-3 text-xs text-ink-faint">
+                浅色带为 bootstrap 95% 区间——历史样本有限，参数本身有不确定性，单点概率不应过度解读。
+              </p>
+            )}
           </Card>
         </section>
 
@@ -81,6 +87,12 @@ export default function Dashboard() {
       </div>
     </div>
   )
+}
+
+function mapCi(unc: Uncertainty, key: 'champion' | 'advance'): Record<string, number[]> {
+  const out: Record<string, number[]> = {}
+  for (const [code, t] of Object.entries(unc.teams)) out[code] = t[key]
+  return out
 }
 
 function StatusBar({ meta }: { meta: Meta }) {

@@ -131,3 +131,12 @@ export interface Evolution {
   snapshots: { run_id: string; at: string; matches_played: number }[]
   teams: Record<string, { champion: number[]; final: number[]; sf: number[]; advance: number[] }>
 }
+
+// 参数不确定性（bootstrap）：每队 champion/advance 的 [2.5%, 中位数, 97.5%] 分位
+export interface Uncertainty {
+  n_boot: number
+  n_sims: number
+  generated_at: string
+  note: string
+  teams: Record<string, { champion: number[]; advance: number[] }>
+}
