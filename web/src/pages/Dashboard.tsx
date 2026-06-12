@@ -41,40 +41,44 @@ export default function Dashboard() {
     .slice(0, 3)
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <StatusBar meta={meta.data} />
 
-      <section>
-        <h2 className="mb-3 text-lg font-medium">夺冠概率</h2>
-        <Card className="px-4 py-4">
-          <ChampionBar data={champTop} />
-        </Card>
-      </section>
-
-      {nextDay.length > 0 && (
+      <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
         <section>
-          <h2 className="mb-1 text-lg font-medium">{dayLabel}</h2>
-          <p className="mb-3 text-xs text-ink-faint">
-            {formatKickoff(nextDay[0].kickoff_utc).split(' ').slice(0, 2).join(' ')}
-          </p>
-          <div className="space-y-2">
-            {nextDay.map((m) => (
-              <MatchCard key={m.id} match={m} />
-            ))}
-          </div>
+          <h2 className="mb-3 text-lg font-medium">夺冠概率</h2>
+          <Card className="px-4 py-4">
+            <ChampionBar data={champTop} />
+          </Card>
         </section>
-      )}
 
-      {finished.length > 0 && (
-        <section>
-          <h2 className="mb-3 text-lg font-medium">最近完赛</h2>
-          <div className="space-y-2">
-            {finished.map((m) => (
-              <MatchCard key={m.id} match={m} />
-            ))}
-          </div>
-        </section>
-      )}
+        <div className="space-y-6">
+          {nextDay.length > 0 && (
+            <section>
+              <h2 className="mb-1 text-lg font-medium">{dayLabel}</h2>
+              <p className="mb-3 text-xs text-ink-faint">
+                {formatKickoff(nextDay[0].kickoff_utc).split(' ').slice(0, 2).join(' ')}
+              </p>
+              <div className="space-y-2">
+                {nextDay.map((m) => (
+                  <MatchCard key={m.id} match={m} />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {finished.length > 0 && (
+            <section>
+              <h2 className="mb-3 text-lg font-medium">最近完赛</h2>
+              <div className="space-y-2">
+                {finished.map((m) => (
+                  <MatchCard key={m.id} match={m} />
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

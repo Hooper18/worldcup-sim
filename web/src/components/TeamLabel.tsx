@@ -1,4 +1,5 @@
 import { useTeams } from '../hooks/useTeams'
+import Flag from './Flag'
 
 interface Props {
   code: string | null | undefined
@@ -15,7 +16,7 @@ export default function TeamLabel({ code, size = 'md', showFlag = true, classNam
   const text = size === 'sm' ? 'text-sm' : 'text-base'
   return (
     <span className={`inline-flex items-center gap-1.5 ${text} ${className}`}>
-      {showFlag && <span aria-hidden>{t?.flag ?? '🏳️'}</span>}
+      {showFlag && <Flag code={code} />}
       <span>{t?.name_zh ?? code}</span>
     </span>
   )

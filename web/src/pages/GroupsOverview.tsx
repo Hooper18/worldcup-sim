@@ -13,7 +13,7 @@ export default function GroupsOverview() {
   return (
     <div>
       <h1 className="mb-4 text-xl font-medium">小组赛</h1>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Object.entries(data).map(([g, teams]) => (
           <Link key={g} to={`/groups/${g}`} className="block">
             <Card className="px-4 py-3 transition-colors hover:bg-surface">

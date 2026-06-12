@@ -14,7 +14,7 @@ export default function ModelPage() {
   const hasBacktest = bt && 'years' in bt
 
   return (
-    <div className="space-y-8">
+    <div className="mx-auto max-w-3xl space-y-8">
       <div>
         <h1 className="text-xl font-medium">预测模型</h1>
         <p className="mt-1 text-xs text-ink-faint">基于 {(data.data.martj42_rows / 1000).toFixed(0)}k 场国际比赛历史，融合两个统计模型</p>

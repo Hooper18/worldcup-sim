@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import type { Knockout, Match } from '../types/data'
 import { useTeams } from '../hooks/useTeams'
 import { pct } from '../lib/format'
+import Flag from './Flag'
 
 // 自绘对阵树：CSS grid 分 5 列（32强→决赛），未定槽位显示最可能队伍+概率。
 // 移动端横向滚动。连接线用极淡边框近似（避免图表库画 bracket 的复杂度）。
@@ -33,9 +34,9 @@ function SlotCell({ code, p }: { code: string | null; p: number | null }) {
   const teams = useTeams()
   const t = code ? teams?.[code] : null
   return (
-    <div className="flex items-center justify-between gap-1 px-2 py-1">
-      <span className="flex items-center gap-1 truncate text-sm">
-        <span aria-hidden>{t?.flag ?? '·'}</span>
+    <div className="flex items-center justify-between gap-1 px-2 py-1.5">
+      <span className="flex items-center gap-1.5 truncate text-sm">
+        <Flag code={code} />
         <span className="truncate">{t?.name_zh ?? '待定'}</span>
       </span>
       {p != null && <span className="shrink-0 text-xs tabular-nums text-ink-faint">{pct(p)}</span>}

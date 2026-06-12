@@ -23,7 +23,7 @@ export default function GroupDetail() {
     .sort((a, b) => a.kickoff_utc.localeCompare(b.kickoff_utc))
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6">
       <div>
         <Link to="/groups" className="text-sm text-ink-faint hover:text-ink-secondary">
           ← 小组赛

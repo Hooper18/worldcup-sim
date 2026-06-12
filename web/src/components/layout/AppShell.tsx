@@ -12,7 +12,7 @@ export default function AppShell() {
   return (
     <div className="min-h-screen bg-paper text-ink">
       <header className="sticky top-0 z-10 border-b border-line bg-paper/90 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <NavLink to="/" className="text-md font-medium">
             2026 世界杯预测
           </NavLink>
@@ -34,7 +34,7 @@ export default function AppShell() {
           </nav>
         </div>
       </header>
-      <main className="mx-auto max-w-3xl px-4 py-6">
+      <main className="mx-auto max-w-5xl px-4 py-6 sm:py-8">
         <Outlet />
       </main>
     </div>

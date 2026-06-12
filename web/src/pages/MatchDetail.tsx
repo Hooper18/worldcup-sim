@@ -23,7 +23,7 @@ export default function MatchDetail() {
   const awayName = m.away && !isKnockout ? m.away : m.slot_dist?.away[0]?.team ?? m.away
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6">
       <div>
         <Link to="/bracket" className="text-sm text-ink-faint hover:text-ink-secondary">
           ← 返回
@@ -120,8 +120,8 @@ export default function MatchDetail() {
             <Card className="overflow-x-auto px-4 py-4">
               <ScoreHeatGrid
                 matrix={m.forecast.score_matrix}
-                homeFlag={teams?.[homeName ?? '']?.flag}
-                awayFlag={teams?.[awayName ?? '']?.flag}
+                homeCode={homeName}
+                awayCode={awayName}
               />
             </Card>
           </section>

@@ -4,6 +4,7 @@ import { useTeams } from '../hooks/useTeams'
 import type { Evolution, Knockout } from '../types/data'
 import { Loading, ErrorMsg } from '../components/Loading'
 import Card from '../components/Card'
+import Flag from '../components/Flag'
 import LineChartSvg, { seriesColor, type Series } from '../components/LineChartSvg'
 
 type Metric = 'champion' | 'sf' | 'advance'
@@ -92,11 +93,11 @@ export default function Trends() {
                 onClick={() =>
                   setSelected(on ? sel.filter((x) => x !== c) : [...sel, c].slice(0, 8))
                 }
-                className={`rounded-lg border px-2.5 py-1 text-sm transition-colors ${
+                className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-sm transition-colors ${
                   on ? 'border-accent bg-accent-soft text-accent' : 'border-line text-ink-secondary hover:bg-surface'
                 }`}
               >
-                {teams?.[c]?.flag} {teams?.[c]?.name_zh ?? c}
+                <Flag code={c} /> {teams?.[c]?.name_zh ?? c}
               </button>
             )
           })}

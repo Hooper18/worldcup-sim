@@ -1,5 +1,6 @@
 import { useTeams } from '../hooks/useTeams'
 import { pct } from '../lib/format'
+import Flag from './Flag'
 
 interface Props {
   data: { code: string; p: number }[]
@@ -15,8 +16,8 @@ export default function ChampionBar({ data }: Props) {
         const t = teams?.[d.code]
         return (
           <div key={d.code} className="flex items-center gap-3">
-            <div className="flex w-20 shrink-0 items-center gap-1.5 text-sm">
-              <span aria-hidden>{t?.flag ?? ''}</span>
+            <div className="flex w-24 shrink-0 items-center gap-1.5 text-sm">
+              <Flag code={d.code} />
               <span className="truncate">{t?.name_zh ?? d.code}</span>
             </div>
             <div className="h-4 flex-1 overflow-hidden rounded bg-line/60">
