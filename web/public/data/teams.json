@@ -40,7 +40,7 @@
     "name_en": "Canada",
     "group": "B",
     "flag": "🇨🇦",
-    "elo": 1898,
+    "elo": 1875,
     "fifa_rank": null,
     "host": true
   },
@@ -49,7 +49,7 @@
     "name_en": "Bosnia and Herzegovina",
     "group": "B",
     "flag": "🇧🇦",
-    "elo": 1650,
+    "elo": 1673,
     "fifa_rank": null,
     "host": false
   },
@@ -112,7 +112,7 @@
     "name_en": "USA",
     "group": "D",
     "flag": "🇺🇸",
-    "elo": 1822,
+    "elo": 1873,
     "fifa_rank": null,
     "host": true
   },
@@ -121,7 +121,7 @@
     "name_en": "Paraguay",
     "group": "D",
     "flag": "🇵🇾",
-    "elo": 1916,
+    "elo": 1864,
     "fifa_rank": null,
     "host": false
   },
