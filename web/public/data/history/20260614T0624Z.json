@@ -1,0 +1,1949 @@
+{
+  "meta": {
+    "run_id": "20260614T0624Z",
+    "generated_at": "2026-06-14T06:24:00Z",
+    "n_sims": 100000,
+    "matches_played": 8,
+    "data": {
+      "martj42_rows": 49409,
+      "elo_through": "2026-06-12",
+      "results_count": 8
+    },
+    "models": {
+      "components": [
+        {
+          "id": "dc_elo",
+          "name_zh": "DC-on-Elo（Dixon-Coles × Elo）",
+          "weight": 0.2,
+          "params": {
+            "beta0": 0.1023,
+            "beta1": 0.7331,
+            "gamma": 0.2276,
+            "rho": -0.0432
+          }
+        },
+        {
+          "id": "dc_attack",
+          "name_zh": "纯攻防 Dixon-Coles",
+          "weight": 0.8,
+          "params": {
+            "mu": 0.0912,
+            "home_adv": 0.2338,
+            "rho": -0.051
+          }
+        }
+      ],
+      "half_life_days": 730.0,
+      "backtest": {
+        "best": {
+          "half_life_days": 730.0,
+          "weight_dc_elo": 0.2,
+          "weight_dc_attack": 0.8,
+          "pooled_rps": 0.1883,
+          "oos_rps": 0.1887,
+          "n_events": 20,
+          "n_matches": 895,
+          "rps_baseline": 0.2294,
+          "rps_elo_baseline": 0.1919
+        },
+        "years": {
+          "2018": {
+            "n_matches": 64,
+            "rps_baseline": 0.2426,
+            "rps_elo_baseline": 0.2126,
+            "rps_dc_elo": 0.2129,
+            "rps_dc_attack": 0.2002,
+            "rps_ensemble": 0.202,
+            "logloss_dc_elo": 0.997,
+            "calibration": [
+              [
+                0.0908,
+                0.1667,
+                6
+              ],
+              [
+                0.1565,
+                0.125,
+                24
+              ],
+              [
+                0.253,
+                0.1864,
+                59
+              ],
+              [
+                0.3321,
+                0.3396,
+                53
+              ],
+              [
+                0.4464,
+                0.5,
+                20
+              ],
+              [
+                0.5446,
+                0.7333,
+                15
+              ],
+              [
+                0.6536,
+                0.6364,
+                11
+              ],
+              [
+                0.7211,
+                0.75,
+                4
+              ]
+            ]
+          },
+          "2022": {
+            "n_matches": 64,
+            "rps_baseline": 0.234,
+            "rps_elo_baseline": 0.2155,
+            "rps_dc_elo": 0.215,
+            "rps_dc_attack": 0.2155,
+            "rps_ensemble": 0.215,
+            "logloss_dc_elo": 1.0361,
+            "calibration": [
+              [
+                0.0731,
+                0.1667,
+                12
+              ],
+              [
+                0.1621,
+                0.2121,
+                33
+              ],
+              [
+                0.2543,
+                0.2787,
+                61
+              ],
+              [
+                0.3337,
+                0.2581,
+                31
+              ],
+              [
+                0.4617,
+                0.4286,
+                14
+              ],
+              [
+                0.5499,
+                0.4211,
+                19
+              ],
+              [
+                0.6337,
+                0.7692,
+                13
+              ],
+              [
+                0.7391,
+                0.75,
+                8
+              ],
+              [
+                0.854,
+                0.0,
+                1
+              ]
+            ]
+          }
+        },
+        "loto": {
+          "oos_rps": 0.1887,
+          "oos_logloss": 0.9592,
+          "oos_brier": 0.5704,
+          "oos_ece": 0.0195,
+          "climatology_rps": 0.2294,
+          "elo_baseline_rps": 0.1919,
+          "elo_baseline_logloss": 0.9694,
+          "logloss_gain_vs_elo": 0.0102,
+          "reliability": [
+            {
+              "p_pred": 0.071,
+              "freq": 0.0593,
+              "ci_lo": 0.029,
+              "ci_hi": 0.1174,
+              "n": 118
+            },
+            {
+              "p_pred": 0.1549,
+              "freq": 0.1354,
+              "ci_lo": 0.1048,
+              "ci_hi": 0.1733,
+              "n": 384
+            },
+            {
+              "p_pred": 0.2573,
+              "freq": 0.2517,
+              "ci_lo": 0.2239,
+              "ci_hi": 0.2818,
+              "n": 862
+            },
+            {
+              "p_pred": 0.3358,
+              "freq": 0.3182,
+              "ci_lo": 0.282,
+              "ci_hi": 0.3567,
+              "n": 594
+            },
+            {
+              "p_pred": 0.4483,
+              "freq": 0.5167,
+              "ci_lo": 0.4572,
+              "ci_hi": 0.5758,
+              "n": 269
+            },
+            {
+              "p_pred": 0.5488,
+              "freq": 0.5459,
+              "ci_lo": 0.4796,
+              "ci_hi": 0.6106,
+              "n": 218
+            },
+            {
+              "p_pred": 0.6448,
+              "freq": 0.66,
+              "ci_lo": 0.581,
+              "ci_hi": 0.731,
+              "n": 150
+            },
+            {
+              "p_pred": 0.7394,
+              "freq": 0.8143,
+              "ci_lo": 0.7077,
+              "ci_hi": 0.8881,
+              "n": 70
+            },
+            {
+              "p_pred": 0.84,
+              "freq": 0.75,
+              "ci_lo": 0.505,
+              "ci_hi": 0.8982,
+              "n": 16
+            },
+            {
+              "p_pred": 0.9268,
+              "freq": 1.0,
+              "ci_lo": 0.5101,
+              "ci_hi": 1.0,
+              "n": 4
+            }
+          ],
+          "n_folds": 20,
+          "n_matches": 895,
+          "per_fold": [
+            {
+              "event": "FIFA World Cup 2014",
+              "n": 64,
+              "selected_H": 1095.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.198
+            },
+            {
+              "event": "AFC Asian Cup 2015",
+              "n": 32,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.187
+            },
+            {
+              "event": "African Cup of Nations 2015",
+              "n": 32,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.2117
+            },
+            {
+              "event": "Copa América 2015",
+              "n": 26,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.1932
+            },
+            {
+              "event": "Copa América 2016",
+              "n": 32,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.1796
+            },
+            {
+              "event": "UEFA Euro 2016",
+              "n": 51,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.2293
+            },
+            {
+              "event": "African Cup of Nations 2017",
+              "n": 32,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.1948
+            },
+            {
+              "event": "FIFA World Cup 2018",
+              "n": 64,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.202
+            },
+            {
+              "event": "AFC Asian Cup 2019",
+              "n": 51,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.172
+            },
+            {
+              "event": "Copa América 2019",
+              "n": 26,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.1493
+            },
+            {
+              "event": "African Cup of Nations 2019",
+              "n": 52,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.1828
+            },
+            {
+              "event": "UEFA Euro 2021",
+              "n": 51,
+              "selected_H": 1095.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.1826
+            },
+            {
+              "event": "Copa América 2021",
+              "n": 28,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.1566
+            },
+            {
+              "event": "African Cup of Nations 2022",
+              "n": 52,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.1987
+            },
+            {
+              "event": "FIFA World Cup 2022",
+              "n": 64,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.215
+            },
+            {
+              "event": "AFC Asian Cup 2024",
+              "n": 51,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.1695
+            },
+            {
+              "event": "African Cup of Nations 2024",
+              "n": 52,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.2096
+            },
+            {
+              "event": "UEFA Euro 2024",
+              "n": 51,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.192
+            },
+            {
+              "event": "Copa América 2024",
+              "n": 32,
+              "selected_H": 730.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.1565
+            },
+            {
+              "event": "African Cup of Nations 2025",
+              "n": 52,
+              "selected_H": 1095.0,
+              "selected_w": 0.2,
+              "oos_rps": 0.1454
+            }
+          ],
+          "selected_H_counts": {
+            "1095.0": 3,
+            "730.0": 17
+          },
+          "selected_w_counts": {
+            "0.2": 20
+          }
+        },
+        "events": [
+          {
+            "name": "FIFA World Cup 2014",
+            "n": 64
+          },
+          {
+            "name": "AFC Asian Cup 2015",
+            "n": 32
+          },
+          {
+            "name": "African Cup of Nations 2015",
+            "n": 32
+          },
+          {
+            "name": "Copa América 2015",
+            "n": 26
+          },
+          {
+            "name": "Copa América 2016",
+            "n": 32
+          },
+          {
+            "name": "UEFA Euro 2016",
+            "n": 51
+          },
+          {
+            "name": "African Cup of Nations 2017",
+            "n": 32
+          },
+          {
+            "name": "FIFA World Cup 2018",
+            "n": 64
+          },
+          {
+            "name": "AFC Asian Cup 2019",
+            "n": 51
+          },
+          {
+            "name": "Copa América 2019",
+            "n": 26
+          },
+          {
+            "name": "African Cup of Nations 2019",
+            "n": 52
+          },
+          {
+            "name": "UEFA Euro 2021",
+            "n": 51
+          },
+          {
+            "name": "Copa América 2021",
+            "n": 28
+          },
+          {
+            "name": "African Cup of Nations 2022",
+            "n": 52
+          },
+          {
+            "name": "FIFA World Cup 2022",
+            "n": 64
+          },
+          {
+            "name": "AFC Asian Cup 2024",
+            "n": 51
+          },
+          {
+            "name": "African Cup of Nations 2024",
+            "n": 52
+          },
+          {
+            "name": "UEFA Euro 2024",
+            "n": 51
+          },
+          {
+            "name": "Copa América 2024",
+            "n": 32
+          },
+          {
+            "name": "African Cup of Nations 2025",
+            "n": 52
+          }
+        ]
+      },
+      "diagnostics": {
+        "selected_ridge": 0.005,
+        "ridge_scan": {
+          "0.005": 0.8412,
+          "0.01": 0.8413,
+          "0.02": 0.8413,
+          "0.05": 0.8416,
+          "0.1": 0.842,
+          "0.2": 0.8428
+        },
+        "empirical_home_advantage": {
+          "n": 6863,
+          "home_goal_diff": 0.669,
+          "home_win_rate": 0.51,
+          "log_lambda_adv": 0.5008
+        }
+      }
+    }
+  },
+  "groups": {
+    "A": {
+      "MEX": {
+        "p_rank": [
+          0.6059,
+          0.2814,
+          0.1041,
+          0.0086
+        ],
+        "p_top2": 0.8873,
+        "p_third_advance": 0.0979,
+        "p_advance": 0.9852,
+        "exp_pts": 6.58,
+        "exp_gd": 3.22,
+        "current": {
+          "pts": 3,
+          "gd": 2,
+          "gf": 2,
+          "played": 1
+        }
+      },
+      "RSA": {
+        "p_rank": [
+          0.0109,
+          0.0818,
+          0.2668,
+          0.6405
+        ],
+        "p_top2": 0.0927,
+        "p_third_advance": 0.155,
+        "p_advance": 0.2476,
+        "exp_pts": 1.81,
+        "exp_gd": -3.27,
+        "current": {
+          "pts": 0,
+          "gd": -2,
+          "gf": 0,
+          "played": 1
+        }
+      },
+      "KOR": {
+        "p_rank": [
+          0.3329,
+          0.5044,
+          0.1239,
+          0.0388
+        ],
+        "p_top2": 0.8373,
+        "p_third_advance": 0.1074,
+        "p_advance": 0.9446,
+        "exp_pts": 5.87,
+        "exp_gd": 1.2,
+        "current": {
+          "pts": 3,
+          "gd": 1,
+          "gf": 2,
+          "played": 1
+        }
+      },
+      "CZE": {
+        "p_rank": [
+          0.0504,
+          0.1324,
+          0.5051,
+          0.312
+        ],
+        "p_top2": 0.1828,
+        "p_third_advance": 0.3357,
+        "p_advance": 0.5185,
+        "exp_pts": 2.65,
+        "exp_gd": -1.15,
+        "current": {
+          "pts": 0,
+          "gd": -1,
+          "gf": 1,
+          "played": 1
+        }
+      }
+    },
+    "B": {
+      "CAN": {
+        "p_rank": [
+          0.376,
+          0.3622,
+          0.1817,
+          0.0801
+        ],
+        "p_top2": 0.7382,
+        "p_third_advance": 0.1262,
+        "p_advance": 0.8643,
+        "exp_pts": 4.55,
+        "exp_gd": 1.39,
+        "current": {
+          "pts": 1,
+          "gd": 0,
+          "gf": 1,
+          "played": 1
+        }
+      },
+      "BIH": {
+        "p_rank": [
+          0.0933,
+          0.1953,
+          0.3825,
+          0.3289
+        ],
+        "p_top2": 0.2886,
+        "p_third_advance": 0.2746,
+        "p_advance": 0.5632,
+        "exp_pts": 3.15,
+        "exp_gd": -1.0,
+        "current": {
+          "pts": 1,
+          "gd": 0,
+          "gf": 1,
+          "played": 1
+        }
+      },
+      "QAT": {
+        "p_rank": [
+          0.0473,
+          0.1248,
+          0.2917,
+          0.5362
+        ],
+        "p_top2": 0.1721,
+        "p_third_advance": 0.2053,
+        "p_advance": 0.3774,
+        "exp_pts": 2.53,
+        "exp_gd": -2.07,
+        "current": {
+          "pts": 1,
+          "gd": 0,
+          "gf": 1,
+          "played": 1
+        }
+      },
+      "SUI": {
+        "p_rank": [
+          0.4834,
+          0.3177,
+          0.1441,
+          0.0547
+        ],
+        "p_top2": 0.8011,
+        "p_third_advance": 0.0795,
+        "p_advance": 0.8807,
+        "exp_pts": 4.85,
+        "exp_gd": 1.68,
+        "current": {
+          "pts": 1,
+          "gd": 0,
+          "gf": 1,
+          "played": 1
+        }
+      }
+    },
+    "C": {
+      "BRA": {
+        "p_rank": [
+          0.5652,
+          0.2864,
+          0.1347,
+          0.0136
+        ],
+        "p_top2": 0.8516,
+        "p_third_advance": 0.1239,
+        "p_advance": 0.9755,
+        "exp_pts": 5.83,
+        "exp_gd": 3.97,
+        "current": {
+          "pts": 1,
+          "gd": 0,
+          "gf": 1,
+          "played": 1
+        }
+      },
+      "MAR": {
+        "p_rank": [
+          0.2848,
+          0.4642,
+          0.2203,
+          0.0306
+        ],
+        "p_top2": 0.749,
+        "p_third_advance": 0.1936,
+        "p_advance": 0.9426,
+        "exp_pts": 5.34,
+        "exp_gd": 2.48,
+        "current": {
+          "pts": 1,
+          "gd": 0,
+          "gf": 1,
+          "played": 1
+        }
+      },
+      "HAI": {
+        "p_rank": [
+          0.0018,
+          0.0068,
+          0.0391,
+          0.9523
+        ],
+        "p_top2": 0.0086,
+        "p_third_advance": 0.0219,
+        "p_advance": 0.0305,
+        "exp_pts": 0.5,
+        "exp_gd": -5.8,
+        "current": {
+          "pts": 0,
+          "gd": -1,
+          "gf": 0,
+          "played": 1
+        }
+      },
+      "SCO": {
+        "p_rank": [
+          0.1482,
+          0.2426,
+          0.6058,
+          0.0035
+        ],
+        "p_top2": 0.3908,
+        "p_third_advance": 0.4702,
+        "p_advance": 0.8609,
+        "exp_pts": 4.54,
+        "exp_gd": -0.65,
+        "current": {
+          "pts": 3,
+          "gd": 1,
+          "gf": 1,
+          "played": 1
+        }
+      }
+    },
+    "D": {
+      "USA": {
+        "p_rank": [
+          0.4597,
+          0.3276,
+          0.1703,
+          0.0424
+        ],
+        "p_top2": 0.7873,
+        "p_third_advance": 0.1612,
+        "p_advance": 0.9485,
+        "exp_pts": 5.63,
+        "exp_gd": 2.86,
+        "current": {
+          "pts": 3,
+          "gd": 3,
+          "gf": 4,
+          "played": 1
+        }
+      },
+      "PAR": {
+        "p_rank": [
+          0.0401,
+          0.1092,
+          0.3092,
+          0.5415
+        ],
+        "p_top2": 0.1493,
+        "p_third_advance": 0.2077,
+        "p_advance": 0.357,
+        "exp_pts": 2.48,
+        "exp_gd": -3.26,
+        "current": {
+          "pts": 0,
+          "gd": -3,
+          "gf": 1,
+          "played": 1
+        }
+      },
+      "AUS": {
+        "p_rank": [
+          0.4285,
+          0.3875,
+          0.1402,
+          0.0438
+        ],
+        "p_top2": 0.816,
+        "p_third_advance": 0.1292,
+        "p_advance": 0.9452,
+        "exp_pts": 5.75,
+        "exp_gd": 2.08,
+        "current": {
+          "pts": 3,
+          "gd": 2,
+          "gf": 2,
+          "played": 1
+        }
+      },
+      "TUR": {
+        "p_rank": [
+          0.0716,
+          0.1758,
+          0.3803,
+          0.3723
+        ],
+        "p_top2": 0.2474,
+        "p_third_advance": 0.2518,
+        "p_advance": 0.4991,
+        "exp_pts": 2.95,
+        "exp_gd": -1.68,
+        "current": {
+          "pts": 0,
+          "gd": -2,
+          "gf": 0,
+          "played": 1
+        }
+      }
+    },
+    "E": {
+      "GER": {
+        "p_rank": [
+          0.5233,
+          0.3155,
+          0.1451,
+          0.0161
+        ],
+        "p_top2": 0.8388,
+        "p_third_advance": 0.1306,
+        "p_advance": 0.9694,
+        "exp_pts": 6.19,
+        "exp_gd": 4.02,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "CUW": {
+        "p_rank": [
+          0.005,
+          0.0268,
+          0.1339,
+          0.8344
+        ],
+        "p_top2": 0.0318,
+        "p_third_advance": 0.0533,
+        "p_advance": 0.0851,
+        "exp_pts": 0.99,
+        "exp_gd": -6.06,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "CIV": {
+        "p_rank": [
+          0.1183,
+          0.2574,
+          0.506,
+          0.1183
+        ],
+        "p_top2": 0.3757,
+        "p_third_advance": 0.3556,
+        "p_advance": 0.7312,
+        "exp_pts": 3.88,
+        "exp_gd": -0.18,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "ECU": {
+        "p_rank": [
+          0.3534,
+          0.4004,
+          0.215,
+          0.0312
+        ],
+        "p_top2": 0.7538,
+        "p_third_advance": 0.1757,
+        "p_advance": 0.9295,
+        "exp_pts": 5.55,
+        "exp_gd": 2.22,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      }
+    },
+    "F": {
+      "NED": {
+        "p_rank": [
+          0.486,
+          0.2913,
+          0.1523,
+          0.0704
+        ],
+        "p_top2": 0.7773,
+        "p_third_advance": 0.1227,
+        "p_advance": 0.9,
+        "exp_pts": 5.67,
+        "exp_gd": 2.31,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "JPN": {
+        "p_rank": [
+          0.3326,
+          0.3408,
+          0.2127,
+          0.1139
+        ],
+        "p_top2": 0.6734,
+        "p_third_advance": 0.1604,
+        "p_advance": 0.8338,
+        "exp_pts": 4.97,
+        "exp_gd": 1.23,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "SWE": {
+        "p_rank": [
+          0.1127,
+          0.2081,
+          0.3326,
+          0.3465
+        ],
+        "p_top2": 0.3208,
+        "p_third_advance": 0.211,
+        "p_advance": 0.5319,
+        "exp_pts": 3.17,
+        "exp_gd": -1.48,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "TUN": {
+        "p_rank": [
+          0.0686,
+          0.1598,
+          0.3024,
+          0.4692
+        ],
+        "p_top2": 0.2284,
+        "p_third_advance": 0.1845,
+        "p_advance": 0.4129,
+        "exp_pts": 2.61,
+        "exp_gd": -2.06,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      }
+    },
+    "G": {
+      "BEL": {
+        "p_rank": [
+          0.5752,
+          0.2581,
+          0.1243,
+          0.0424
+        ],
+        "p_top2": 0.8333,
+        "p_third_advance": 0.1024,
+        "p_advance": 0.9356,
+        "exp_pts": 6.08,
+        "exp_gd": 2.87,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "EGY": {
+        "p_rank": [
+          0.1592,
+          0.293,
+          0.342,
+          0.2058
+        ],
+        "p_top2": 0.4522,
+        "p_third_advance": 0.2255,
+        "p_advance": 0.6776,
+        "exp_pts": 3.85,
+        "exp_gd": -0.31,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "IRN": {
+        "p_rank": [
+          0.2303,
+          0.337,
+          0.2856,
+          0.1471
+        ],
+        "p_top2": 0.5673,
+        "p_third_advance": 0.2013,
+        "p_advance": 0.7685,
+        "exp_pts": 4.38,
+        "exp_gd": 0.37,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "NZL": {
+        "p_rank": [
+          0.0353,
+          0.1119,
+          0.2481,
+          0.6047
+        ],
+        "p_top2": 0.1472,
+        "p_third_advance": 0.1355,
+        "p_advance": 0.2828,
+        "exp_pts": 2.03,
+        "exp_gd": -2.93,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      }
+    },
+    "H": {
+      "ESP": {
+        "p_rank": [
+          0.7506,
+          0.2127,
+          0.0317,
+          0.005
+        ],
+        "p_top2": 0.9633,
+        "p_third_advance": 0.0284,
+        "p_advance": 0.9916,
+        "exp_pts": 7.27,
+        "exp_gd": 5.56,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "CPV": {
+        "p_rank": [
+          0.0112,
+          0.0916,
+          0.358,
+          0.5392
+        ],
+        "p_top2": 0.1028,
+        "p_third_advance": 0.1459,
+        "p_advance": 0.2487,
+        "exp_pts": 1.88,
+        "exp_gd": -4.02,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "KSA": {
+        "p_rank": [
+          0.0173,
+          0.1268,
+          0.4476,
+          0.4083
+        ],
+        "p_top2": 0.1441,
+        "p_third_advance": 0.1988,
+        "p_advance": 0.3429,
+        "exp_pts": 2.27,
+        "exp_gd": -3.1,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "URU": {
+        "p_rank": [
+          0.2209,
+          0.5689,
+          0.1627,
+          0.0475
+        ],
+        "p_top2": 0.7898,
+        "p_third_advance": 0.1103,
+        "p_advance": 0.9001,
+        "exp_pts": 5.24,
+        "exp_gd": 1.56,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      }
+    },
+    "I": {
+      "FRA": {
+        "p_rank": [
+          0.5339,
+          0.285,
+          0.1441,
+          0.0371
+        ],
+        "p_top2": 0.8189,
+        "p_third_advance": 0.1201,
+        "p_advance": 0.9389,
+        "exp_pts": 6.03,
+        "exp_gd": 2.86,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "SEN": {
+        "p_rank": [
+          0.1535,
+          0.2831,
+          0.3844,
+          0.179
+        ],
+        "p_top2": 0.4366,
+        "p_third_advance": 0.2637,
+        "p_advance": 0.7003,
+        "exp_pts": 3.92,
+        "exp_gd": -0.26,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "IRQ": {
+        "p_rank": [
+          0.0206,
+          0.0756,
+          0.2146,
+          0.6891
+        ],
+        "p_top2": 0.0962,
+        "p_third_advance": 0.111,
+        "p_advance": 0.2073,
+        "exp_pts": 1.65,
+        "exp_gd": -3.81,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "NOR": {
+        "p_rank": [
+          0.292,
+          0.3563,
+          0.2569,
+          0.0948
+        ],
+        "p_top2": 0.6483,
+        "p_third_advance": 0.1957,
+        "p_advance": 0.844,
+        "exp_pts": 4.9,
+        "exp_gd": 1.21,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      }
+    },
+    "J": {
+      "ARG": {
+        "p_rank": [
+          0.7162,
+          0.2014,
+          0.0672,
+          0.0152
+        ],
+        "p_top2": 0.9176,
+        "p_third_advance": 0.059,
+        "p_advance": 0.9767,
+        "exp_pts": 6.88,
+        "exp_gd": 4.22,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "ALG": {
+        "p_rank": [
+          0.1134,
+          0.317,
+          0.3619,
+          0.2077
+        ],
+        "p_top2": 0.4304,
+        "p_third_advance": 0.2417,
+        "p_advance": 0.6721,
+        "exp_pts": 3.72,
+        "exp_gd": -0.52,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "AUT": {
+        "p_rank": [
+          0.1471,
+          0.3745,
+          0.3182,
+          0.1602
+        ],
+        "p_top2": 0.5216,
+        "p_third_advance": 0.2192,
+        "p_advance": 0.7408,
+        "exp_pts": 4.11,
+        "exp_gd": 0.07,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "JOR": {
+        "p_rank": [
+          0.0233,
+          0.1071,
+          0.2527,
+          0.6169
+        ],
+        "p_top2": 0.1304,
+        "p_third_advance": 0.1302,
+        "p_advance": 0.2606,
+        "exp_pts": 1.86,
+        "exp_gd": -3.76,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      }
+    },
+    "K": {
+      "POR": {
+        "p_rank": [
+          0.4726,
+          0.3392,
+          0.1362,
+          0.052
+        ],
+        "p_top2": 0.8118,
+        "p_third_advance": 0.1083,
+        "p_advance": 0.92,
+        "exp_pts": 5.78,
+        "exp_gd": 2.37,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "COD": {
+        "p_rank": [
+          0.0503,
+          0.1443,
+          0.3438,
+          0.4616
+        ],
+        "p_top2": 0.1946,
+        "p_third_advance": 0.1864,
+        "p_advance": 0.381,
+        "exp_pts": 2.46,
+        "exp_gd": -2.23,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "UZB": {
+        "p_rank": [
+          0.0564,
+          0.1578,
+          0.3632,
+          0.4225
+        ],
+        "p_top2": 0.2142,
+        "p_third_advance": 0.1999,
+        "p_advance": 0.4142,
+        "exp_pts": 2.59,
+        "exp_gd": -2.09,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "COL": {
+        "p_rank": [
+          0.4207,
+          0.3587,
+          0.1567,
+          0.0639
+        ],
+        "p_top2": 0.7794,
+        "p_third_advance": 0.1212,
+        "p_advance": 0.9006,
+        "exp_pts": 5.52,
+        "exp_gd": 1.96,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      }
+    },
+    "L": {
+      "ENG": {
+        "p_rank": [
+          0.6691,
+          0.264,
+          0.0549,
+          0.012
+        ],
+        "p_top2": 0.9331,
+        "p_third_advance": 0.0475,
+        "p_advance": 0.9806,
+        "exp_pts": 6.91,
+        "exp_gd": 4.53,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "CRO": {
+        "p_rank": [
+          0.2803,
+          0.5053,
+          0.1619,
+          0.0525
+        ],
+        "p_top2": 0.7856,
+        "p_third_advance": 0.1218,
+        "p_advance": 0.9074,
+        "exp_pts": 5.38,
+        "exp_gd": 2.05,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "GHA": {
+        "p_rank": [
+          0.0223,
+          0.1086,
+          0.3831,
+          0.4861
+        ],
+        "p_top2": 0.1309,
+        "p_third_advance": 0.1907,
+        "p_advance": 0.3215,
+        "exp_pts": 2.14,
+        "exp_gd": -3.32,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      },
+      "PAN": {
+        "p_rank": [
+          0.0284,
+          0.1221,
+          0.4001,
+          0.4494
+        ],
+        "p_top2": 0.1505,
+        "p_third_advance": 0.2006,
+        "p_advance": 0.3512,
+        "exp_pts": 2.29,
+        "exp_gd": -3.27,
+        "current": {
+          "pts": 0,
+          "gd": 0,
+          "gf": 0,
+          "played": 0
+        }
+      }
+    }
+  },
+  "knockout": {
+    "teams": {
+      "MEX": {
+        "p_r32": 0.9852,
+        "p_r16": 0.5325,
+        "p_qf": 0.207,
+        "p_sf": 0.0759,
+        "p_final": 0.0257,
+        "p_champion": 0.0084
+      },
+      "RSA": {
+        "p_r32": 0.2476,
+        "p_r16": 0.0662,
+        "p_qf": 0.0156,
+        "p_sf": 0.0022,
+        "p_final": 0.0004,
+        "p_champion": 0.0
+      },
+      "KOR": {
+        "p_r32": 0.9446,
+        "p_r16": 0.4789,
+        "p_qf": 0.1643,
+        "p_sf": 0.051,
+        "p_final": 0.0141,
+        "p_champion": 0.0034
+      },
+      "CZE": {
+        "p_r32": 0.5185,
+        "p_r16": 0.2103,
+        "p_qf": 0.0806,
+        "p_sf": 0.0185,
+        "p_final": 0.0046,
+        "p_champion": 0.0009
+      },
+      "CAN": {
+        "p_r32": 0.8643,
+        "p_r16": 0.4206,
+        "p_qf": 0.1375,
+        "p_sf": 0.0381,
+        "p_final": 0.0106,
+        "p_champion": 0.0026
+      },
+      "BIH": {
+        "p_r32": 0.5632,
+        "p_r16": 0.1715,
+        "p_qf": 0.0356,
+        "p_sf": 0.0048,
+        "p_final": 0.0008,
+        "p_champion": 0.0001
+      },
+      "QAT": {
+        "p_r32": 0.3774,
+        "p_r16": 0.0773,
+        "p_qf": 0.0105,
+        "p_sf": 0.0007,
+        "p_final": 0.0001,
+        "p_champion": 0.0
+      },
+      "SUI": {
+        "p_r32": 0.8807,
+        "p_r16": 0.5485,
+        "p_qf": 0.2451,
+        "p_sf": 0.0982,
+        "p_final": 0.0399,
+        "p_champion": 0.015
+      },
+      "BRA": {
+        "p_r32": 0.9755,
+        "p_r16": 0.6562,
+        "p_qf": 0.4328,
+        "p_sf": 0.2648,
+        "p_final": 0.1427,
+        "p_champion": 0.076
+      },
+      "MAR": {
+        "p_r32": 0.9426,
+        "p_r16": 0.5424,
+        "p_qf": 0.318,
+        "p_sf": 0.1658,
+        "p_final": 0.0757,
+        "p_champion": 0.0334
+      },
+      "HAI": {
+        "p_r32": 0.0305,
+        "p_r16": 0.0037,
+        "p_qf": 0.0006,
+        "p_sf": 0.0001,
+        "p_final": 0.0,
+        "p_champion": 0.0
+      },
+      "SCO": {
+        "p_r32": 0.8609,
+        "p_r16": 0.3428,
+        "p_qf": 0.1321,
+        "p_sf": 0.0438,
+        "p_final": 0.0123,
+        "p_champion": 0.0033
+      },
+      "USA": {
+        "p_r32": 0.9485,
+        "p_r16": 0.4545,
+        "p_qf": 0.1523,
+        "p_sf": 0.037,
+        "p_final": 0.0104,
+        "p_champion": 0.0022
+      },
+      "PAR": {
+        "p_r32": 0.357,
+        "p_r16": 0.1497,
+        "p_qf": 0.0521,
+        "p_sf": 0.0184,
+        "p_final": 0.006,
+        "p_champion": 0.0017
+      },
+      "AUS": {
+        "p_r32": 0.9452,
+        "p_r16": 0.5225,
+        "p_qf": 0.2064,
+        "p_sf": 0.0658,
+        "p_final": 0.0239,
+        "p_champion": 0.0073
+      },
+      "TUR": {
+        "p_r32": 0.4991,
+        "p_r16": 0.2369,
+        "p_qf": 0.0904,
+        "p_sf": 0.0341,
+        "p_final": 0.0114,
+        "p_champion": 0.0031
+      },
+      "GER": {
+        "p_r32": 0.9694,
+        "p_r16": 0.6139,
+        "p_qf": 0.3366,
+        "p_sf": 0.1902,
+        "p_final": 0.0901,
+        "p_champion": 0.0411
+      },
+      "CUW": {
+        "p_r32": 0.0851,
+        "p_r16": 0.0083,
+        "p_qf": 0.0007,
+        "p_sf": 0.0001,
+        "p_final": 0.0,
+        "p_champion": 0.0
+      },
+      "CIV": {
+        "p_r32": 0.7312,
+        "p_r16": 0.278,
+        "p_qf": 0.0919,
+        "p_sf": 0.0273,
+        "p_final": 0.0077,
+        "p_champion": 0.0019
+      },
+      "ECU": {
+        "p_r32": 0.9295,
+        "p_r16": 0.5203,
+        "p_qf": 0.2615,
+        "p_sf": 0.1328,
+        "p_final": 0.0577,
+        "p_champion": 0.0236
+      },
+      "NED": {
+        "p_r32": 0.9,
+        "p_r16": 0.4451,
+        "p_qf": 0.2752,
+        "p_sf": 0.1415,
+        "p_final": 0.0624,
+        "p_champion": 0.0276
+      },
+      "JPN": {
+        "p_r32": 0.8338,
+        "p_r16": 0.3756,
+        "p_qf": 0.2063,
+        "p_sf": 0.0976,
+        "p_final": 0.0392,
+        "p_champion": 0.0156
+      },
+      "SWE": {
+        "p_r32": 0.5319,
+        "p_r16": 0.1539,
+        "p_qf": 0.0569,
+        "p_sf": 0.0172,
+        "p_final": 0.0043,
+        "p_champion": 0.0009
+      },
+      "TUN": {
+        "p_r32": 0.4129,
+        "p_r16": 0.1038,
+        "p_qf": 0.0326,
+        "p_sf": 0.0093,
+        "p_final": 0.0024,
+        "p_champion": 0.0005
+      },
+      "BEL": {
+        "p_r32": 0.9356,
+        "p_r16": 0.6464,
+        "p_qf": 0.3765,
+        "p_sf": 0.1636,
+        "p_final": 0.0814,
+        "p_champion": 0.0351
+      },
+      "EGY": {
+        "p_r32": 0.6776,
+        "p_r16": 0.3081,
+        "p_qf": 0.098,
+        "p_sf": 0.0274,
+        "p_final": 0.0081,
+        "p_champion": 0.0022
+      },
+      "IRN": {
+        "p_r32": 0.7685,
+        "p_r16": 0.3774,
+        "p_qf": 0.132,
+        "p_sf": 0.0374,
+        "p_final": 0.0121,
+        "p_champion": 0.003
+      },
+      "NZL": {
+        "p_r32": 0.2828,
+        "p_r16": 0.0682,
+        "p_qf": 0.01,
+        "p_sf": 0.0013,
+        "p_final": 0.0002,
+        "p_champion": 0.0
+      },
+      "ESP": {
+        "p_r32": 0.9916,
+        "p_r16": 0.7074,
+        "p_qf": 0.5026,
+        "p_sf": 0.385,
+        "p_final": 0.2651,
+        "p_champion": 0.1672
+      },
+      "CPV": {
+        "p_r32": 0.2487,
+        "p_r16": 0.0438,
+        "p_qf": 0.0078,
+        "p_sf": 0.0011,
+        "p_final": 0.0002,
+        "p_champion": 0.0001
+      },
+      "KSA": {
+        "p_r32": 0.3429,
+        "p_r16": 0.0805,
+        "p_qf": 0.0202,
+        "p_sf": 0.0036,
+        "p_final": 0.0007,
+        "p_champion": 0.0001
+      },
+      "URU": {
+        "p_r32": 0.9001,
+        "p_r16": 0.4127,
+        "p_qf": 0.2325,
+        "p_sf": 0.119,
+        "p_final": 0.0556,
+        "p_champion": 0.0228
+      },
+      "FRA": {
+        "p_r32": 0.9389,
+        "p_r16": 0.6461,
+        "p_qf": 0.4031,
+        "p_sf": 0.2494,
+        "p_final": 0.1328,
+        "p_champion": 0.071
+      },
+      "SEN": {
+        "p_r32": 0.7003,
+        "p_r16": 0.3211,
+        "p_qf": 0.1438,
+        "p_sf": 0.0569,
+        "p_final": 0.0196,
+        "p_champion": 0.0064
+      },
+      "IRQ": {
+        "p_r32": 0.2073,
+        "p_r16": 0.0517,
+        "p_qf": 0.0135,
+        "p_sf": 0.0027,
+        "p_final": 0.0004,
+        "p_champion": 0.0001
+      },
+      "NOR": {
+        "p_r32": 0.844,
+        "p_r16": 0.474,
+        "p_qf": 0.2462,
+        "p_sf": 0.1215,
+        "p_final": 0.051,
+        "p_champion": 0.0203
+      },
+      "ARG": {
+        "p_r32": 0.9767,
+        "p_r16": 0.6761,
+        "p_qf": 0.5316,
+        "p_sf": 0.3863,
+        "p_final": 0.2646,
+        "p_champion": 0.1731
+      },
+      "ALG": {
+        "p_r32": 0.6721,
+        "p_r16": 0.2404,
+        "p_qf": 0.1004,
+        "p_sf": 0.0357,
+        "p_final": 0.0124,
+        "p_champion": 0.0033
+      },
+      "AUT": {
+        "p_r32": 0.7408,
+        "p_r16": 0.2773,
+        "p_qf": 0.124,
+        "p_sf": 0.0497,
+        "p_final": 0.0182,
+        "p_champion": 0.0058
+      },
+      "JOR": {
+        "p_r32": 0.2606,
+        "p_r16": 0.0546,
+        "p_qf": 0.0128,
+        "p_sf": 0.0022,
+        "p_final": 0.0004,
+        "p_champion": 0.0001
+      },
+      "POR": {
+        "p_r32": 0.92,
+        "p_r16": 0.6313,
+        "p_qf": 0.3971,
+        "p_sf": 0.2262,
+        "p_final": 0.126,
+        "p_champion": 0.0647
+      },
+      "COD": {
+        "p_r32": 0.381,
+        "p_r16": 0.1178,
+        "p_qf": 0.0367,
+        "p_sf": 0.0102,
+        "p_final": 0.0025,
+        "p_champion": 0.0007
+      },
+      "UZB": {
+        "p_r32": 0.4142,
+        "p_r16": 0.1266,
+        "p_qf": 0.0389,
+        "p_sf": 0.0107,
+        "p_final": 0.0027,
+        "p_champion": 0.0007
+      },
+      "COL": {
+        "p_r32": 0.9006,
+        "p_r16": 0.5936,
+        "p_qf": 0.3559,
+        "p_sf": 0.1961,
+        "p_final": 0.1061,
+        "p_champion": 0.0524
+      },
+      "ENG": {
+        "p_r32": 0.9806,
+        "p_r16": 0.6607,
+        "p_qf": 0.4374,
+        "p_sf": 0.2693,
+        "p_final": 0.1516,
+        "p_champion": 0.0847
+      },
+      "CRO": {
+        "p_r32": 0.9074,
+        "p_r16": 0.4588,
+        "p_qf": 0.2132,
+        "p_sf": 0.1057,
+        "p_final": 0.0453,
+        "p_champion": 0.0175
+      },
+      "GHA": {
+        "p_r32": 0.3215,
+        "p_r16": 0.0485,
+        "p_qf": 0.0094,
+        "p_sf": 0.0014,
+        "p_final": 0.0002,
+        "p_champion": 0.0
+      },
+      "PAN": {
+        "p_r32": 0.3512,
+        "p_r16": 0.0633,
+        "p_qf": 0.0137,
+        "p_sf": 0.0026,
+        "p_final": 0.0004,
+        "p_champion": 0.0001
+      }
+    },
+    "bracket": {
+      "73": {
+        "home_slot": "2A",
+        "away_slot": "2B"
+      },
+      "74": {
+        "home_slot": "1E",
+        "away_slot": "3ABCDF"
+      },
+      "75": {
+        "home_slot": "1F",
+        "away_slot": "2C"
+      },
+      "76": {
+        "home_slot": "1C",
+        "away_slot": "2F"
+      },
+      "77": {
+        "home_slot": "1I",
+        "away_slot": "3CDFGH"
+      },
+      "78": {
+        "home_slot": "2E",
+        "away_slot": "2I"
+      },
+      "79": {
+        "home_slot": "1A",
+        "away_slot": "3CEFHI"
+      },
+      "80": {
+        "home_slot": "1L",
+        "away_slot": "3EHIJK"
+      },
+      "81": {
+        "home_slot": "1D",
+        "away_slot": "3BEFIJ"
+      },
+      "82": {
+        "home_slot": "1G",
+        "away_slot": "3AEHIJ"
+      },
+      "83": {
+        "home_slot": "2K",
+        "away_slot": "2L"
+      },
+      "84": {
+        "home_slot": "1H",
+        "away_slot": "2J"
+      },
+      "85": {
+        "home_slot": "1B",
+        "away_slot": "3EFGIJ"
+      },
+      "86": {
+        "home_slot": "1J",
+        "away_slot": "2H"
+      },
+      "87": {
+        "home_slot": "1K",
+        "away_slot": "3DEIJL"
+      },
+      "88": {
+        "home_slot": "2D",
+        "away_slot": "2G"
+      },
+      "89": {
+        "home_src": "W74",
+        "away_src": "W77"
+      },
+      "90": {
+        "home_src": "W73",
+        "away_src": "W75"
+      },
+      "91": {
+        "home_src": "W76",
+        "away_src": "W78"
+      },
+      "92": {
+        "home_src": "W79",
+        "away_src": "W80"
+      },
+      "93": {
+        "home_src": "W83",
+        "away_src": "W84"
+      },
+      "94": {
+        "home_src": "W81",
+        "away_src": "W82"
+      },
+      "95": {
+        "home_src": "W86",
+        "away_src": "W88"
+      },
+      "96": {
+        "home_src": "W85",
+        "away_src": "W87"
+      },
+      "97": {
+        "home_src": "W89",
+        "away_src": "W90"
+      },
+      "98": {
+        "home_src": "W93",
+        "away_src": "W94"
+      },
+      "99": {
+        "home_src": "W91",
+        "away_src": "W92"
+      },
+      "100": {
+        "home_src": "W95",
+        "away_src": "W96"
+      },
+      "101": {
+        "home_src": "W97",
+        "away_src": "W98"
+      },
+      "102": {
+        "home_src": "W99",
+        "away_src": "W100"
+      },
+      "103": {
+        "home_src": "L101",
+        "away_src": "L102"
+      },
+      "104": {
+        "home_src": "W101",
+        "away_src": "W102"
+      }
+    }
+  }
+}
