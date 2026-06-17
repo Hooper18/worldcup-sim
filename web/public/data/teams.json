@@ -292,7 +292,7 @@
     "name_en": "France",
     "group": "I",
     "flag": "🇫🇷",
-    "elo": 2123,
+    "elo": 2144,
     "fifa_rank": null,
     "host": false
   },
@@ -301,7 +301,7 @@
     "name_en": "Senegal",
     "group": "I",
     "flag": "🇸🇳",
-    "elo": 1913,
+    "elo": 1892,
     "fifa_rank": null,
     "host": false
   },
@@ -310,7 +310,7 @@
     "name_en": "Iraq",
     "group": "I",
     "flag": "🇮🇶",
-    "elo": 1737,
+    "elo": 1716,
     "fifa_rank": null,
     "host": false
   },
@@ -319,7 +319,7 @@
     "name_en": "Norway",
     "group": "I",
     "flag": "🇳🇴",
-    "elo": 1970,
+    "elo": 1992,
     "fifa_rank": null,
     "host": false
   },
@@ -328,7 +328,7 @@
     "name_en": "Argentina",
     "group": "J",
     "flag": "🇦🇷",
-    "elo": 2190,
+    "elo": 2205,
     "fifa_rank": null,
     "host": false
   },
@@ -337,7 +337,7 @@
     "name_en": "Algeria",
     "group": "J",
     "flag": "🇩🇿",
-    "elo": 1883,
+    "elo": 1868,
     "fifa_rank": null,
     "host": false
   },
@@ -346,7 +346,7 @@
     "name_en": "Austria",
     "group": "J",
     "flag": "🇦🇹",
-    "elo": 1889,
+    "elo": 1920,
     "fifa_rank": null,
     "host": false
   },
@@ -355,7 +355,7 @@
     "name_en": "Jordan",
     "group": "J",
     "flag": "🇯🇴",
-    "elo": 1775,
+    "elo": 1744,
     "fifa_rank": null,
     "host": false
   },
