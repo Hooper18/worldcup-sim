@@ -193,7 +193,7 @@
     "name_en": "Japan",
     "group": "F",
     "flag": "🇯🇵",
-    "elo": 1992,
+    "elo": 1993,
     "fifa_rank": null,
     "host": false
   },
@@ -364,7 +364,7 @@
     "name_en": "Portugal",
     "group": "K",
     "flag": "🇵🇹",
-    "elo": 2044,
+    "elo": 2024,
     "fifa_rank": null,
     "host": false
   },
@@ -373,7 +373,7 @@
     "name_en": "Congo DR",
     "group": "K",
     "flag": "🇨🇩",
-    "elo": 1763,
+    "elo": 1783,
     "fifa_rank": null,
     "host": false
   },
@@ -382,7 +382,7 @@
     "name_en": "Uzbekistan",
     "group": "K",
     "flag": "🇺🇿",
-    "elo": 1820,
+    "elo": 1802,
     "fifa_rank": null,
     "host": false
   },
@@ -391,7 +391,7 @@
     "name_en": "Colombia",
     "group": "K",
     "flag": "🇨🇴",
-    "elo": 2061,
+    "elo": 2079,
     "fifa_rank": null,
     "host": false
   },
@@ -400,7 +400,7 @@
     "name_en": "England",
     "group": "L",
     "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    "elo": 2089,
+    "elo": 2119,
     "fifa_rank": null,
     "host": false
   },
@@ -409,7 +409,7 @@
     "name_en": "Croatia",
     "group": "L",
     "flag": "🇭🇷",
-    "elo": 1968,
+    "elo": 1938,
     "fifa_rank": null,
     "host": false
   },
@@ -418,7 +418,7 @@
     "name_en": "Ghana",
     "group": "L",
     "flag": "🇬🇭",
-    "elo": 1625,
+    "elo": 1671,
     "fifa_rank": null,
     "host": false
   },
@@ -427,7 +427,7 @@
     "name_en": "Panama",
     "group": "L",
     "flag": "🇵🇦",
-    "elo": 1839,
+    "elo": 1793,
     "fifa_rank": null,
     "host": false
   }
