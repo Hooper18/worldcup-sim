@@ -4,7 +4,7 @@
     "name_en": "Mexico",
     "group": "A",
     "flag": "🇲🇽",
-    "elo": 1966,
+    "elo": 1983,
     "fifa_rank": null,
     "host": true
   },
@@ -13,7 +13,7 @@
     "name_en": "South Africa",
     "group": "A",
     "flag": "🇿🇦",
-    "elo": 1654,
+    "elo": 1664,
     "fifa_rank": null,
     "host": false
   },
@@ -22,7 +22,7 @@
     "name_en": "Korea Republic",
     "group": "A",
     "flag": "🇰🇷",
-    "elo": 1903,
+    "elo": 1886,
     "fifa_rank": null,
     "host": false
   },
@@ -31,7 +31,7 @@
     "name_en": "Czechia",
     "group": "A",
     "flag": "🇨🇿",
-    "elo": 1777,
+    "elo": 1767,
     "fifa_rank": null,
     "host": false
   },
@@ -40,7 +40,7 @@
     "name_en": "Canada",
     "group": "B",
     "flag": "🇨🇦",
-    "elo": 1875,
+    "elo": 1888,
     "fifa_rank": null,
     "host": true
   },
@@ -49,7 +49,7 @@
     "name_en": "Bosnia and Herzegovina",
     "group": "B",
     "flag": "🇧🇦",
-    "elo": 1673,
+    "elo": 1654,
     "fifa_rank": null,
     "host": false
   },
@@ -58,7 +58,7 @@
     "name_en": "Qatar",
     "group": "B",
     "flag": "🇶🇦",
-    "elo": 1590,
+    "elo": 1578,
     "fifa_rank": null,
     "host": false
   },
@@ -67,7 +67,7 @@
     "name_en": "Switzerland",
     "group": "B",
     "flag": "🇨🇭",
-    "elo": 1930,
+    "elo": 1950,
     "fifa_rank": null,
     "host": false
   },
@@ -193,7 +193,7 @@
     "name_en": "Japan",
     "group": "F",
     "flag": "🇯🇵",
-    "elo": 1993,
+    "elo": 1992,
     "fifa_rank": null,
     "host": false
   },
