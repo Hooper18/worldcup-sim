@@ -76,7 +76,7 @@
     "name_en": "Brazil",
     "group": "C",
     "flag": "🇧🇷",
-    "elo": 2060,
+    "elo": 2071,
     "fifa_rank": null,
     "host": false
   },
@@ -85,7 +85,7 @@
     "name_en": "Morocco",
     "group": "C",
     "flag": "🇲🇦",
-    "elo": 1991,
+    "elo": 2010,
     "fifa_rank": null,
     "host": false
   },
@@ -94,7 +94,7 @@
     "name_en": "Haiti",
     "group": "C",
     "flag": "🇭🇹",
-    "elo": 1697,
+    "elo": 1686,
     "fifa_rank": null,
     "host": false
   },
@@ -103,7 +103,7 @@
     "name_en": "Scotland",
     "group": "C",
     "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-    "elo": 1863,
+    "elo": 1843,
     "fifa_rank": null,
     "host": false
   },
@@ -112,7 +112,7 @@
     "name_en": "USA",
     "group": "D",
     "flag": "🇺🇸",
-    "elo": 1873,
+    "elo": 1916,
     "fifa_rank": null,
     "host": true
   },
@@ -121,7 +121,7 @@
     "name_en": "Paraguay",
     "group": "D",
     "flag": "🇵🇾",
-    "elo": 1864,
+    "elo": 1899,
     "fifa_rank": null,
     "host": false
   },
@@ -130,7 +130,7 @@
     "name_en": "Australia",
     "group": "D",
     "flag": "🇦🇺",
-    "elo": 1954,
+    "elo": 1911,
     "fifa_rank": null,
     "host": false
   },
@@ -139,7 +139,7 @@
     "name_en": "Türkiye",
     "group": "D",
     "flag": "🇹🇷",
-    "elo": 1914,
+    "elo": 1880,
     "fifa_rank": null,
     "host": false
   },
