@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 
 const NAV = [
   { to: '/', label: '总览', end: true },
+  { to: '/schedule', label: '赛程' },
   { to: '/groups', label: '小组赛' },
   { to: '/bracket', label: '淘汰赛' },
   { to: '/trends', label: '概率演变' },

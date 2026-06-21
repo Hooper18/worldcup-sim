@@ -6,6 +6,7 @@ import { Loading, ErrorMsg } from '../components/Loading'
 import Card from '../components/Card'
 import Flag from '../components/Flag'
 import LineChartSvg, { seriesColor, type Series } from '../components/LineChartSvg'
+import { dedupeEvolution, pickSeries } from '../lib/evolution'
 
 type Metric = 'champion' | 'sf' | 'advance'
 const METRIC_LABEL: Record<Metric, string> = { champion: '夺冠', sf: '进四强', advance: '出线' }
@@ -31,11 +32,11 @@ export default function Trends() {
   if (evo.error || ko.error || !evo.data || !ko.data) return <ErrorMsg msg={evo.error || ko.error || '无数据'} />
 
   const snaps = evo.data.snapshots
-  const xLabels = snaps.map((s) => `${s.matches_played}场`)
+  const { keepIdx, xLabels } = dedupeEvolution(evo.data)
   const series: Series[] = sel.map((code, i) => ({
     label: teams?.[code]?.name_zh ?? code,
     color: seriesColor(i),
-    values: evo.data!.teams[code]?.[metric] ?? [],
+    values: pickSeries(evo.data!.teams[code]?.[metric], keepIdx),
   }))
 
   const candidates = Object.entries(ko.data.teams)

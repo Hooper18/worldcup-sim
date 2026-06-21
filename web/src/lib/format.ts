@@ -21,6 +21,17 @@ export function kickoffDateKey(utc: string): string {
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
 }
 
+export function formatDay(utc: string): string {
+  // 仅日期（本地时区），用于赛程按日分组的标题
+  const d = new Date(utc)
+  return `${d.getMonth() + 1}月${d.getDate()}日 ${WEEKDAYS[d.getDay()]}`
+}
+
+export function formatTime(utc: string): string {
+  const d = new Date(utc)
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+}
+
 export function todayKey(now = new Date()): string {
   return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
 }
