@@ -148,7 +148,7 @@
     "name_en": "Germany",
     "group": "E",
     "flag": "🇩🇪",
-    "elo": 2015,
+    "elo": 2032,
     "fifa_rank": null,
     "host": false
   },
@@ -157,7 +157,7 @@
     "name_en": "Curaçao",
     "group": "E",
     "flag": "🇨🇼",
-    "elo": 1597,
+    "elo": 1621,
     "fifa_rank": null,
     "host": false
   },
@@ -166,7 +166,7 @@
     "name_en": "Côte d'Ivoire",
     "group": "E",
     "flag": "🇨🇮",
-    "elo": 1861,
+    "elo": 1843,
     "fifa_rank": null,
     "host": false
   },
@@ -175,7 +175,7 @@
     "name_en": "Ecuador",
     "group": "E",
     "flag": "🇪🇨",
-    "elo": 1978,
+    "elo": 1954,
     "fifa_rank": null,
     "host": false
   },
@@ -184,7 +184,7 @@
     "name_en": "Netherlands",
     "group": "F",
     "flag": "🇳🇱",
-    "elo": 2008,
+    "elo": 2036,
     "fifa_rank": null,
     "host": false
   },
@@ -193,7 +193,7 @@
     "name_en": "Japan",
     "group": "F",
     "flag": "🇯🇵",
-    "elo": 1992,
+    "elo": 2009,
     "fifa_rank": null,
     "host": false
   },
@@ -202,7 +202,7 @@
     "name_en": "Sweden",
     "group": "F",
     "flag": "🇸🇪",
-    "elo": 1821,
+    "elo": 1792,
     "fifa_rank": null,
     "host": false
   },
@@ -211,7 +211,7 @@
     "name_en": "Tunisia",
     "group": "F",
     "flag": "🇹🇳",
-    "elo": 1687,
+    "elo": 1670,
     "fifa_rank": null,
     "host": false
   },
