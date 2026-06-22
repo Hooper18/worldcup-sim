@@ -136,5 +136,8 @@ npm run dev / test / build
     ModelPage 加「本届实战表现」面板（指标卡 + 累计 RPS 三线），MatchDetail 已完赛加「赛后复盘」（赛前预测 vs 实际 + 命中）。
   - **cron 健壮性**：build_context 不再静默吞 feed 失败（记 refresh_failed + data.feed_ok），
     `wcsim update` 遇 feed 失败发 `::error::` + 非零退出，cron 变红可见。
+  - **暗色模式**：色板改 CSS 变量（RGB 三通道，`rgb(var / <alpha-value>)`），tailwind `darkMode:'class'`；
+    亮=暖白 / 暗=ChatGPT 风 #212121；AppShell 日/月切换 + localStorage 持久化 + index.html 无闪烁脚本；
+    图表硬编码 hex 全改 `rgb(var(--c-*))`（var() 在 SVG presentation 属性可解析）。`bg-white/40`→`bg-card/40`。
 - **前端 7 页**：仪表盘 / 赛程 / 小组（总览+详情）/ 对阵树 / 单场详情（含赛后复盘）/ 概率演变 / 模型说明（含本届实战表现）。
-- **可选增强（未做）**：历史快照浏览页、XGBoost 第三模型、实时赔率融合、FIFA 排名字段、暗色模式、移动端打磨。
+- **可选增强（未做）**：历史快照浏览页、XGBoost 第三模型、实时赔率融合、FIFA 排名字段、移动端打磨、淘汰赛纳入实战评分。
