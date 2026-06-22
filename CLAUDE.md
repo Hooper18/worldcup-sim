@@ -32,7 +32,8 @@ engine/
     tournament/          # structure（赛制硬数据）/ annexe_c（495 行第三名落位）/
                          #   tiebreak（2026 头对头）/ third_place / simulate（蒙特卡洛，小组+淘汰赛均代入 fixed）
     backtest/            # runner（跨赛事 LOTO CV）/ metrics（RPS/Brier/ECE/可靠性）/ baselines（Elo-logistic）
-    export/writer.py     # 写 6 类前端 JSON（meta/teams/matches/groups/knockout/evolution）+ history 快照；uncertainty.json 由 pipeline 另写
+    backtest/performance.py  # 本届实战表现：重建赛前预测对赛果打分 → performance.json
+    export/writer.py     # 写 6 类前端 JSON（meta/teams/matches/groups/knockout/evolution）+ history 快照；uncertainty.json / performance.json 由 pipeline 另写
   scripts/gen_static_data.py  # 一次性生成 fixtures_data.py + annexe_c_data.py（留档）
   data/                  # results.json（真实赛果状态,入库）/ params.json（拟合参数+诊断,入库）/ cache/（gitignored）
 web/
@@ -125,7 +126,15 @@ npm run dev / test / build
   - 折线图加 hover：竖直参考线 + 各队该场次具体数值（概率演变页与赛程页共用 LineChartSvg）。
   - **修淘汰赛回填 bug**：simulate.play() 对已完赛淘汰赛代入真实赛果（此前只小组赛生效，淘汰赛仍抽样），
     新增 2 回归测试（普通比分 + 点球），进淘汰赛后生效。
-- **前端 7 页**：仪表盘 / 赛程 / 小组（总览+详情）/ 对阵树 / 单场详情 / 概率演变 / 模型说明。
-- **可选增强（未做）**：历史快照浏览页、XGBoost 第三模型、实时赔率融合、FIFA 排名字段、暗色模式、移动端打磨；
-  引擎清死代码（eloratings fetcher / PENALTY_WIN_PROB / FIT_WINDOW_YEARS / parse_martj42 / 前端 Placeholder.tsx / teams.flag emoji）；
-  backtest 的 dc_attack.fit 未传 ridge（用默认 0.02，生产 0.005，影响小）。
+  - **技术债大清理**：引擎接 ruff、前端接 ESLint+Prettier+knip 全进 CI（永久拦新债）；清死代码
+    （PENALTY_WIN_PROB / eloratings 抓取 / Placeholder.tsx / teams.flag emoji / BracketView 死 prop）；
+    backtest ridge 改 select_ridge→fit 与生产一致。测试 引擎 107 / 前端 vitest 13 / Playwright 6。
+  - **Tier-1 本届实战表现**：`backtest/performance.py` 用冻结 bundle + 重放到赛前的 Elo
+    （replay with_history 取 home_elo_pre）重建每场赛前融合 1X2，对真实赛果算 RPS/Brier/命中率，
+    vs Elo-logistic + climatology → `performance.json`（接 pipeline.export + `wcsim performance`）。
+    当前 40 场：融合 RPS **0.167** / 命中率 **52.5%** 优于 Elo 0.191、climatology 0.214。
+    ModelPage 加「本届实战表现」面板（指标卡 + 累计 RPS 三线），MatchDetail 已完赛加「赛后复盘」（赛前预测 vs 实际 + 命中）。
+  - **cron 健壮性**：build_context 不再静默吞 feed 失败（记 refresh_failed + data.feed_ok），
+    `wcsim update` 遇 feed 失败发 `::error::` + 非零退出，cron 变红可见。
+- **前端 7 页**：仪表盘 / 赛程 / 小组（总览+详情）/ 对阵树 / 单场详情（含赛后复盘）/ 概率演变 / 模型说明（含本届实战表现）。
+- **可选增强（未做）**：历史快照浏览页、XGBoost 第三模型、实时赔率融合、FIFA 排名字段、暗色模式、移动端打磨。
