@@ -34,4 +34,4 @@ npm run build
 
 - 历史比赛:[martj42/international_results](https://github.com/martj42/international_results)(CC0,每日更新)
 - 赛程/赛果:[fixturedownload.com](https://fixturedownload.com/results/fifa-world-cup-2026)
-- Elo 交叉校验:[eloratings.net](https://eloratings.net/)
+- Elo 由 martj42 历史全量重放自算(无外部 Elo 数据源)

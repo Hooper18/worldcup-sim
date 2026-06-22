@@ -117,6 +117,9 @@ def parse_martj42(
 ) -> dict[int, Result]:
     """从 martj42 已完赛行提取 2026 世界杯赛果。
 
+    注：当前生产仅用 parse_feed（fixturedownload）；本函数是 feed 不可用时的回退，
+    暂未接入 pipeline（保留以备启用，由 test_results_store 锁定行为）。
+
     resolved：{match_id: (home_code, away_code)}——淘汰赛场次需调用方先解析出实际对阵；
     小组赛场次可直接由 MATCHES 提供。martj42 主表记录 120 分钟比分，点球胜者在
     shootouts.csv（此处不解析点球，标记 after="FT"/"AET" 不可区分时一律按平局处理，

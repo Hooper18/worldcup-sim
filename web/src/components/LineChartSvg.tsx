@@ -1,5 +1,6 @@
 // 自绘多序列折线图（SVG，不依赖图表库，保证渲染）。
-// x 为快照序号，y 为概率 [0, yMax]。鼠标移上去显示参考线 + 各序列具体数值。
+// x 为数据点序号（标签由 xLabels 提供，本项目即已赛场数），y 为概率 [0, yMax]。
+// 鼠标移上去显示参考线 + 各序列具体数值。
 
 import { useRef, useState } from 'react'
 import type { Series } from '../lib/chart'

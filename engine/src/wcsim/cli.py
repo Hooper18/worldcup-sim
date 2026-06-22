@@ -1,11 +1,12 @@
 """wcsim 命令行入口。
 
 wcsim fetch                  拉取 martj42 历史数据 + fixturedownload feed
-wcsim fit                    拟合 DC-on-Elo 并落 params.json（赛前一次性）
+wcsim fit                    拟合双模型(DC-on-Elo + 纯攻防)并落 params.json（赛前一次性）
 wcsim simulate [-n N]        蒙特卡洛模拟（自动条件化已完赛场次）
 wcsim export [-n N]          模拟 + 导出 web/public/data/ 全套 JSON
 wcsim update [-n N]          一条龙：刷新赛果 → 有新完赛才重模拟 → 导出（cron 用）
-wcsim backtest --year 2018   回测（M1 实现）
+wcsim backtest [--apply]     跨赛事 LOTO 回测选最优 H/权重（--apply 据此重拟合 params.json）
+wcsim uncertainty [-n N]     bootstrap 参数不确定性 → 夺冠/晋级概率置信区间
 """
 
 from __future__ import annotations

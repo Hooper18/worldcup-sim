@@ -77,7 +77,7 @@ web/
 
 - 历史比赛：`martj42/international_results` raw CSV（CC0，每日 commit，已含 2026 赛程行赛后回填）
 - 赛程/赛果：`fixturedownload.com/feed/json/fifa-world-cup-2026`（免 key，**需浏览器 UA 否则 403**）；feed 为生产唯一赛果源（results_store.parse_feed），parse_martj42 为未接的回退
-- Elo 交叉校验：`eloratings.net/World.tsv`（有 fetcher 但无 loader，当前未接入，仅留档）
+- Elo：由 martj42 历史全量重放自算（ratings/elo.py），无外部 Elo 数据源（原 eloratings 抓取已移除）
 - 队名归一：martj42 与 feed 两套拼写各一张表（normalize.py），未知队名一律 raise
 
 ## 常用命令
