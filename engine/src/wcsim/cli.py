@@ -7,6 +7,7 @@ wcsim export [-n N]          模拟 + 导出 web/public/data/ 全套 JSON
 wcsim update [-n N]          一条龙：刷新赛果 → 有新完赛才重模拟 → 导出（cron 用）
 wcsim backtest [--apply]     跨赛事 LOTO 回测选最优 H/权重（--apply 据此重拟合 params.json）
 wcsim uncertainty [-n N]     bootstrap 参数不确定性 → 夺冠/晋级概率置信区间
+wcsim performance            重建赛前预测，评本届实战表现（RPS/Brier/命中率）→ performance.json
 """
 
 from __future__ import annotations
@@ -70,6 +71,12 @@ def _cmd_update(args: argparse.Namespace) -> int:
 
     before = results_store.load_store()
     ctx = pipeline.build_context(force_fetch=True, refresh_results=True)
+    if ctx.refresh_failed:
+        # 不再静默吞掉 feed 失败：发 GitHub Actions error 注解 + 非零退出让 cron 变红可见
+        print(
+            f"::error::赛果 feed 刷新失败，可能数据已 stale：{ctx.refresh_error}", file=sys.stderr
+        )
+        return 2
     new = results_store.new_finished(before, ctx.results)
     if not new and config.WEB_DATA_DIR.joinpath("meta.json").exists():
         print("[update] 无新完赛场次，跳过重模拟")
@@ -92,6 +99,25 @@ def _cmd_uncertainty(args: argparse.Namespace) -> int:
     for c, t in top:
         lo, med, hi = t["champion"]
         print(f"  {c}: {med:.1%}  [{lo:.1%}, {hi:.1%}]")
+    return 0
+
+
+def _cmd_performance(args: argparse.Namespace) -> int:
+    """重建本届赛前预测并对真实赛果打分，写 performance.json。"""
+    from .backtest import performance
+
+    out = performance.write_performance()
+    f = out.get("fused")
+    if f:
+        print(
+            f"[performance] 已评 {out['n_scored']}/{out['n_finished_group']} 场小组赛"
+            f"（跳过 {out['n_skipped']}）。融合 RPS={f['rps']} 命中率={f['hit_rate']:.1%}"
+            f" | Elo 基准 RPS={out['elo_baseline']['rps']} | climatology RPS={out['climatology']['rps']}"
+        )
+    else:
+        print(
+            f"[performance] 暂无可评场次（已完赛小组赛 {out['n_finished_group']}，跳过 {out['n_skipped']}）"
+        )
     return 0
 
 
@@ -166,6 +192,9 @@ def main(argv: list[str] | None = None) -> int:
     p_un.add_argument("--boot", type=int, default=40, help="bootstrap 重抽次数")
     p_un.add_argument("--force", action="store_true", help="强制重新下载数据")
     p_un.set_defaults(func=_cmd_uncertainty)
+
+    p_perf = sub.add_parser("performance", help="重建赛前预测，评本届实战表现 → performance.json")
+    p_perf.set_defaults(func=_cmd_performance)
 
     args = parser.parse_args(argv)
     return args.func(args)

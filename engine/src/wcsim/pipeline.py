@@ -31,6 +31,8 @@ class PipelineContext:
     penalty_theta: dict[str, float]
     results: dict[int, dict]
     data_info: dict
+    refresh_failed: bool = False  # feed 刷新是否失败（供 update 告警，非静默）
+    refresh_error: str | None = None
 
 
 def _now_iso() -> str:
@@ -127,6 +129,8 @@ def build_context(*, force_fetch: bool = False, refresh_results: bool = True) ->
 
     # 真实赛果：feed 优先，解析后并入 store
     results = results_store.load_store()
+    refresh_failed = False
+    refresh_error: str | None = None
     if refresh_results:
         try:
             feed = fetch.load_fixture_feed(force=force_fetch)
@@ -136,16 +140,29 @@ def build_context(*, force_fetch: bool = False, refresh_results: bool = True) ->
                 results[mid] = parsed[mid]
             if new:
                 results_store.save_store(results)
-        except Exception as e:  # 网络/解析失败不阻断模拟，用已有 store
+        except (
+            Exception
+        ) as e:  # 失败不阻断模拟（用已有 store），但记录状态供 update 告警，不再静默吞掉
+            refresh_failed = True
+            refresh_error = str(e)
             print(f"[pipeline] 警告：刷新赛果失败（{e}），沿用已存赛果")
 
     data_info = {
         "martj42_rows": int(len(df)),
         "elo_through": str(df["date"].max().date()),
         "results_count": len(results),
+        "feed_ok": not refresh_failed,
     }
     return PipelineContext(
-        bundle, model, elo_by_code, tiebreak_key, penalty_theta, results, data_info
+        bundle,
+        model,
+        elo_by_code,
+        tiebreak_key,
+        penalty_theta,
+        results,
+        data_info,
+        refresh_failed=refresh_failed,
+        refresh_error=refresh_error,
     )
 
 
@@ -262,4 +279,8 @@ def export(ctx: PipelineContext, sim: SimResult) -> str:
         sim=sim,
         data_info=ctx.data_info,
     )
+    # 本届实战表现（重建赛前预测打分，便宜、无需模拟）
+    from .backtest import performance
+
+    performance.write_performance(bundle=ctx.bundle, results=ctx.results)
     return rid
