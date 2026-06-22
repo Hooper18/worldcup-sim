@@ -53,9 +53,7 @@ def fetch_fixture_feed(*, force: bool = False) -> Path:
     """fixturedownload JSON feed（104 场赛程 + 赛后回填比分）。需带浏览器 UA。"""
     dest = config.CACHE_DIR / "fixtures.json"
     if force or not _is_fresh(dest, config.CACHE_MAX_AGE_HOURS):
-        _download(
-            config.FIXTURE_FEED_URL, dest, headers={"User-Agent": config.BROWSER_UA}
-        )
+        _download(config.FIXTURE_FEED_URL, dest, headers={"User-Agent": config.BROWSER_UA})
     return dest
 
 

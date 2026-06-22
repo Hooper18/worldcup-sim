@@ -53,8 +53,13 @@ def test_fit_recovers_true_parameters():
 
 def test_predict_lambdas_symmetry_and_host():
     p = dc_elo.DcEloParams(
-        beta0=0.2, beta1=1.1, gamma=0.3, rho=-0.05,
-        half_life_days=730, n_matches=0, cutoff="2026-06-11",
+        beta0=0.2,
+        beta1=1.1,
+        gamma=0.3,
+        rho=-0.05,
+        half_life_days=730,
+        n_matches=0,
+        cutoff="2026-06-11",
     )
     lh, la = dc_elo.predict_lambdas(p, 1800, 1800)
     assert lh == pytest.approx(la)  # 同分中立场对称
@@ -68,7 +73,12 @@ def test_predict_lambdas_symmetry_and_host():
 
 def test_params_round_trip():
     p = dc_elo.DcEloParams(
-        beta0=0.1, beta1=1.0, gamma=0.25, rho=-0.04,
-        half_life_days=540, n_matches=123, cutoff="2026-06-11",
+        beta0=0.1,
+        beta1=1.0,
+        gamma=0.25,
+        rho=-0.04,
+        half_life_days=540,
+        n_matches=123,
+        cutoff="2026-06-11",
     )
     assert dc_elo.DcEloParams.from_dict(p.to_dict()) == p

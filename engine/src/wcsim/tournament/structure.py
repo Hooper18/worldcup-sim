@@ -83,8 +83,7 @@ _TEAM_ROWS: list[tuple[str, str, str, str, str, bool]] = [
 ]
 
 TEAMS: dict[str, Team] = {
-    code: Team(code, en, zh, flag, group, host)
-    for code, en, zh, flag, group, host in _TEAM_ROWS
+    code: Team(code, en, zh, flag, group, host) for code, en, zh, flag, group, host in _TEAM_ROWS
 }
 
 # 各组队伍（种子顺位排列，仅用于展示；排名一律由比赛结果计算）
@@ -180,7 +179,9 @@ def _build_matches() -> dict[int, dict]:
         if stage == "r32":
             expected = R32_SLOTS[mid]
             if (m["home"], m["away"]) != expected:
-                raise AssertionError(f"M{mid} feed 槽位 {m['home']}/{m['away']} 与规程 {expected} 不符")
+                raise AssertionError(
+                    f"M{mid} feed 槽位 {m['home']}/{m['away']} 与规程 {expected} 不符"
+                )
         elif stage not in ("group", "r32"):
             m["home"], m["away"] = KO_CHAIN[mid]
         matches[mid] = m
@@ -212,18 +213,13 @@ def _validate() -> None:
             if m["stage"] == "group" and m["group"] == g
         }
         codes = GROUPS[g]
-        expected_pairs = {
-            frozenset((a, b)) for i, a in enumerate(codes) for b in codes[i + 1 :]
-        }
+        expected_pairs = {frozenset((a, b)) for i, a in enumerate(codes) for b in codes[i + 1 :]}
         assert pairs == expected_pairs, f"组 {g} 对阵不完整"
 
     # 串联封闭性：r32 的 16 个胜者恰好各被 r16 引用一次，依此类推
     def _sources(stage: str) -> list[Source]:
         return [
-            src
-            for m in MATCHES.values()
-            if m["stage"] == stage
-            for src in (m["home"], m["away"])
+            src for m in MATCHES.values() if m["stage"] == stage for src in (m["home"], m["away"])
         ]
 
     assert sorted(_sources("r16")) == [("W", n) for n in range(73, 89)]

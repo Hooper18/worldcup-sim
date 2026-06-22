@@ -111,10 +111,7 @@ def test_third_slot_matches_order():
 def test_ko_chain_closure():
     def sources(stage: str):
         return sorted(
-            src
-            for m in MATCHES.values()
-            if m["stage"] == stage
-            for src in (m["home"], m["away"])
+            src for m in MATCHES.values() if m["stage"] == stage for src in (m["home"], m["away"])
         )
 
     assert sources("r16") == [("W", n) for n in range(73, 89)]

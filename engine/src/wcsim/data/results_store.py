@@ -112,7 +112,9 @@ def _pen_side(mid: int, winner_code: str, row: dict) -> str | None:
 # ---------------------------------------------------------------------------
 
 
-def parse_martj42(results_df: pd.DataFrame, resolved: dict[int, tuple[str, str]]) -> dict[int, Result]:
+def parse_martj42(
+    results_df: pd.DataFrame, resolved: dict[int, tuple[str, str]]
+) -> dict[int, Result]:
     """从 martj42 已完赛行提取 2026 世界杯赛果。
 
     resolved：{match_id: (home_code, away_code)}——淘汰赛场次需调用方先解析出实际对阵；

@@ -13,8 +13,13 @@ from wcsim.tournament.structure import GROUP_LETTERS, GROUPS, MATCHES
 @pytest.fixture(scope="module")
 def params():
     return DcEloParams(
-        beta0=0.10, beta1=0.73, gamma=0.23, rho=-0.043,
-        half_life_days=730, n_matches=7768, cutoff="2026-06-11",
+        beta0=0.10,
+        beta1=0.73,
+        gamma=0.23,
+        rho=-0.043,
+        half_life_days=730,
+        n_matches=7768,
+        cutoff="2026-06-11",
     )
 
 

@@ -25,17 +25,21 @@ def _synthetic_league(n_teams=12, n_matches=4000, seed=3):
         lam_a = np.exp(mu + true_att[a] - true_def[h])
         rows.append((rng.poisson(lam_h), rng.poisson(lam_a), h, a))
     dates = pd.Timestamp("2026-01-01") - pd.to_timedelta(rng.integers(0, 700, n_matches), unit="D")
-    return pd.DataFrame(
-        {
-            "date": dates,
-            "home_team": [r[2] for r in rows],
-            "away_team": [r[3] for r in rows],
-            "home_score": [r[0] for r in rows],
-            "away_score": [r[1] for r in rows],
-            "tournament": "Friendly",
-            "neutral": True,
-        }
-    ), true_att, true_def
+    return (
+        pd.DataFrame(
+            {
+                "date": dates,
+                "home_team": [r[2] for r in rows],
+                "away_team": [r[3] for r in rows],
+                "home_score": [r[0] for r in rows],
+                "away_score": [r[1] for r in rows],
+                "tournament": "Friendly",
+                "neutral": True,
+            }
+        ),
+        true_att,
+        true_def,
+    )
 
 
 def test_attack_fit_recovers_relative_strength():
@@ -62,7 +66,9 @@ def test_attack_predict_stronger_scores_more():
 def test_select_ridge_returns_grid_value():
     df, _, _ = _synthetic_league(n_matches=6000)
     grid = (0.01, 0.05, 0.2)
-    best, scan = dc_attack.select_ridge(df, cutoff="2026-01-01", ridge_grid=grid, half_life_days=1e9)
+    best, scan = dc_attack.select_ridge(
+        df, cutoff="2026-01-01", ridge_grid=grid, half_life_days=1e9
+    )
     assert best in grid
     assert set(scan) == set(grid)
     assert all(v > 0 for v in scan.values())
@@ -76,7 +82,16 @@ def test_empirical_home_advantage():
         ("2025-03-01", "E", "F", 1, 0, "Friendly", True),  # 中立场，应被排除
     ]
     df = pd.DataFrame(
-        rows, columns=["date", "home_team", "away_team", "home_score", "away_score", "tournament", "neutral"]
+        rows,
+        columns=[
+            "date",
+            "home_team",
+            "away_team",
+            "home_score",
+            "away_score",
+            "tournament",
+            "neutral",
+        ],
     ).assign(date=lambda d: pd.to_datetime(d["date"]))
     diag = dc_attack.empirical_home_advantage(df)
     assert diag["n"] == 2  # 中立场被排除
@@ -94,11 +109,25 @@ def test_attack_unknown_team_uses_average():
 
 
 def test_ensemble_matrix_blends_and_normalizes():
-    elo_p = DcEloParams(beta0=0.1, beta1=0.7, gamma=0.2, rho=-0.04, half_life_days=730, n_matches=1, cutoff="2026-06-11")
+    elo_p = DcEloParams(
+        beta0=0.1,
+        beta1=0.7,
+        gamma=0.2,
+        rho=-0.04,
+        half_life_days=730,
+        n_matches=1,
+        cutoff="2026-06-11",
+    )
     att_p = dc_attack.DcAttackParams(
-        mu=0.1, home_adv=0.2, rho=-0.03,
-        att={"A": 0.5, "B": -0.2}, def_={"A": 0.1, "B": -0.3},
-        half_life_days=730, n_matches=1, cutoff="2026-06-11", teams=["A", "B"],
+        mu=0.1,
+        home_adv=0.2,
+        rho=-0.03,
+        att={"A": 0.5, "B": -0.2},
+        def_={"A": 0.1, "B": -0.3},
+        half_life_days=730,
+        n_matches=1,
+        cutoff="2026-06-11",
+        teams=["A", "B"],
     )
     elo = {"A": 1900.0, "B": 1700.0}
     ens = EnsembleModel([(DcEloModel(elo_p, elo), 0.5), (DcAttackModel(att_p), 0.5)])

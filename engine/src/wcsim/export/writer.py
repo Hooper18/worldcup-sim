@@ -64,9 +64,7 @@ def match_forecast(
         "p_away": _round(pa),
         "lambda_home": _round(lh, 3),
         "lambda_away": _round(la, 3),
-        "top_scores": [
-            {"h": h, "a": a, "p": _round(p)} for h, a, p in top_scores(mat, 8)
-        ],
+        "top_scores": [{"h": h, "a": a, "p": _round(p)} for h, a, p in top_scores(mat, 8)],
         "score_matrix": [
             [_round(mat[h, a]) for a in range(DISPLAY_GRID)] for h in range(DISPLAY_GRID)
         ],
@@ -274,9 +272,7 @@ def update_evolution(
     if any(s["run_id"] == run_id for s in evo["snapshots"]):
         return evo
 
-    evo["snapshots"].append(
-        {"run_id": run_id, "at": generated_at, "matches_played": len(results)}
-    )
+    evo["snapshots"].append({"run_id": run_id, "at": generated_at, "matches_played": len(results)})
     for c in CODES:
         sc = sim.stage_counts[c]
         vals = {

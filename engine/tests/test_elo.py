@@ -13,8 +13,15 @@ def _df(rows):
     return pd.DataFrame(
         rows,
         columns=[
-            "date", "home_team", "away_team", "home_score", "away_score",
-            "tournament", "city", "country", "neutral",
+            "date",
+            "home_team",
+            "away_team",
+            "home_score",
+            "away_score",
+            "tournament",
+            "city",
+            "country",
+            "neutral",
         ],
     ).assign(date=lambda d: pd.to_datetime(d["date"]))
 
@@ -72,10 +79,12 @@ def test_update_pair_upset_gains_more():
 
 
 def test_replay_chronological_and_through():
-    df = _df([
-        ("2024-01-01", "Alpha", "Beta", 2, 0, "Friendly", "x", "y", True),
-        ("2024-06-01", "Alpha", "Beta", 0, 1, "Friendly", "x", "y", True),
-    ])
+    df = _df(
+        [
+            ("2024-01-01", "Alpha", "Beta", 2, 0, "Friendly", "x", "y", True),
+            ("2024-06-01", "Alpha", "Beta", 0, 1, "Friendly", "x", "y", True),
+        ]
+    )
     full, _ = elo.replay(df)
     cut, _ = elo.replay(df, through="2024-03-01")
     # 截止 3 月时只重放了第一场
@@ -85,10 +94,12 @@ def test_replay_chronological_and_through():
 
 
 def test_replay_with_history_records_pre_match_elo():
-    df = _df([
-        ("2024-01-01", "Alpha", "Beta", 2, 0, "Friendly", "x", "y", True),
-        ("2024-06-01", "Alpha", "Beta", 0, 1, "Friendly", "x", "y", True),
-    ])
+    df = _df(
+        [
+            ("2024-01-01", "Alpha", "Beta", 2, 0, "Friendly", "x", "y", True),
+            ("2024-06-01", "Alpha", "Beta", 0, 1, "Friendly", "x", "y", True),
+        ]
+    )
     ratings, hist = elo.replay(df, with_history=True)
     assert hist is not None
     assert list(hist["home_elo_pre"])[0] == pytest.approx(config.ELO_START)
@@ -96,5 +107,7 @@ def test_replay_with_history_records_pre_match_elo():
     after_first = 1500 + 20 * 1.5 * 0.5
     assert list(hist["home_elo_pre"])[1] == pytest.approx(after_first)
     assert ratings["Beta"] == pytest.approx(
-        elo.update_pair(after_first, 3000 - after_first, 0, 1, neutral=True, tournament="Friendly")[1]
+        elo.update_pair(after_first, 3000 - after_first, 0, 1, neutral=True, tournament="Friendly")[
+            1
+        ]
     )

@@ -73,8 +73,11 @@ def _attack_params_by_code(att_params: DcAttackParams) -> DcAttackParams:
 
 
 def fit_bundle(
-    *, force_fetch: bool = False, half_life_days: float | None = None,
-    weight_dc_elo: float = 0.5, backtest: dict | None = None,
+    *,
+    force_fetch: bool = False,
+    half_life_days: float | None = None,
+    weight_dc_elo: float = 0.5,
+    backtest: dict | None = None,
 ) -> ModelBundle:
     """拟合两个模型并落 params.json（赛前一次性，之后冻结）。
 
@@ -190,13 +193,20 @@ def bootstrap_uncertainty(
         hist_b = hist.sample(frac=1.0, replace=True, random_state=b)
         df_b = df.sample(frac=1.0, replace=True, random_state=10_000 + b)
         elo_p = dc_elo.fit(hist_b, cutoff=CUTOFF, half_life_days=H)
-        att_p = _attack_params_by_code(dc_attack.fit(df_b, cutoff=CUTOFF, half_life_days=H, ridge=ridge))
+        att_p = _attack_params_by_code(
+            dc_attack.fit(df_b, cutoff=CUTOFF, half_life_days=H, ridge=ridge)
+        )
         model = EnsembleModel(
             [(DcEloModel(elo_p, elo_by_code), w_elo), (DcAttackModel(att_p), 1 - w_elo)]
         )
         sim = simulate(
-            model, elo_by_code, n_sims=n_sims, fixed_results=results,
-            tiebreak_key=tiebreak_key, penalty_theta=penalty_theta, seed=b,
+            model,
+            elo_by_code,
+            n_sims=n_sims,
+            fixed_results=results,
+            tiebreak_key=tiebreak_key,
+            penalty_theta=penalty_theta,
+            seed=b,
         )
         for i, c in enumerate(CODES):
             champ[b, i] = sim.stage_counts[c]["champion"] / n_sims
@@ -210,8 +220,16 @@ def bootstrap_uncertainty(
     a_lo, a_med, a_hi = ci(advance)
     teams = {
         c: {
-            "champion": [round(float(c_lo[i]), 4), round(float(c_med[i]), 4), round(float(c_hi[i]), 4)],
-            "advance": [round(float(a_lo[i]), 4), round(float(a_med[i]), 4), round(float(a_hi[i]), 4)],
+            "champion": [
+                round(float(c_lo[i]), 4),
+                round(float(c_med[i]), 4),
+                round(float(c_hi[i]), 4),
+            ],
+            "advance": [
+                round(float(a_lo[i]), 4),
+                round(float(a_med[i]), 4),
+                round(float(a_hi[i]), 4),
+            ],
         }
         for i, c in enumerate(CODES)
     }
@@ -224,7 +242,9 @@ def bootstrap_uncertainty(
     }
     path = config.WEB_DATA_DIR / "uncertainty.json"
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    path.write_text(
+        json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
     return out
 
 

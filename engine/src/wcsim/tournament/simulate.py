@@ -302,9 +302,7 @@ def simulate(
 
     stage_arr["champion"] = np.bincount(winners[104], minlength=48)
 
-    stage_counts = {
-        c: {s: int(stage_arr[s][i]) for s in KO_STAGES} for i, c in enumerate(CODES)
-    }
+    stage_counts = {c: {s: int(stage_arr[s][i]) for s in KO_STAGES} for i, c in enumerate(CODES)}
     return SimResult(
         n_sims=n_sims,
         group_rank_counts=group_rank_counts,
@@ -322,9 +320,7 @@ def simulate(
 # ---------------------------------------------------------------------------
 
 
-def _fixed_ko_winner(
-    h: np.ndarray, a: np.ndarray, res: dict
-) -> tuple[np.ndarray, np.ndarray]:
+def _fixed_ko_winner(h: np.ndarray, a: np.ndarray, res: dict) -> tuple[np.ndarray, np.ndarray]:
     """已完赛淘汰赛：用真实赛果定胜负，不抽样。返回 (胜者, 负者)。
 
     胜方由最终比分决定；若加时后仍平（点球大战），由 res['pen_winner'] 决定。

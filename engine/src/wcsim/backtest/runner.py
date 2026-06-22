@@ -82,10 +82,14 @@ def list_events(
     return events
 
 
-def _elo_probs(params: dc_elo.DcEloParams, elo: dict[str, float], actual: pd.DataFrame) -> np.ndarray:
+def _elo_probs(
+    params: dc_elo.DcEloParams, elo: dict[str, float], actual: pd.DataFrame
+) -> np.ndarray:
     rows = []
     for m in actual.itertuples(index=False):
-        lh, la = dc_elo.predict_lambdas(params, elo.get(m.home_team, 1500.0), elo.get(m.away_team, 1500.0))
+        lh, la = dc_elo.predict_lambdas(
+            params, elo.get(m.home_team, 1500.0), elo.get(m.away_team, 1500.0)
+        )
         rows.append(outcome_probs(score_matrix(lh, la, params.rho)))
     return np.array(rows)
 
@@ -100,7 +104,10 @@ def _attack_probs(params: dc_attack.DcAttackParams, actual: pd.DataFrame) -> np.
 
 def _outcomes(matches: pd.DataFrame) -> np.ndarray:
     return np.array(
-        [metrics.outcome_of(int(m.home_score), int(m.away_score)) for m in matches.itertuples(index=False)]
+        [
+            metrics.outcome_of(int(m.home_score), int(m.away_score))
+            for m in matches.itertuples(index=False)
+        ]
     )
 
 

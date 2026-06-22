@@ -23,8 +23,7 @@ class ScoreModel(Protocol):
 
     def lambdas(
         self, home: str, away: str, *, host_home: bool, host_away: bool
-    ) -> tuple[float, float]:
-        ...
+    ) -> tuple[float, float]: ...
 
 
 class DcEloModel:
@@ -72,8 +71,14 @@ class EnsembleModel:
 
     def lambdas(self, home, away, *, host_home=False, host_away=False):
         # 融合 λ = 权重加权（仅用于展示，矩阵融合才是真正口径）
-        lh = sum(w * m.lambdas(home, away, host_home=host_home, host_away=host_away)[0] for m, w in self.components)
-        la = sum(w * m.lambdas(home, away, host_home=host_home, host_away=host_away)[1] for m, w in self.components)
+        lh = sum(
+            w * m.lambdas(home, away, host_home=host_home, host_away=host_away)[0]
+            for m, w in self.components
+        )
+        la = sum(
+            w * m.lambdas(home, away, host_home=host_home, host_away=host_away)[1]
+            for m, w in self.components
+        )
         return lh, la
 
     def matrix(self, home, away, *, host_home=False, host_away=False, factor=1.0):

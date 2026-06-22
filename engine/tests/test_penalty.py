@@ -41,7 +41,9 @@ def test_win_prob_symmetry():
 
 def test_code_map_and_unseen_team():
     df = _shootouts([("Germany", "England", "Germany")])
-    theta = penalty.fit_penalty_ratings(df, ridge=2.0, code_map={"Germany": "GER", "England": "ENG"})
+    theta = penalty.fit_penalty_ratings(
+        df, ridge=2.0, code_map={"Germany": "GER", "England": "ENG"}
+    )
     assert "GER" in theta and "ENG" in theta
     assert theta["GER"] > theta["ENG"]
 

@@ -147,7 +147,9 @@ def _validate() -> None:
     assert len(MARTJ42_TO_CODE) == 48 and len(FEED_TO_CODE) == 48
     # feed 拼写须与 structure 的 name_en 完全一致（teams.json 用 name_en 展示）
     for name, code in FEED_TO_CODE.items():
-        assert TEAMS[code].name_en == name, f"{code}: feed {name!r} != structure {TEAMS[code].name_en!r}"
+        assert TEAMS[code].name_en == name, (
+            f"{code}: feed {name!r} != structure {TEAMS[code].name_en!r}"
+        )
 
 
 _validate()

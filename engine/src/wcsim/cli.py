@@ -1,11 +1,11 @@
 """wcsim 命令行入口。
 
-    wcsim fetch                  拉取 martj42 历史数据 + fixturedownload feed
-    wcsim fit                    拟合 DC-on-Elo 并落 params.json（赛前一次性）
-    wcsim simulate [-n N]        蒙特卡洛模拟（自动条件化已完赛场次）
-    wcsim export [-n N]          模拟 + 导出 web/public/data/ 全套 JSON
-    wcsim update [-n N]          一条龙：刷新赛果 → 有新完赛才重模拟 → 导出（cron 用）
-    wcsim backtest --year 2018   回测（M1 实现）
+wcsim fetch                  拉取 martj42 历史数据 + fixturedownload feed
+wcsim fit                    拟合 DC-on-Elo 并落 params.json（赛前一次性）
+wcsim simulate [-n N]        蒙特卡洛模拟（自动条件化已完赛场次）
+wcsim export [-n N]          模拟 + 导出 web/public/data/ 全套 JSON
+wcsim update [-n N]          一条龙：刷新赛果 → 有新完赛才重模拟 → 导出（cron 用）
+wcsim backtest --year 2018   回测（M1 实现）
 """
 
 from __future__ import annotations
@@ -28,12 +28,18 @@ def _cmd_fetch(args: argparse.Namespace) -> int:
 def _cmd_fit(args: argparse.Namespace) -> int:
     bundle = pipeline.fit_bundle(force_fetch=args.force)
     e = bundle.dc_elo
-    print(f"[fit] DC-on-Elo（{e.n_matches} 场）β0={e.beta0:.4f} β1={e.beta1:.4f} "
-          f"γ={e.gamma:.4f} ρ={e.rho:.4f}")
-    print(f"[fit] 纯攻防（{bundle.dc_attack.n_matches} 场）μ={bundle.dc_attack.mu:.4f} "
-          f"host={bundle.dc_attack.home_adv:.4f} ρ={bundle.dc_attack.rho:.4f}")
-    print(f"[fit] 权重 DC-on-Elo={bundle.weight_dc_elo} 攻防={bundle.weight_dc_attack:.2f} "
-          f"H={bundle.half_life_days} → {config.PARAMS_PATH}")
+    print(
+        f"[fit] DC-on-Elo（{e.n_matches} 场）β0={e.beta0:.4f} β1={e.beta1:.4f} "
+        f"γ={e.gamma:.4f} ρ={e.rho:.4f}"
+    )
+    print(
+        f"[fit] 纯攻防（{bundle.dc_attack.n_matches} 场）μ={bundle.dc_attack.mu:.4f} "
+        f"host={bundle.dc_attack.home_adv:.4f} ρ={bundle.dc_attack.rho:.4f}"
+    )
+    print(
+        f"[fit] 权重 DC-on-Elo={bundle.weight_dc_elo} 攻防={bundle.weight_dc_attack:.2f} "
+        f"H={bundle.half_life_days} → {config.PARAMS_PATH}"
+    )
     return 0
 
 
@@ -71,7 +77,9 @@ def _cmd_update(args: argparse.Namespace) -> int:
     rid = pipeline.export(ctx, sim)
     # 有新赛果时一并刷新 bootstrap 不确定性区间（保持与点估计一致；约 1-2 分钟）
     pipeline.bootstrap_uncertainty(n_boot=30, n_sims=4000, force_fetch=False)
-    print(f"[update] 新完赛 {len(new)} 场 {new}，run_id={rid} 重模拟 {args.n} 次 + 刷新不确定性完成")
+    print(
+        f"[update] 新完赛 {len(new)} 场 {new}，run_id={rid} 重模拟 {args.n} 次 + 刷新不确定性完成"
+    )
     return 0
 
 
@@ -96,15 +104,25 @@ def _cmd_backtest(args: argparse.Namespace) -> int:
     res = runner.select_best(df)
     best = res["best"]
     loto = res["loto"]
-    print(f"=== 跨赛事回测：{best['n_events']} 届决赛圈 / {best['n_matches']} 场（RPS 越低越好）===")
+    print(
+        f"=== 跨赛事回测：{best['n_events']} 届决赛圈 / {best['n_matches']} 场（RPS 越低越好）==="
+    )
     for year, m in res["years"].items():
-        print(f"[世界杯 {year}] {m['n_matches']} 场  基准={m['rps_baseline']}  "
-              f"DC-Elo={m['rps_dc_elo']}  攻防={m['rps_dc_attack']}  融合={m['rps_ensemble']}")
-    print(f"[生产参数] H={best['half_life_days']} 天  权重 DC-Elo={best['weight_dc_elo']}/"
-          f"攻防={best['weight_dc_attack']}（全量 pooled RPS={best['pooled_rps']}）")
-    print(f"[诚实性能] LOTO 留一届样本外 RPS={best['oos_rps']}"
-          f"（climatology 基准={best['rps_baseline']}，更强的 Elo 基准={best['rps_elo_baseline']}）")
-    print(f"[选择稳定性] 各折选中 H 分布={loto['selected_H_counts']}  权重分布={loto['selected_w_counts']}")
+        print(
+            f"[世界杯 {year}] {m['n_matches']} 场  基准={m['rps_baseline']}  "
+            f"DC-Elo={m['rps_dc_elo']}  攻防={m['rps_dc_attack']}  融合={m['rps_ensemble']}"
+        )
+    print(
+        f"[生产参数] H={best['half_life_days']} 天  权重 DC-Elo={best['weight_dc_elo']}/"
+        f"攻防={best['weight_dc_attack']}（全量 pooled RPS={best['pooled_rps']}）"
+    )
+    print(
+        f"[诚实性能] LOTO 留一届样本外 RPS={best['oos_rps']}"
+        f"（climatology 基准={best['rps_baseline']}，更强的 Elo 基准={best['rps_elo_baseline']}）"
+    )
+    print(
+        f"[选择稳定性] 各折选中 H 分布={loto['selected_H_counts']}  权重分布={loto['selected_w_counts']}"
+    )
     if args.apply:
         pipeline.fit_bundle(
             force_fetch=False,

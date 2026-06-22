@@ -32,13 +32,27 @@ def test_point_values_from_regulations():
     # 实施计划附录 A 的示例行：ABEFHJKL → 1A v 3E, 1B v 3J, 1D v 3B, 1E v 3F,
     # 1G v 3A, 1I v 3H, 1K v 3L, 1L v 3K
     assert allocate("ABEFHJKL") == {
-        79: "E", 85: "J", 81: "B", 74: "F", 82: "A", 77: "H", 87: "L", 80: "K",
+        79: "E",
+        85: "J",
+        81: "B",
+        74: "F",
+        82: "A",
+        77: "H",
+        87: "L",
+        80: "K",
     }
     # 首行与末行点值
     assert TABLE["ABCDEFGH"] == "HGBCAFDE"
     assert TABLE["EFGHIJKL"] == "EJIFHGLK"
     assert allocate("EFGHIJKL") == {
-        79: "E", 85: "J", 81: "I", 74: "F", 82: "H", 77: "G", 87: "L", 80: "K",
+        79: "E",
+        85: "J",
+        81: "I",
+        74: "F",
+        82: "H",
+        77: "G",
+        87: "L",
+        80: "K",
     }
 
 

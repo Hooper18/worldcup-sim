@@ -18,8 +18,13 @@ from wcsim.tournament.structure import GROUP_LETTERS, TEAMS
 @pytest.fixture(scope="module")
 def params():
     return DcEloParams(
-        beta0=0.10, beta1=0.73, gamma=0.23, rho=-0.043,
-        half_life_days=730, n_matches=7768, cutoff="2026-06-11",
+        beta0=0.10,
+        beta1=0.73,
+        gamma=0.23,
+        rho=-0.043,
+        half_life_days=730,
+        n_matches=7768,
+        cutoff="2026-06-11",
     )
 
 
@@ -31,13 +36,23 @@ def elo():
 @pytest.fixture(scope="module")
 def bundle(params, elo):
     att = DcAttackParams(
-        mu=0.1, home_adv=0.25, rho=-0.04,
+        mu=0.1,
+        home_adv=0.25,
+        rho=-0.04,
         att={c: 0.5 - 0.02 * i for i, c in enumerate(CODES)},
         def_={c: -0.5 + 0.02 * i for i, c in enumerate(CODES)},
-        half_life_days=730, n_matches=7000, cutoff="2026-06-11", teams=CODES,
+        half_life_days=730,
+        n_matches=7000,
+        cutoff="2026-06-11",
+        teams=CODES,
     )
-    return ModelBundle(dc_elo=params, dc_attack=att, weight_dc_elo=0.6, half_life_days=730,
-                       backtest={"best": {"weight_dc_elo": 0.6}})
+    return ModelBundle(
+        dc_elo=params,
+        dc_attack=att,
+        weight_dc_elo=0.6,
+        half_life_days=730,
+        backtest={"best": {"weight_dc_elo": 0.6}},
+    )
 
 
 @pytest.fixture(scope="module")
@@ -61,7 +76,11 @@ def test_build_teams_complete(elo):
 
 def _components(bundle, elo):
     from wcsim.models.score_model import DcAttackModel
-    return [("dc_elo", DcEloModel(bundle.dc_elo, elo)), ("dc_attack", DcAttackModel(bundle.dc_attack))]
+
+    return [
+        ("dc_elo", DcEloModel(bundle.dc_elo, elo)),
+        ("dc_attack", DcAttackModel(bundle.dc_attack)),
+    ]
 
 
 def test_build_matches_104_with_forecast(bundle, model, elo, sim):
@@ -104,7 +123,15 @@ def test_build_groups_probabilities(sim):
 
 def test_build_groups_current_standings():
     # 给 A 组 M1 一个真实结果，current 应反映
-    p = DcEloParams(beta0=0.1, beta1=0.7, gamma=0.2, rho=-0.04, half_life_days=730, n_matches=1, cutoff="2026-06-11")
+    p = DcEloParams(
+        beta0=0.1,
+        beta1=0.7,
+        gamma=0.2,
+        rho=-0.04,
+        half_life_days=730,
+        n_matches=1,
+        cutoff="2026-06-11",
+    )
     e = {c: 1800.0 for c in CODES}
     s = simulate(p, e, n_sims=200, seed=1)
     results = {1: {"h": 3, "a": 0, "after": "FT"}}  # 墨西哥 3-0 南非

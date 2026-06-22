@@ -55,7 +55,9 @@ def outcome_probs(mat: np.ndarray) -> tuple[float, float, float]:
 
 def top_scores(mat: np.ndarray, n: int = 8) -> list[tuple[int, int, float]]:
     """概率最高的 n 个比分 [(h, a, p), ...]。"""
-    flat = [(int(h), int(a), float(mat[h, a])) for h in range(mat.shape[0]) for a in range(mat.shape[1])]
+    flat = [
+        (int(h), int(a), float(mat[h, a])) for h in range(mat.shape[0]) for a in range(mat.shape[1])
+    ]
     flat.sort(key=lambda t: -t[2])
     return flat[:n]
 

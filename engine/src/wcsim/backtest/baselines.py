@@ -32,14 +32,19 @@ def _probs(b: float, c: float, dz: np.ndarray) -> np.ndarray:
     return p / p.sum(axis=1, keepdims=True)
 
 
-def fit(hist: pd.DataFrame, *, cutoff, half_life_days: float = 730.0, window_years: float = 8.0) -> tuple[float, float]:
+def fit(
+    hist: pd.DataFrame, *, cutoff, half_life_days: float = 730.0, window_years: float = 8.0
+) -> tuple[float, float]:
     """在带 home_elo_pre/away_elo_pre 的历史明细上拟合 (b, c)。"""
     cutoff_ts = pd.Timestamp(cutoff)
     lo = cutoff_ts - pd.Timedelta(days=window_years * 365.25)
     df = hist[(hist["date"] > lo) & (hist["date"] <= cutoff_ts)]
     dz = (df["home_elo_pre"].to_numpy() - df["away_elo_pre"].to_numpy()) / 400.0
     outc = np.array(
-        [metrics.outcome_of(int(h), int(a)) for h, a in zip(df["home_score"], df["away_score"], strict=True)]
+        [
+            metrics.outcome_of(int(h), int(a))
+            for h, a in zip(df["home_score"], df["away_score"], strict=True)
+        ]
     )
     w = 0.5 ** ((cutoff_ts - df["date"]).dt.days.to_numpy(dtype=float) / half_life_days)
 
@@ -54,6 +59,9 @@ def fit(hist: pd.DataFrame, *, cutoff, half_life_days: float = 730.0, window_yea
 
 def probs(b: float, c: float, elo: dict[str, float], matches: pd.DataFrame) -> np.ndarray:
     dz = np.array(
-        [(elo.get(m.home_team, 1500.0) - elo.get(m.away_team, 1500.0)) / 400.0 for m in matches.itertuples(index=False)]
+        [
+            (elo.get(m.home_team, 1500.0) - elo.get(m.away_team, 1500.0)) / 400.0
+            for m in matches.itertuples(index=False)
+        ]
     )
     return _probs(b, c, dz)
