@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import type { Knockout, Match } from '../types/data'
+import type { Match } from '../types/data'
 import { useTeams } from '../hooks/useTeams'
 import { pct } from '../lib/format'
 import Flag from './Flag'
@@ -47,14 +47,7 @@ function SlotCell({ code, p }: { code: string | null; p: number | null }) {
   )
 }
 
-export default function BracketView({
-  matches,
-  knockout,
-}: {
-  matches: Match[]
-  knockout: Knockout
-}) {
-  void knockout
+export default function BracketView({ matches }: { matches: Match[] }) {
   const byId = new Map(matches.map((m) => [m.id, m]))
   return (
     <div className="overflow-x-auto pb-4">

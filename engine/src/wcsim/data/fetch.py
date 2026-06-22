@@ -57,14 +57,6 @@ def fetch_fixture_feed(*, force: bool = False) -> Path:
     return dest
 
 
-def fetch_elo_tsv(*, force: bool = False) -> Path:
-    """eloratings.net 当前排名 TSV（仅交叉校验用，无表头）。"""
-    dest = config.CACHE_DIR / "eloratings_world.tsv"
-    if force or not _is_fresh(dest, config.CACHE_MAX_AGE_HOURS):
-        _download(config.ELORATINGS_URL, dest, headers={"User-Agent": config.BROWSER_UA})
-    return dest
-
-
 # ---------------------------------------------------------------------------
 # 加载
 # ---------------------------------------------------------------------------

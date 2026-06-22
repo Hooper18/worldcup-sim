@@ -73,7 +73,6 @@ export interface Team {
   name_zh: string
   name_en: string
   group: string
-  flag: string
   elo: number
   fifa_rank: number | null
   host: boolean

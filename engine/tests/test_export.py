@@ -70,7 +70,7 @@ def test_build_teams_complete(elo):
     teams = writer.build_teams(elo)
     assert len(teams) == 48
     for c, t in teams.items():
-        assert set(t) == {"name_zh", "name_en", "group", "flag", "elo", "fifa_rank", "host"}
+        assert set(t) == {"name_zh", "name_en", "group", "elo", "fifa_rank", "host"}
         assert t["name_zh"] == TEAMS[c].name_zh
 
 

@@ -94,7 +94,6 @@ def build_teams(elo: dict[str, float], fifa_rank: dict[str, int] | None = None) 
             "name_zh": t.name_zh,
             "name_en": t.name_en,
             "group": t.group,
-            "flag": t.flag,
             "elo": round(elo[c]),
             "fifa_rank": fifa_rank.get(c),
             "host": t.host,

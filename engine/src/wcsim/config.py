@@ -25,7 +25,6 @@ MARTJ42_SHOOTOUTS_URL = (
     "https://raw.githubusercontent.com/martj42/international_results/master/shootouts.csv"
 )
 FIXTURE_FEED_URL = "https://fixturedownload.com/feed/json/fifa-world-cup-2026"
-ELORATINGS_URL = "https://eloratings.net/World.tsv"
 
 # fixturedownload 网页端对无 UA 的程序请求返回 403，统一带浏览器 UA
 BROWSER_UA = (
@@ -61,4 +60,3 @@ MAX_GOALS = 12  # 比分矩阵截断（0..12）
 # ---------------------------------------------------------------------------
 N_SIMS_DEFAULT = 100_000
 EXTRA_TIME_LAMBDA_FACTOR = 1.0 / 3.0  # 加时 30 分钟 ≈ λ × 1/3
-PENALTY_WIN_PROB = 0.5  # 点球大战 50:50（大样本研究支持，无先罚优势）
