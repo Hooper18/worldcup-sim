@@ -286,7 +286,11 @@ def simulate(
         bc_a = np.bincount(a, minlength=48)
         match_side_counts[mid] = {"home": bc_h, "away": bc_a}
         stage_arr[stage] += bc_h + bc_a
-        winners[mid], losers[mid] = _decide(sampler, h, a, rng, pen_theta)
+        if mid in fixed:
+            # 已完赛淘汰赛：用真实赛果定胜负，不抽样（与小组赛 fixed 对称）
+            winners[mid], losers[mid] = _fixed_ko_winner(h, a, fixed[mid])
+        else:
+            winners[mid], losers[mid] = _decide(sampler, h, a, rng, pen_theta)
 
     for mid in sorted(R32_SLOTS):
         play(mid, home_of[mid], away_of[mid], "r32")
@@ -316,6 +320,24 @@ def simulate(
 # ---------------------------------------------------------------------------
 # 辅助
 # ---------------------------------------------------------------------------
+
+
+def _fixed_ko_winner(
+    h: np.ndarray, a: np.ndarray, res: dict
+) -> tuple[np.ndarray, np.ndarray]:
+    """已完赛淘汰赛：用真实赛果定胜负，不抽样。返回 (胜者, 负者)。
+
+    胜方由最终比分决定；若加时后仍平（点球大战），由 res['pen_winner'] 决定。
+    h/a 为本场参赛队的全局 index 数组——一旦此场已完赛，其上游各场也都已完赛固定，
+    故 h/a 逐 sim 恒定、胜负侧对所有 sim 一致，与小组赛 fixed 代入比分严格对称。
+    """
+    if res["h"] > res["a"]:
+        home_wins = True
+    elif res["a"] > res["h"]:
+        home_wins = False
+    else:  # 90 分钟+加时仍平 → 只能点球决出，真实赛果必带 pen_winner
+        home_wins = res.get("pen_winner") == "home"
+    return (h, a) if home_wins else (a, h)
 
 
 def _decide(

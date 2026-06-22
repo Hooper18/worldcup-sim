@@ -97,6 +97,58 @@ def test_conditional_simulation_fixes_match(params, elo):
     assert res.advance_counts["MEX"] < base.advance_counts["MEX"]
 
 
+def _all_groups_fixed():
+    # 固定全部 72 场小组赛：组内 CODES 序靠前（Elo 更高）者 1-0 取胜
+    # → 每组 9/6/3/0 严格名次，整个 32 强对阵（含第三名 Annexe C 落位）逐 sim 完全确定。
+    order = {c: i for i, c in enumerate(CODES)}
+    fixed = {}
+    for mid, m in MATCHES.items():
+        if m["stage"] != "group":
+            continue
+        h, a = m["home"], m["away"]
+        fixed[mid] = (
+            {"h": 1, "a": 0, "after": "FT"}
+            if order[h] < order[a]
+            else {"h": 0, "a": 1, "after": "FT"}
+        )
+    return fixed
+
+
+def test_conditional_simulation_fixes_knockout(params, elo):
+    # 已完赛淘汰赛应代入真实赛果而非重新抽样（回归：旧版只对小组赛生效，淘汰赛仍抽样）。
+    tk = {c: elo[c] for c in CODES}
+    fixed = _all_groups_fixed()
+
+    base = simulate(params, elo, n_sims=200, fixed_results=fixed, tiebreak_key=tk, seed=4)
+    side = base.match_side_counts[73]
+    assert side["home"].max() == 200 and side["away"].max() == 200  # 参赛队逐 sim 恒定
+    home_team = CODES[int(side["home"].argmax())]
+    away_team = CODES[int(side["away"].argmax())]
+    # 不固定 M73 时主队不一定晋级（抽样胜率 < 1）
+    assert base.stage_counts[home_team]["r16"] < 200
+
+    # 固定 M73 = 主队 2-0：主队必进 16 强，负者必出局
+    fixed[73] = {"h": 2, "a": 0, "after": "FT"}
+    res = simulate(params, elo, n_sims=200, fixed_results=fixed, tiebreak_key=tk, seed=4)
+    assert res.stage_counts[home_team]["r16"] == 200
+    assert res.stage_counts[away_team]["r16"] == 0
+
+
+def test_fixed_knockout_penalty_winner(params, elo):
+    # 淘汰赛平局：由 pen_winner 决定晋级方，不抽样
+    tk = {c: elo[c] for c in CODES}
+    fixed = _all_groups_fixed()
+    base = simulate(params, elo, n_sims=200, fixed_results=fixed, tiebreak_key=tk, seed=5)
+    side = base.match_side_counts[73]
+    home_team = CODES[int(side["home"].argmax())]
+    away_team = CODES[int(side["away"].argmax())]
+
+    fixed[73] = {"h": 1, "a": 1, "after": "PEN", "pen_winner": "away"}
+    res = simulate(params, elo, n_sims=200, fixed_results=fixed, tiebreak_key=tk, seed=5)
+    assert res.stage_counts[away_team]["r16"] == 200  # 点球胜者晋级
+    assert res.stage_counts[home_team]["r16"] == 0
+
+
 def test_fully_fixed_group_is_deterministic(params, elo):
     # 固定 A 组全部 6 场，让 rank 小的队 1-0 取胜 → 积分 9/6/3/0 严格区分，名次完全确定
     tk = {c: elo[c] for c in CODES}
