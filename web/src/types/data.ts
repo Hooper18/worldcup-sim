@@ -156,3 +156,41 @@ export interface Uncertainty {
   note: string
   teams: Record<string, { champion: number[]; advance: number[] }>
 }
+
+// 本届实战表现（performance.json）：重建每场赛前预测对真实赛果打分
+type Outcome = 'home' | 'draw' | 'away'
+export interface PerfSummary {
+  rps: number
+  brier: number
+  log_loss: number
+  hit_rate: number
+}
+export interface PerfMatch {
+  id: number
+  group: string
+  kickoff_utc: string
+  home: string
+  away: string
+  pred: {
+    p_home: number
+    p_draw: number
+    p_away: number
+    pick: Outcome
+    top_score: { h: number; a: number }
+  }
+  actual: { h: number; a: number; outcome: Outcome }
+  rps: number
+  hit: boolean
+}
+export interface Performance {
+  generated_at: string
+  cutoff: string
+  n_scored: number
+  n_finished_group: number
+  n_skipped: number
+  fused: PerfSummary | null
+  elo_baseline: PerfSummary | null
+  climatology: PerfSummary | null
+  per_match: PerfMatch[]
+  cumulative: { id: number; n: number; fused_rps: number; elo_rps: number; clim_rps: number }[]
+}

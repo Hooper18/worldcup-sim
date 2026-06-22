@@ -1,11 +1,15 @@
 import { useData } from '../hooks/useData'
-import type { Backtest, Meta } from '../types/data'
+import type { Backtest, Meta, Performance } from '../types/data'
 import { Loading, ErrorMsg } from '../components/Loading'
 import Card from '../components/Card'
 import CalibrationSvg from '../components/CalibrationSvg'
+import LineChartSvg from '../components/LineChartSvg'
+import { seriesColor } from '../lib/chart'
+import { pct } from '../lib/format'
 
 export default function ModelPage() {
   const { data, loading, error } = useData<Meta>('meta')
+  const perf = useData<Performance>('performance').data
   if (loading) return <Loading />
   if (error || !data) return <ErrorMsg msg={error || '无数据'} />
 
@@ -13,6 +17,28 @@ export default function ModelPage() {
   const bt = data.models.backtest as Backtest
   const hasBacktest = bt && 'years' in bt
   const diag = data.models.diagnostics
+
+  const perfSeries =
+    perf && perf.cumulative.length
+      ? [
+          {
+            label: '融合模型',
+            color: seriesColor(0),
+            values: perf.cumulative.map((c) => c.fused_rps),
+          },
+          {
+            label: '简单 Elo 基准',
+            color: seriesColor(2),
+            values: perf.cumulative.map((c) => c.elo_rps),
+          },
+          {
+            label: 'climatology',
+            color: seriesColor(1),
+            values: perf.cumulative.map((c) => c.clim_rps),
+          },
+        ]
+      : []
+  const perfX = perf ? perf.cumulative.map((c) => `${c.n}场`) : []
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
@@ -50,6 +76,57 @@ export default function ModelPage() {
           50:50）微调，而非一律掷硬币。真实赛果出来后固定该场、只重抽未赛场次。
         </Prose>
       </section>
+
+      {perf && perf.fused && perf.elo_baseline && perf.climatology && perfSeries.length > 1 && (
+        <section>
+          <h2 className="mb-1 text-lg font-medium">本届实战表现</h2>
+          <p className="mb-3 text-xs text-ink-faint">
+            用赛前冻结的模型重建每场<b>开赛前</b>的预测（只回放到该场之前的 Elo，杜绝"已知赛果"
+            泄漏），再对真实赛果打分。已评 {perf.n_scored} 场小组赛
+            {perf.n_skipped ? `（另 ${perf.n_skipped} 场待数据源回填）` : ''}。RPS 越低越准。
+          </p>
+          <Card className="space-y-4 px-4 py-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <Stat label="融合模型 RPS" value={perf.fused.rps.toFixed(3)} hint="本届，越低越好" />
+              <Stat
+                label="胜平负命中率"
+                value={pct(perf.fused.hit_rate, 0)}
+                hint={`${perf.n_scored} 场`}
+              />
+              <Stat label="简单 Elo 基准" value={perf.elo_baseline.rps.toFixed(3)} hint="RPS" />
+              <Stat label="弱基准 climatology" value={perf.climatology.rps.toFixed(3)} hint="RPS" />
+            </div>
+            <div>
+              <div className="mb-1 text-xs text-ink-faint">
+                累计 RPS 随赛事推进（三线越低越准；融合应压在最下方）
+              </div>
+              <LineChartSvg
+                series={perfSeries}
+                xLabels={perfX}
+                valueFmt={(v) => v.toFixed(3)}
+                yFmt={(v) => v.toFixed(2)}
+              />
+              <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-ink-secondary">
+                {perfSeries.map((s, i) => (
+                  <span key={i} className="flex items-center gap-1.5">
+                    <span
+                      className="inline-block h-2 w-3 rounded"
+                      style={{ backgroundColor: s.color }}
+                    />
+                    {s.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <p className="text-xs text-ink-faint">
+              融合本届 RPS {perf.fused.rps.toFixed(3)}{' '}
+              {perf.fused.rps < perf.elo_baseline.rps ? '优于' : '接近'} 简单 Elo 基准（
+              {perf.elo_baseline.rps.toFixed(3)}），明显优于 climatology（
+              {perf.climatology.rps.toFixed(3)}）。样本仅 {perf.n_scored} 场，仍会波动。
+            </p>
+          </Card>
+        </section>
+      )}
 
       <section>
         <h2 className="mb-1 text-lg font-medium">回测验证</h2>

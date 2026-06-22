@@ -10,10 +10,18 @@ interface Props {
   xLabels: string[]
   yMax?: number
   height?: number
-  valueFmt?: (v: number) => string
+  valueFmt?: (v: number) => string // 提示框数值格式（默认百分比）
+  yFmt?: (v: number) => string // y 轴刻度格式（默认百分比；RPS 等非百分比指标可覆盖）
 }
 
-export default function LineChartSvg({ series, xLabels, yMax, height = 240, valueFmt }: Props) {
+export default function LineChartSvg({
+  series,
+  xLabels,
+  yMax,
+  height = 240,
+  valueFmt,
+  yFmt,
+}: Props) {
   const W = 640
   const H = height
   const padL = 36
@@ -25,6 +33,7 @@ export default function LineChartSvg({ series, xLabels, yMax, height = 240, valu
   const x = (i: number) => padL + (n <= 1 ? 0 : (i * (W - padL - padR)) / (n - 1))
   const y = (v: number) => padT + (1 - v / maxY) * (H - padT - padB)
   const fmt = valueFmt ?? ((v: number) => `${(v * 100).toFixed(1)}%`)
+  const yfmt = yFmt ?? ((v: number) => `${(v * 100).toFixed(0)}%`)
 
   const yTicks = [0, 0.25, 0.5, 0.75, 1].map((f) => f * maxY)
 
@@ -64,7 +73,7 @@ export default function LineChartSvg({ series, xLabels, yMax, height = 240, valu
           <g key={i}>
             <line x1={padL} y1={y(t)} x2={W - padR} y2={y(t)} stroke="#E7E4DE" strokeWidth={1} />
             <text x={padL - 6} y={y(t) + 3} textAnchor="end" fontSize={10} fill="#9C9A96">
-              {(t * 100).toFixed(0)}%
+              {yfmt(t)}
             </text>
           </g>
         ))}

@@ -233,6 +233,34 @@ const EVOLUTION = {
   ),
 }
 
+const PERFORMANCE = {
+  generated_at: '2026-06-12T00:00:00Z',
+  cutoff: '2026-06-11',
+  n_scored: 2,
+  n_finished_group: 2,
+  n_skipped: 0,
+  fused: { rps: 0.167, brier: 0.64, log_loss: 1.0, hit_rate: 0.525 },
+  elo_baseline: { rps: 0.19, brier: 0.7, log_loss: 1.1, hit_rate: 0.45 },
+  climatology: { rps: 0.214, brier: 0.75, log_loss: 1.2, hit_rate: 0.4 },
+  per_match: [
+    {
+      id: 1,
+      group: 'A',
+      kickoff_utc: '2026-06-11T19:00:00Z',
+      home: 'MEX',
+      away: 'RSA',
+      pred: { p_home: 0.6, p_draw: 0.25, p_away: 0.15, pick: 'home', top_score: { h: 1, a: 0 } },
+      actual: { h: 2, a: 0, outcome: 'home' },
+      rps: 0.07,
+      hit: true,
+    },
+  ],
+  cumulative: [
+    { id: 1, n: 1, fused_rps: 0.07, elo_rps: 0.1, clim_rps: 0.2 },
+    { id: 2, n: 2, fused_rps: 0.167, elo_rps: 0.19, clim_rps: 0.214 },
+  ],
+}
+
 async function stubData(page: Page) {
   const map: Record<string, unknown> = {
     'meta.json': META,
@@ -241,6 +269,7 @@ async function stubData(page: Page) {
     'groups.json': GROUPS,
     'knockout.json': KNOCKOUT,
     'evolution.json': EVOLUTION,
+    'performance.json': PERFORMANCE,
   }
   await page.route('**/data/*.json', (route) => {
     const name = route.request().url().split('/').pop()!
@@ -267,16 +296,18 @@ test('对阵树渲染未定槽位的最可能球队', async ({ page }) => {
   await expect(page.getByText('32 强').first()).toBeVisible()
 })
 
-test('单场详情显示赛前预测与真实比分', async ({ page }) => {
+test('单场详情显示赛后复盘与真实比分', async ({ page }) => {
   await page.goto('/match/1')
   await expect(page.getByText('2 : 0')).toBeVisible()
-  await expect(page.getByText('赛前预测')).toBeVisible()
+  await expect(page.getByText('赛后复盘 · 赛前预测 vs 实际')).toBeVisible()
+  await expect(page.getByText('命中', { exact: false }).first()).toBeVisible()
 })
 
-test('模型页显示回测对比表', async ({ page }) => {
+test('模型页显示本届实战表现 + 回测对比表', async ({ page }) => {
   await page.goto('/model')
+  await expect(page.getByText('本届实战表现')).toBeVisible() // 赛中重建预测打分
+  await expect(page.getByText('胜平负命中率')).toBeVisible()
   await expect(page.getByText('回测验证')).toBeVisible()
-  await expect(page.getByText('融合').first()).toBeVisible()
   await expect(page.getByText('样本外 RPS').first()).toBeVisible() // LOTO 诚实指标卡
   await expect(page.getByText('0.202')).toBeVisible() // 2018 融合 RPS
 })

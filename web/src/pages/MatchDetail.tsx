@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
 import { useData } from '../hooks/useData'
 import { useTeams } from '../hooks/useTeams'
-import type { Match } from '../types/data'
+import type { Match, Performance } from '../types/data'
 import { Loading, ErrorMsg } from '../components/Loading'
 import Card from '../components/Card'
 import ProbBar from '../components/ProbBar'
@@ -9,14 +9,18 @@ import ScoreHeatGrid from '../components/ScoreHeatGrid'
 import TeamLabel from '../components/TeamLabel'
 import { AFTER_LABEL, formatKickoff, STAGE_LABEL } from '../lib/format'
 
+const OUTCOME_ZH = { home: '主胜', draw: '平局', away: '客胜' } as const
+
 export default function MatchDetail() {
   const { id = '' } = useParams()
   const matches = useData<Match[]>('matches')
+  const perf = useData<Performance>('performance')
   const teams = useTeams()
   if (matches.loading) return <Loading />
   if (matches.error || !matches.data) return <ErrorMsg msg={matches.error || '无数据'} />
   const m = matches.data.find((x) => x.id === Number(id))
   if (!m) return <ErrorMsg msg="未找到该场比赛" />
+  const recap = perf.data?.per_match.find((p) => p.id === m.id)
 
   const isKnockout = m.stage !== 'group'
   const homeName = m.home && !isKnockout ? m.home : (m.slot_dist?.home[0]?.team ?? m.home)
@@ -65,6 +69,50 @@ export default function MatchDetail() {
         </div>
       </Card>
 
+      {/* 赛后复盘：赛前预测 vs 实际（仅已完赛、有重建的赛前预测） */}
+      {m.status === 'finished' && recap && (
+        <section>
+          <h2 className="mb-3 text-md font-medium text-ink-secondary">
+            赛后复盘 · 赛前预测 vs 实际
+          </h2>
+          <Card className="space-y-3 px-4 py-4">
+            <ProbBar
+              pHome={recap.pred.p_home}
+              pDraw={recap.pred.p_draw}
+              pAway={recap.pred.p_away}
+              labels={[teams?.[recap.home]?.name_zh ?? '主', teams?.[recap.away]?.name_zh ?? '客']}
+            />
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm">
+              <span className="text-ink-secondary">
+                预测倾向 <b>{OUTCOME_ZH[recap.pred.pick]}</b>
+              </span>
+              <span className="text-ink-secondary">
+                预测最可能{' '}
+                <span className="tabular-nums">
+                  {recap.pred.top_score.h}:{recap.pred.top_score.a}
+                </span>
+              </span>
+              <span className="text-ink-secondary">
+                实际{' '}
+                <span className="font-medium tabular-nums">
+                  {recap.actual.h}:{recap.actual.a}
+                </span>
+              </span>
+              <span
+                className={`rounded-md px-2 py-0.5 text-xs ${
+                  recap.hit ? 'bg-accent-soft text-accent' : 'bg-surface text-ink-faint'
+                }`}
+              >
+                {recap.hit ? '命中' : '未中'} · RPS {recap.rps.toFixed(2)}
+              </span>
+            </div>
+            <p className="text-xs text-ink-faint">
+              用赛前冻结模型 + 只回放到开赛前的 Elo 重建，非事后诸葛。
+            </p>
+          </Card>
+        </section>
+      )}
+
       {/* 淘汰赛槽位归属 */}
       {isKnockout && m.slot_dist && (
         <section>
@@ -94,7 +142,7 @@ export default function MatchDetail() {
         <>
           <section>
             <h2 className="mb-3 text-md font-medium text-ink-secondary">
-              {m.status === 'finished' ? '赛前预测' : '比分预测'}
+              {m.status === 'finished' ? '模型当前预测（含赛果更新的 Elo）' : '比分预测'}
             </h2>
             <Card className="space-y-4 px-4 py-4">
               <ProbBar
