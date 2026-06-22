@@ -19,14 +19,14 @@ export default function CalibrationSvg({ points }: Props) {
         y1={y(0)}
         x2={x(1)}
         y2={y(1)}
-        stroke="#E7E4DE"
+        stroke="rgb(var(--c-line))"
         strokeWidth={1}
         strokeDasharray="3 3"
       />
       {/* 轴 */}
-      <line x1={pad} y1={S - pad} x2={S - pad} y2={S - pad} stroke="#E7E4DE" />
-      <line x1={pad} y1={pad} x2={pad} y2={S - pad} stroke="#E7E4DE" />
-      <text x={S / 2} y={S - 6} textAnchor="middle" fontSize={10} fill="#9C9A96">
+      <line x1={pad} y1={S - pad} x2={S - pad} y2={S - pad} stroke="rgb(var(--c-line))" />
+      <line x1={pad} y1={pad} x2={pad} y2={S - pad} stroke="rgb(var(--c-line))" />
+      <text x={S / 2} y={S - 6} textAnchor="middle" fontSize={10} fill="rgb(var(--c-ink-faint))">
         预测概率
       </text>
       <text
@@ -34,7 +34,7 @@ export default function CalibrationSvg({ points }: Props) {
         y={S / 2}
         textAnchor="middle"
         fontSize={10}
-        fill="#9C9A96"
+        fill="rgb(var(--c-ink-faint))"
         transform={`rotate(-90 10 ${S / 2})`}
       >
         实际频率
@@ -46,7 +46,7 @@ export default function CalibrationSvg({ points }: Props) {
           cx={x(p[0])}
           cy={y(p[1])}
           r={3 + 4 * (p[2] / maxN)}
-          fill="#2F6B4F"
+          fill="rgb(var(--c-accent))"
           fillOpacity={0.55}
         />
       ))}

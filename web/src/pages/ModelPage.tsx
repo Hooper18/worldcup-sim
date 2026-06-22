@@ -243,7 +243,7 @@ export default function ModelPage() {
 
 function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="rounded-xl border border-line bg-white/40 px-3 py-2">
+    <div className="rounded-xl border border-line bg-card/40 px-3 py-2">
       <div className="text-xs text-ink-faint">{label}</div>
       <div className="mt-0.5 text-lg font-medium tabular-nums text-accent">{value}</div>
       {hint && <div className="text-xs text-ink-faint">{hint}</div>}

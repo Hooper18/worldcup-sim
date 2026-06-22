@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 主题色板（RGB 三通道，供 tailwind 的 rgb(var / <alpha-value>) 用，支持 /透明度）。
+   亮色 = Claude 暖白系；暗色 = ChatGPT 深灰底 #212121，文字 #ECECEC。 */
+:root {
+  --c-paper: 250 249 246; /* #FAF9F6 */
+  --c-surface: 244 242 238; /* #F4F2EE */
+  --c-card: 255 255 255; /* 卡片基色（多以 /40 透明度使用） */
+  --c-ink: 31 31 31; /* #1F1F1F */
+  --c-ink-secondary: 107 107 107;
+  --c-ink-faint: 156 154 150; /* #9C9A96 */
+  --c-accent: 47 107 79; /* #2F6B4F 草皮深绿 */
+  --c-accent-soft: 232 240 235; /* #E8F0EB 选中浅底 */
+  --c-line: 231 228 222; /* #E7E4DE 分隔线 */
+  color-scheme: light;
+}
+
+.dark {
+  --c-paper: 33 33 33; /* #212121 */
+  --c-surface: 42 42 42; /* #2A2A2A 略亮层 */
+  --c-card: 70 70 70; /* /40 叠在深底上得到微亮卡片 */
+  --c-ink: 236 236 236; /* #ECECEC */
+  --c-ink-secondary: 176 176 176;
+  --c-ink-faint: 124 124 124;
+  --c-accent: 90 170 130; /* 深底上更清晰的草绿 */
+  --c-accent-soft: 36 51 41; /* 深绿选中底 */
+  --c-line: 64 64 64; /* #404040 */
+  color-scheme: dark;
+}
+
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -11,8 +39,8 @@ body {
   font-family:
     -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', Roboto,
     sans-serif;
-  background-color: #faf9f6;
-  color: #1f1f1f;
+  background-color: rgb(var(--c-paper));
+  color: rgb(var(--c-ink));
   font-size: 14px;
   line-height: 1.7;
 }

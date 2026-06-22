@@ -9,6 +9,16 @@
       name="description"
       content="基于历史战绩的 2026 世界杯每场比分预测与夺冠概率模拟，随真实赛果每日更新"
     />
+    <script>
+      // 首屏前确定主题，避免暗色闪白：localStorage 优先，否则跟随系统
+      ;(function () {
+        try {
+          var t = localStorage.getItem('theme')
+          if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches))
+            document.documentElement.classList.add('dark')
+        } catch (e) {}
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

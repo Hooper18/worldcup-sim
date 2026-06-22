@@ -10,7 +10,7 @@ export default function MatchCard({ match }: { match: Match }) {
   return (
     <Link
       to={`/match/${match.id}`}
-      className="block rounded-xl border border-line bg-white/40 px-4 py-3 transition-colors hover:bg-surface"
+      className="block rounded-xl border border-line bg-card/40 px-4 py-3 transition-colors hover:bg-surface"
     >
       <div className="mb-2 flex items-center justify-between text-xs text-ink-faint">
         <span>

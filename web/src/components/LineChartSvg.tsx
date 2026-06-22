@@ -71,8 +71,21 @@ export default function LineChartSvg({
         {/* y 网格 + 刻度 */}
         {yTicks.map((t, i) => (
           <g key={i}>
-            <line x1={padL} y1={y(t)} x2={W - padR} y2={y(t)} stroke="#E7E4DE" strokeWidth={1} />
-            <text x={padL - 6} y={y(t) + 3} textAnchor="end" fontSize={10} fill="#9C9A96">
+            <line
+              x1={padL}
+              y1={y(t)}
+              x2={W - padR}
+              y2={y(t)}
+              stroke="rgb(var(--c-line))"
+              strokeWidth={1}
+            />
+            <text
+              x={padL - 6}
+              y={y(t) + 3}
+              textAnchor="end"
+              fontSize={10}
+              fill="rgb(var(--c-ink-faint))"
+            >
               {yfmt(t)}
             </text>
           </g>
@@ -82,7 +95,14 @@ export default function LineChartSvg({
           const step = Math.ceil(n / 6)
           if (i % step !== 0 && i !== n - 1) return null
           return (
-            <text key={i} x={x(i)} y={H - 10} textAnchor="middle" fontSize={10} fill="#9C9A96">
+            <text
+              key={i}
+              x={x(i)}
+              y={H - 10}
+              textAnchor="middle"
+              fontSize={10}
+              fill="rgb(var(--c-ink-faint))"
+            >
               {lab}
             </text>
           )
@@ -94,7 +114,7 @@ export default function LineChartSvg({
             y1={padT}
             x2={x(hover)}
             y2={H - padB}
-            stroke="#9C9A96"
+            stroke="rgb(var(--c-ink-faint))"
             strokeWidth={1}
             strokeDasharray="3 3"
           />
@@ -121,7 +141,7 @@ export default function LineChartSvg({
                 cy={y(s.values[hover])}
                 r={3.5}
                 fill={s.color}
-                stroke="#fff"
+                stroke="rgb(var(--c-paper))"
                 strokeWidth={1}
               />
             ),
@@ -134,7 +154,7 @@ export default function LineChartSvg({
           className={`pointer-events-none absolute top-1 z-10 ${flip ? '-translate-x-full -ml-2' : 'ml-2'}`}
           style={{ left: `${leftPct}%` }}
         >
-          <div className="min-w-[7rem] rounded-lg border border-line bg-white px-2.5 py-1.5">
+          <div className="min-w-[7rem] rounded-lg border border-line bg-card px-2.5 py-1.5">
             <div className="mb-1 text-[11px] font-medium text-ink-secondary">{xLabels[hover]}</div>
             <div className="space-y-0.5">
               {ordered.map((s) => (

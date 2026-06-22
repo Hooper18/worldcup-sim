@@ -166,7 +166,7 @@ export default function MatchDetail() {
               {m.forecast.top_scores.slice(0, 6).map((s, i) => (
                 <span
                   key={i}
-                  className="rounded-lg border border-line bg-white/40 px-3 py-1.5 text-sm tabular-nums"
+                  className="rounded-lg border border-line bg-card/40 px-3 py-1.5 text-sm tabular-nums"
                 >
                   {s.h}:{s.a}
                   <span className="ml-1.5 text-xs text-ink-faint">{(s.p * 100).toFixed(1)}%</span>

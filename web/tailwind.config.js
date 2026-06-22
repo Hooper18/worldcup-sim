@@ -1,23 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        // 暖白底 + 极淡层级差（参照 Claude.ai 的暖白系）
-        paper: '#FAF9F6',
-        surface: '#F4F2EE',
+        // 色值来自 index.css 的 CSS 变量（亮/暗双主题），rgb(var / <alpha-value>) 支持 /透明度
+        paper: 'rgb(var(--c-paper) / <alpha-value>)',
+        surface: 'rgb(var(--c-surface) / <alpha-value>)',
+        card: 'rgb(var(--c-card) / <alpha-value>)',
         ink: {
-          DEFAULT: '#1F1F1F',
-          secondary: '#6B6B6B',
-          faint: '#9C9A96',
+          DEFAULT: 'rgb(var(--c-ink) / <alpha-value>)',
+          secondary: 'rgb(var(--c-ink-secondary) / <alpha-value>)',
+          faint: 'rgb(var(--c-ink-faint) / <alpha-value>)',
         },
-        // 单一低调强调色：深绿（草皮色系，克制不抢眼）
         accent: {
-          DEFAULT: '#2F6B4F',
-          soft: '#E8F0EB',
+          DEFAULT: 'rgb(var(--c-accent) / <alpha-value>)',
+          soft: 'rgb(var(--c-accent-soft) / <alpha-value>)',
         },
-        line: '#E7E4DE',
+        line: 'rgb(var(--c-line) / <alpha-value>)',
       },
       fontSize: {
         // 界面文字 13-15px 为主（Apple HIG 节奏）

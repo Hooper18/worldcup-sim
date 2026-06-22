@@ -66,7 +66,7 @@ export default function BracketView({ matches }: { matches: Match[] }) {
                   <Link
                     key={id}
                     to={`/match/${id}`}
-                    className="divide-y divide-line rounded-lg border border-line bg-white/40 transition-colors hover:bg-surface"
+                    className="divide-y divide-line rounded-lg border border-line bg-card/40 transition-colors hover:bg-surface"
                   >
                     <SlotCell code={home.code} p={home.p} />
                     <SlotCell code={away.code} p={away.p} />

@@ -29,8 +29,8 @@ export default function ScoreHeatGrid({ matrix, homeCode, awayCode }: Props) {
                   title={`${h} : ${a} — ${pct(p, 1)}`}
                   className="flex aspect-square w-9 items-center justify-center rounded text-xs tabular-nums"
                   style={{
-                    backgroundColor: `rgba(47, 107, 79, ${0.06 + 0.94 * (p / max)})`,
-                    color: p / max > 0.5 ? '#fff' : '#6B6B6B',
+                    backgroundColor: `rgb(var(--c-accent) / ${0.06 + 0.94 * (p / max)})`,
+                    color: p / max > 0.5 ? '#fff' : 'rgb(var(--c-ink-secondary))',
                   }}
                 >
                   {h}:{a}

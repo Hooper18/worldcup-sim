@@ -167,7 +167,7 @@ export default function Schedule() {
                 {days.map((d) => (
                   <div key={d.key}>
                     <div className="mb-1.5 text-xs font-medium text-ink-secondary">{d.label}</div>
-                    <div className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-white/40">
+                    <div className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-card/40">
                       {d.items.map((m) => (
                         <ScheduleRow
                           key={m.id}
