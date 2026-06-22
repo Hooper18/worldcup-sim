@@ -220,7 +220,7 @@
     "name_en": "Belgium",
     "group": "G",
     "flag": "🇧🇪",
-    "elo": 1943,
+    "elo": 1938,
     "fifa_rank": null,
     "host": false
   },
@@ -229,7 +229,7 @@
     "name_en": "Egypt",
     "group": "G",
     "flag": "🇪🇬",
-    "elo": 1822,
+    "elo": 1857,
     "fifa_rank": null,
     "host": false
   },
@@ -238,7 +238,7 @@
     "name_en": "IR Iran",
     "group": "G",
     "flag": "🇮🇷",
-    "elo": 1882,
+    "elo": 1888,
     "fifa_rank": null,
     "host": false
   },
@@ -247,7 +247,7 @@
     "name_en": "New Zealand",
     "group": "G",
     "flag": "🇳🇿",
-    "elo": 1744,
+    "elo": 1709,
     "fifa_rank": null,
     "host": false
   },
@@ -256,7 +256,7 @@
     "name_en": "Spain",
     "group": "H",
     "flag": "🇪🇸",
-    "elo": 2190,
+    "elo": 2196,
     "fifa_rank": null,
     "host": false
   },
@@ -265,7 +265,7 @@
     "name_en": "Cabo Verde",
     "group": "H",
     "flag": "🇨🇻",
-    "elo": 1681,
+    "elo": 1701,
     "fifa_rank": null,
     "host": false
   },
@@ -274,7 +274,7 @@
     "name_en": "Saudi Arabia",
     "group": "H",
     "flag": "🇸🇦",
-    "elo": 1717,
+    "elo": 1710,
     "fifa_rank": null,
     "host": false
   },
@@ -283,7 +283,7 @@
     "name_en": "Uruguay",
     "group": "H",
     "flag": "🇺🇾",
-    "elo": 1952,
+    "elo": 1933,
     "fifa_rank": null,
     "host": false
   },
