@@ -116,7 +116,10 @@ def event_probs(results: pd.DataFrame, cutoff, matches: pd.DataFrame, H: float):
     train = results[results["date"] <= pd.Timestamp(cutoff)]
     ratings, hist = replay(train, with_history=True)
     elo_params = dc_elo.fit(hist, cutoff=cutoff, half_life_days=H)
-    att_params = dc_attack.fit(train, cutoff=cutoff, half_life_days=H)
+    # 与生产 fit_bundle 同一套流程：先时序 CV 选岭再拟合
+    # （消除旧版 backtest 用默认 0.02、生产用 CV 选的 0.005 的训练/评估口径不一致）
+    ridge, _ = dc_attack.select_ridge(train, cutoff=cutoff, half_life_days=H)
+    att_params = dc_attack.fit(train, cutoff=cutoff, half_life_days=H, ridge=ridge)
     b, c = baselines.fit(hist, cutoff=cutoff, half_life_days=H)
     return (
         _elo_probs(elo_params, ratings, matches),
