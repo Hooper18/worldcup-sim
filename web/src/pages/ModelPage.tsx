@@ -18,7 +18,9 @@ export default function ModelPage() {
     <div className="mx-auto max-w-3xl space-y-8">
       <div>
         <h1 className="text-xl font-medium">预测模型</h1>
-        <p className="mt-1 text-xs text-ink-faint">基于 {(data.data.martj42_rows / 1000).toFixed(0)}k 场国际比赛历史，融合两个统计模型</p>
+        <p className="mt-1 text-xs text-ink-faint">
+          基于 {(data.data.martj42_rows / 1000).toFixed(0)}k 场国际比赛历史，融合两个统计模型
+        </p>
       </div>
 
       <section className="space-y-3">
@@ -34,14 +36,18 @@ export default function ModelPage() {
           <b>纯攻防 Dixon-Coles</b>：分别刻画每队的「进攻能力」和「防守漏洞」，比单一 Elo 更细。
           <br />
           两者对同一场给出各自概率，按回测最优权重{' '}
-          {comps.map((c) => `${c.name_zh.split('（')[0]} ${(c.weight * 100).toFixed(0)}%`).join(' · ')}{' '}
+          {comps
+            .map((c) => `${c.name_zh.split('（')[0]} ${(c.weight * 100).toFixed(0)}%`)
+            .join(' · ')}{' '}
           融合。融合通常比任一单模型在样本外更稳。
         </Prose>
         <Prose title="模拟整届赛事">
           把 104 场逐场按概率随机抽一个比分，按真实赛制（含 2026 头对头排名规则、8 个最佳第三的
-          官方落位表）推进到冠军，重复 {(data.n_sims / 10000).toFixed(0)} 万次，统计每队夺冠/出线的频率。
+          官方落位表）推进到冠军，重复 {(data.n_sims / 10000).toFixed(0)}{' '}
+          万次，统计每队夺冠/出线的频率。
           淘汰赛平局走加时（进球率按比例缩减），仍平则点球——点球胜率由各队历史点球大战战绩
-          （Bradley-Terry 模型，强收缩到接近 50:50）微调，而非一律掷硬币。真实赛果出来后固定该场、只重抽未赛场次。
+          （Bradley-Terry 模型，强收缩到接近
+          50:50）微调，而非一律掷硬币。真实赛果出来后固定该场、只重抽未赛场次。
         </Prose>
       </section>
 
@@ -49,19 +55,37 @@ export default function ModelPage() {
         <h2 className="mb-1 text-lg font-medium">回测验证</h2>
         <p className="mb-3 text-xs text-ink-faint">
           纳入 2014 年以来世界杯/欧洲杯/美洲杯/非洲杯/亚洲杯各届决赛圈，用<b>留一届交叉验证</b>：
-          每届的参数只在其余赛事上选、在该届做样本外预测，杜绝"同集选参又评估"的乐观偏置。RPS / log-loss 越低越准。
+          每届的参数只在其余赛事上选、在该届做样本外预测，杜绝"同集选参又评估"的乐观偏置。RPS /
+          log-loss 越低越准。
         </p>
         {hasBacktest && bt.loto ? (
           <Card className="space-y-4 px-4 py-4">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <Stat label="融合模型 RPS" value={bt.loto.oos_rps.toFixed(3)} hint="样本外，越低越好" />
-              <Stat label="简单 Elo 基准" value={bt.loto.elo_baseline_rps.toFixed(3)} hint={`弱基准 ${bt.loto.climatology_rps.toFixed(3)}`} />
-              <Stat label="校准误差 ECE" value={bt.loto.oos_ece.toFixed(3)} hint="越接近 0 越可信" />
-              <Stat label="验证规模" value={`${bt.best.n_events} 届`} hint={`${bt.best.n_matches} 场`} />
+              <Stat
+                label="融合模型 RPS"
+                value={bt.loto.oos_rps.toFixed(3)}
+                hint="样本外，越低越好"
+              />
+              <Stat
+                label="简单 Elo 基准"
+                value={bt.loto.elo_baseline_rps.toFixed(3)}
+                hint={`弱基准 ${bt.loto.climatology_rps.toFixed(3)}`}
+              />
+              <Stat
+                label="校准误差 ECE"
+                value={bt.loto.oos_ece.toFixed(3)}
+                hint="越接近 0 越可信"
+              />
+              <Stat
+                label="验证规模"
+                value={`${bt.best.n_events} 届`}
+                hint={`${bt.best.n_matches} 场`}
+              />
             </div>
             <p className="text-xs text-ink-faint">
-              诚实对标：融合模型（{bt.loto.oos_rps.toFixed(3)}）优于"只用 Elo 差的两参数简单模型"
-              （{bt.loto.elo_baseline_rps.toFixed(3)}），但领先幅度不大——这符合"简单模型很难被大幅超越"的足球预测共识；
+              诚实对标：融合模型（{bt.loto.oos_rps.toFixed(3)}）优于"只用 Elo 差的两参数简单模型" （
+              {bt.loto.elo_baseline_rps.toFixed(3)}
+              ），但领先幅度不大——这符合"简单模型很难被大幅超越"的足球预测共识；
               两者都远好于永远报历史平均的弱基准（{bt.loto.climatology_rps.toFixed(3)}）。
             </p>
 
@@ -91,10 +115,12 @@ export default function ModelPage() {
             </div>
 
             <p className="text-xs text-ink-faint">
-              生产参数：时间衰减半衰期 {bt.best.half_life_days} 天，融合权重 DC-Elo {(bt.best.weight_dc_elo * 100).toFixed(0)}% /
-              攻防 {(bt.best.weight_dc_attack * 100).toFixed(0)}%。
-              该选择在 {Object.values(bt.loto.selected_H_counts).reduce((a, b) => a + b, 0)} 折中高度一致
-              （样本外 RPS {bt.loto.oos_rps.toFixed(3)} ≈ 全量 {bt.best.pooled_rps.toFixed(3)}，说明没有过拟合）。
+              生产参数：时间衰减半衰期 {bt.best.half_life_days} 天，融合权重 DC-Elo{' '}
+              {(bt.best.weight_dc_elo * 100).toFixed(0)}% / 攻防{' '}
+              {(bt.best.weight_dc_attack * 100).toFixed(0)}%。 该选择在{' '}
+              {Object.values(bt.loto.selected_H_counts).reduce((a, b) => a + b, 0)} 折中高度一致
+              （样本外 RPS {bt.loto.oos_rps.toFixed(3)} ≈ 全量 {bt.best.pooled_rps.toFixed(3)}
+              ，说明没有过拟合）。
             </p>
 
             {bt.loto.reliability.length > 0 && (
@@ -108,7 +134,9 @@ export default function ModelPage() {
           </Card>
         ) : (
           <Card className="px-4 py-6">
-            <p className="text-center text-sm text-ink-faint">运行 wcsim backtest --apply 后这里会显示回测对比</p>
+            <p className="text-center text-sm text-ink-faint">
+              运行 wcsim backtest --apply 后这里会显示回测对比
+            </p>
           </Card>
         )}
       </section>
@@ -116,11 +144,15 @@ export default function ModelPage() {
       <section>
         <h2 className="mb-2 text-lg font-medium">口径与局限</h2>
         <ul className="space-y-1.5 text-sm text-ink-secondary">
-          <li>· Elo 与点球能力随真实赛果更新；模型系数与融合权重冻结在赛前，保证概率变化只反映赛果信息。</li>
+          <li>
+            · Elo
+            与点球能力随真实赛果更新；模型系数与融合权重冻结在赛前，保证概率变化只反映赛果信息。
+          </li>
           {diag && (
             <li>
               · 正则化强度由时序交叉验证选定（当前 {diag.selected_ridge}，模型对该值不敏感）；
-              经验主场优势（近 10 年非中立场净胜 {diag.empirical_home_advantage.home_goal_diff} 球）与 Elo +100 设定一致。
+              经验主场优势（近 10 年非中立场净胜 {diag.empirical_home_advantage.home_goal_diff}{' '}
+              球）与 Elo +100 设定一致。
             </li>
           )}
           <li>· 纯历史/Elo 口径对近年强队更敏感，可能与博彩盘略有出入。</li>

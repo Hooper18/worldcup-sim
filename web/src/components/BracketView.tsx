@@ -19,7 +19,10 @@ function range(a: number, b: number): number[] {
   return Array.from({ length: b - a + 1 }, (_, i) => a + i)
 }
 
-function topSlot(m: Match | undefined, side: 'home' | 'away'): { code: string | null; p: number | null } {
+function topSlot(
+  m: Match | undefined,
+  side: 'home' | 'away',
+): { code: string | null; p: number | null } {
   if (!m) return { code: null, p: null }
   const resolved = side === 'home' ? m.home : m.away
   if (m.stage === 'group' || (m.stage === 'r32' && resolved && !/^[123]/.test(resolved))) {
@@ -44,7 +47,13 @@ function SlotCell({ code, p }: { code: string | null; p: number | null }) {
   )
 }
 
-export default function BracketView({ matches, knockout }: { matches: Match[]; knockout: Knockout }) {
+export default function BracketView({
+  matches,
+  knockout,
+}: {
+  matches: Match[]
+  knockout: Knockout
+}) {
   void knockout
   const byId = new Map(matches.map((m) => [m.id, m]))
   return (
@@ -52,7 +61,9 @@ export default function BracketView({ matches, knockout }: { matches: Match[]; k
       <div className="flex min-w-[760px] gap-4">
         {COLUMNS.map((col) => (
           <div key={col.stage} className="flex flex-1 flex-col">
-            <div className="mb-2 text-center text-xs font-medium text-ink-secondary">{col.label}</div>
+            <div className="mb-2 text-center text-xs font-medium text-ink-secondary">
+              {col.label}
+            </div>
             <div className="flex flex-1 flex-col justify-around gap-2">
               {col.ids.map((id) => {
                 const m = byId.get(id)

@@ -27,17 +27,30 @@ export default function GroupTable({ teams }: Props) {
               <TeamLabel code={code} size="sm" />
             </td>
             <td className="py-2 text-right tabular-nums text-ink-secondary">
-              {t.current?.played ? t.current.pts : <span className="text-ink-faint">{t.exp_pts}</span>}
+              {t.current?.played ? (
+                t.current.pts
+              ) : (
+                <span className="text-ink-faint">{t.exp_pts}</span>
+              )}
             </td>
             <td className="py-2 text-right tabular-nums text-ink-secondary">
-              {t.current?.played
-                ? (t.current.gd > 0 ? `+${t.current.gd}` : t.current.gd)
-                : <span className="text-ink-faint">{t.exp_gd > 0 ? `+${t.exp_gd}` : t.exp_gd}</span>}
+              {t.current?.played ? (
+                t.current.gd > 0 ? (
+                  `+${t.current.gd}`
+                ) : (
+                  t.current.gd
+                )
+              ) : (
+                <span className="text-ink-faint">{t.exp_gd > 0 ? `+${t.exp_gd}` : t.exp_gd}</span>
+              )}
             </td>
             <td className="py-2 text-right">
               <div className="flex items-center justify-end gap-2">
                 <div className="h-1.5 w-16 overflow-hidden rounded-full bg-line">
-                  <div className="h-full bg-accent" style={{ width: pct(Math.min(1, t.p_advance)) }} />
+                  <div
+                    className="h-full bg-accent"
+                    style={{ width: pct(Math.min(1, t.p_advance)) }}
+                  />
                 </div>
                 <span className="w-10 tabular-nums text-ink">{pct(t.p_advance)}</span>
               </div>

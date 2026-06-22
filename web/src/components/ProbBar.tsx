@@ -21,9 +21,13 @@ export default function ProbBar({ pHome, pDraw, pAway, labels }: Props) {
         <div style={{ width: pct(a) }} className="bg-ink-secondary/70" />
       </div>
       <div className="mt-1 flex justify-between text-xs text-ink-secondary">
-        <span>{labels?.[0] ?? '主胜'} {pct(h)}</span>
+        <span>
+          {labels?.[0] ?? '主胜'} {pct(h)}
+        </span>
         <span>平 {pct(d)}</span>
-        <span>{labels?.[1] ?? '客胜'} {pct(a)}</span>
+        <span>
+          {labels?.[1] ?? '客胜'} {pct(a)}
+        </span>
       </div>
     </div>
   )

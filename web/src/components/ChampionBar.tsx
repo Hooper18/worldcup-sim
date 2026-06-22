@@ -32,7 +32,10 @@ export default function ChampionBar({ data, ci }: Props) {
               )}
               <div
                 className="absolute inset-y-0 left-0 rounded bg-accent"
-                style={{ width: pct(Math.max(0.02, d.p / max)), opacity: 0.45 + 0.55 * (d.p / max) }}
+                style={{
+                  width: pct(Math.max(0.02, d.p / max)),
+                  opacity: 0.45 + 0.55 * (d.p / max),
+                }}
               />
             </div>
             <span className="shrink-0 text-right text-sm tabular-nums text-ink-secondary">

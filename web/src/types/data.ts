@@ -48,13 +48,23 @@ export interface Meta {
   matches_played: number
   data: { martj42_rows: number; elo_through: string; results_count: number }
   models: {
-    components: { id: string; name_zh: string; weight: number; params: Record<string, number | string> }[]
+    components: {
+      id: string
+      name_zh: string
+      weight: number
+      params: Record<string, number | string>
+    }[]
     half_life_days: number
     backtest: Backtest | Record<string, never>
     diagnostics?: {
       selected_ridge: number
       ridge_scan: Record<string, number>
-      empirical_home_advantage: { n: number; home_goal_diff: number; home_win_rate: number; log_lambda_adv: number }
+      empirical_home_advantage: {
+        n: number
+        home_goal_diff: number
+        home_win_rate: number
+        log_lambda_adv: number
+      }
     }
   }
 }
@@ -128,7 +138,10 @@ export interface KnockoutTeam {
 }
 export interface Knockout {
   teams: Record<string, KnockoutTeam>
-  bracket: Record<string, { home_slot?: string; away_slot?: string; home_src?: string; away_src?: string }>
+  bracket: Record<
+    string,
+    { home_slot?: string; away_slot?: string; home_src?: string; away_src?: string }
+  >
 }
 
 export interface Evolution {

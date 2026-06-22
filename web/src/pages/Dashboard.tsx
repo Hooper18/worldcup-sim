@@ -31,7 +31,9 @@ export default function Dashboard() {
   const nextDay = todayMatches.length
     ? todayMatches
     : upcoming.slice(0, 1).length
-      ? upcoming.filter((m) => kickoffDateKey(m.kickoff_utc) === kickoffDateKey(upcoming[0].kickoff_utc))
+      ? upcoming.filter(
+          (m) => kickoffDateKey(m.kickoff_utc) === kickoffDateKey(upcoming[0].kickoff_utc),
+        )
       : []
   const dayLabel = todayMatches.length ? '今日赛程' : nextDay.length ? '下一比赛日' : '赛程'
 
@@ -52,7 +54,8 @@ export default function Dashboard() {
             <ChampionBar data={champTop} ci={unc.data?.teams && mapCi(unc.data, 'champion')} />
             {unc.data?.teams && (
               <p className="mt-3 text-xs text-ink-faint">
-                浅色带为 bootstrap 95% 区间——历史样本有限，参数本身有不确定性，单点概率不应过度解读。
+                浅色带为 bootstrap 95%
+                区间——历史样本有限，参数本身有不确定性，单点概率不应过度解读。
               </p>
             )}
           </Card>

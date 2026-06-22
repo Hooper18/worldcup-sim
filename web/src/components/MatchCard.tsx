@@ -13,7 +13,10 @@ export default function MatchCard({ match }: { match: Match }) {
       className="block rounded-xl border border-line bg-white/40 px-4 py-3 transition-colors hover:bg-surface"
     >
       <div className="mb-2 flex items-center justify-between text-xs text-ink-faint">
-        <span>{STAGE_LABEL[match.stage]}{match.group ? ` · ${match.group} 组` : ''}</span>
+        <span>
+          {STAGE_LABEL[match.stage]}
+          {match.group ? ` · ${match.group} 组` : ''}
+        </span>
         <span>{formatKickoff(match.kickoff_utc)}</span>
       </div>
       <div className="mb-2 flex items-center justify-between">

@@ -19,8 +19,8 @@ export default function MatchDetail() {
   if (!m) return <ErrorMsg msg="未找到该场比赛" />
 
   const isKnockout = m.stage !== 'group'
-  const homeName = m.home && !isKnockout ? m.home : m.slot_dist?.home[0]?.team ?? m.home
-  const awayName = m.away && !isKnockout ? m.away : m.slot_dist?.away[0]?.team ?? m.away
+  const homeName = m.home && !isKnockout ? m.home : (m.slot_dist?.home[0]?.team ?? m.home)
+  const awayName = m.away && !isKnockout ? m.away : (m.slot_dist?.away[0]?.team ?? m.away)
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
@@ -29,8 +29,13 @@ export default function MatchDetail() {
           ← 返回
         </Link>
         <div className="mt-1 flex items-center justify-between text-xs text-ink-faint">
-          <span>{STAGE_LABEL[m.stage]}{m.group ? ` · ${m.group} 组` : ''}</span>
-          <span>{formatKickoff(m.kickoff_utc)} · {m.venue}</span>
+          <span>
+            {STAGE_LABEL[m.stage]}
+            {m.group ? ` · ${m.group} 组` : ''}
+          </span>
+          <span>
+            {formatKickoff(m.kickoff_utc)} · {m.venue}
+          </span>
         </div>
       </div>
 
@@ -67,11 +72,15 @@ export default function MatchDetail() {
           <div className="grid grid-cols-2 gap-4">
             {(['home', 'away'] as const).map((side) => (
               <Card key={side} className="px-4 py-3">
-                <div className="mb-2 text-xs text-ink-faint">{side === 'home' ? '一方' : '另一方'}</div>
+                <div className="mb-2 text-xs text-ink-faint">
+                  {side === 'home' ? '一方' : '另一方'}
+                </div>
                 {m.slot_dist![side].map((s) => (
                   <div key={s.team} className="flex justify-between py-0.5 text-sm">
                     <TeamLabel code={s.team} size="sm" />
-                    <span className="tabular-nums text-ink-secondary">{(s.p * 100).toFixed(0)}%</span>
+                    <span className="tabular-nums text-ink-secondary">
+                      {(s.p * 100).toFixed(0)}%
+                    </span>
                   </div>
                 ))}
               </Card>
@@ -92,7 +101,10 @@ export default function MatchDetail() {
                 pHome={m.forecast.p_home}
                 pDraw={m.forecast.p_draw}
                 pAway={m.forecast.p_away}
-                labels={[teams?.[homeName ?? '']?.name_zh ?? '主', teams?.[awayName ?? '']?.name_zh ?? '客']}
+                labels={[
+                  teams?.[homeName ?? '']?.name_zh ?? '主',
+                  teams?.[awayName ?? '']?.name_zh ?? '客',
+                ]}
               />
               <div className="text-xs text-ink-faint">
                 预期进球 λ：{m.forecast.lambda_home} — {m.forecast.lambda_away}
