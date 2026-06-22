@@ -5,7 +5,8 @@ import type { Evolution, Knockout } from '../types/data'
 import { Loading, ErrorMsg } from '../components/Loading'
 import Card from '../components/Card'
 import Flag from '../components/Flag'
-import LineChartSvg, { seriesColor, type Series } from '../components/LineChartSvg'
+import LineChartSvg from '../components/LineChartSvg'
+import { seriesColor, type Series } from '../lib/chart'
 import { dedupeEvolution, pickSeries } from '../lib/evolution'
 
 type Metric = 'champion' | 'sf' | 'advance'
@@ -29,7 +30,8 @@ export default function Trends() {
   const sel = selected ?? defaultSel
 
   if (evo.loading || ko.loading) return <Loading />
-  if (evo.error || ko.error || !evo.data || !ko.data) return <ErrorMsg msg={evo.error || ko.error || '无数据'} />
+  if (evo.error || ko.error || !evo.data || !ko.data)
+    return <ErrorMsg msg={evo.error || ko.error || '无数据'} />
 
   const snaps = evo.data.snapshots
   const { keepIdx, xLabels } = dedupeEvolution(evo.data)
@@ -48,7 +50,9 @@ export default function Trends() {
     <div className="space-y-6">
       <div>
         <h1 className="text-xl font-medium">概率演变</h1>
-        <p className="mt-1 text-xs text-ink-faint">每次回填真实赛果后重新模拟，追踪各队概率随赛事推进的变化</p>
+        <p className="mt-1 text-xs text-ink-faint">
+          每次回填真实赛果后重新模拟，追踪各队概率随赛事推进的变化
+        </p>
       </div>
 
       <div className="flex gap-1">
@@ -95,7 +99,9 @@ export default function Trends() {
                   setSelected(on ? sel.filter((x) => x !== c) : [...sel, c].slice(0, 8))
                 }
                 className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-sm transition-colors ${
-                  on ? 'border-accent bg-accent-soft text-accent' : 'border-line text-ink-secondary hover:bg-surface'
+                  on
+                    ? 'border-accent bg-accent-soft text-accent'
+                    : 'border-line text-ink-secondary hover:bg-surface'
                 }`}
               >
                 <Flag code={c} /> {teams?.[c]?.name_zh ?? c}

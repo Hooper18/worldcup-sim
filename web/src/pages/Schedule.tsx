@@ -6,7 +6,8 @@ import type { Evolution, Knockout, Match, Stage } from '../types/data'
 import { Loading, ErrorMsg } from '../components/Loading'
 import Card from '../components/Card'
 import TeamLabel from '../components/TeamLabel'
-import LineChartSvg, { seriesColor, type Series } from '../components/LineChartSvg'
+import LineChartSvg from '../components/LineChartSvg'
+import { seriesColor, type Series } from '../lib/chart'
 import { AFTER_LABEL, formatDay, formatTime, kickoffDateKey } from '../lib/format'
 import { koSide } from '../lib/bracket'
 import { dedupeEvolution, pickSeries } from '../lib/evolution'
@@ -100,7 +101,10 @@ export default function Schedule() {
           <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1.5">
             {chart.series.map((s, i) => (
               <span key={i} className="flex items-center gap-1.5 text-xs text-ink-secondary">
-                <span className="inline-block h-2 w-3 rounded" style={{ backgroundColor: s.color }} />
+                <span
+                  className="inline-block h-2 w-3 rounded"
+                  style={{ backgroundColor: s.color }}
+                />
                 {s.label}
               </span>
             ))}
@@ -113,21 +117,21 @@ export default function Schedule() {
 
       {/* 阶段筛选 */}
       <div className="flex flex-wrap gap-1">
-        {([{ key: 'all', label: '全部' }, ...STAGES] as { key: Stage | 'all'; label: string }[]).map(
-          (s) => (
-            <button
-              key={s.key}
-              onClick={() => setStageFilter(s.key)}
-              className={`rounded-lg px-3 py-1 text-sm transition-colors ${
-                stageFilter === s.key
-                  ? 'bg-accent-soft text-accent'
-                  : 'text-ink-secondary hover:bg-surface'
-              }`}
-            >
-              {s.label}
-            </button>
-          ),
-        )}
+        {(
+          [{ key: 'all', label: '全部' }, ...STAGES] as { key: Stage | 'all'; label: string }[]
+        ).map((s) => (
+          <button
+            key={s.key}
+            onClick={() => setStageFilter(s.key)}
+            className={`rounded-lg px-3 py-1 text-sm transition-colors ${
+              stageFilter === s.key
+                ? 'bg-accent-soft text-accent'
+                : 'text-ink-secondary hover:bg-surface'
+            }`}
+          >
+            {s.label}
+          </button>
+        ))}
       </div>
 
       {/* 时间轴：阶段 → 日期 → 比赛 */}

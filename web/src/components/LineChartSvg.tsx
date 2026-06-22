@@ -2,12 +2,7 @@
 // x 为快照序号，y 为概率 [0, yMax]。鼠标移上去显示参考线 + 各序列具体数值。
 
 import { useRef, useState } from 'react'
-
-export interface Series {
-  label: string
-  color: string
-  values: number[]
-}
+import type { Series } from '../lib/chart'
 
 interface Props {
   series: Series[]
@@ -15,12 +10,6 @@ interface Props {
   yMax?: number
   height?: number
   valueFmt?: (v: number) => string
-}
-
-const PALETTE = ['#2F6B4F', '#B5651D', '#3A5A8C', '#7A4E8C', '#8C5A3A', '#4A7A6A']
-
-export function seriesColor(i: number): string {
-  return PALETTE[i % PALETTE.length]
 }
 
 export default function LineChartSvg({ series, xLabels, yMax, height = 240, valueFmt }: Props) {

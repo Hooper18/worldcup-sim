@@ -6,7 +6,7 @@ import type { Knockout } from '../types/data'
 
 const RANK: Record<string, string> = { '1': '头名', '2': '第 2', '3': '第 3' }
 
-export function slotLabel(token: string): string {
+function slotLabel(token: string): string {
   const r = token[0]
   const rest = token.slice(1)
   // "3ABCDF" = 8 个最佳第三名之一，候选组 A/B/C/D/F
@@ -14,16 +14,12 @@ export function slotLabel(token: string): string {
   return `${rest} 组${RANK[r] ?? r}`
 }
 
-export function srcLabel(s: string): string {
+function srcLabel(s: string): string {
   return `M${s.slice(1)} ${s[0] === 'W' ? '胜者' : '负者'}`
 }
 
 // 取淘汰赛某一侧的对阵位描述（home / away）
-export function koSide(
-  bracket: Knockout['bracket'],
-  id: number,
-  side: 'home' | 'away',
-): string {
+export function koSide(bracket: Knockout['bracket'], id: number, side: 'home' | 'away'): string {
   const b = bracket[String(id)]
   if (!b) return '待定'
   const slot = side === 'home' ? b.home_slot : b.away_slot

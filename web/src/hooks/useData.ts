@@ -22,7 +22,7 @@ async function load<T>(name: string): Promise<T> {
   return inflight.get(name) as Promise<T>
 }
 
-export interface DataState<T> {
+interface DataState<T> {
   data: T | null
   loading: boolean
   error: string | null
@@ -34,7 +34,9 @@ export function useData<T>(name: string): DataState<T> {
     let alive = true
     load<T>(name)
       .then((data) => alive && setState({ data, loading: false, error: null }))
-      .catch((e) => alive && setState({ data: null, loading: false, error: String(e.message ?? e) }))
+      .catch(
+        (e) => alive && setState({ data: null, loading: false, error: String(e.message ?? e) }),
+      )
     return () => {
       alive = false
     }

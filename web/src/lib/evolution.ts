@@ -5,7 +5,7 @@
 
 import type { Evolution } from '../types/data'
 
-export interface DedupedEvolution {
+interface DedupedEvolution {
   keepIdx: number[] // 保留的快照下标（升序，对应单调递增的 matches_played）
   matchesPlayed: number[] // 每个保留点的已赛场数
   xLabels: string[] // x 轴标签，如 "12 场"
