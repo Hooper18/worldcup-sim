@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import numpy as np
 import pytest
 
 from wcsim.models.dc_elo import DcEloParams
@@ -58,7 +57,7 @@ def test_stage_monotonicity(result):
     for c in CODES:
         sc = result.stage_counts[c]
         seq = [sc["r32"], sc["r16"], sc["qf"], sc["sf"], sc["final"], sc["champion"]]
-        for a, b in zip(seq, seq[1:]):
+        for a, b in zip(seq, seq[1:], strict=False):
             assert a >= b, f"{c} 阶段概率非单调: {seq}"
 
 

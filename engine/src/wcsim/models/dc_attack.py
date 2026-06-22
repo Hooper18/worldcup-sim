@@ -52,7 +52,7 @@ class DcAttackParams:
         }
 
     @classmethod
-    def from_dict(cls, d: dict) -> "DcAttackParams":
+    def from_dict(cls, d: dict) -> DcAttackParams:
         return cls(**d)
 
 

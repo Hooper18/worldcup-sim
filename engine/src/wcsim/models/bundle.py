@@ -35,7 +35,7 @@ class ModelBundle:
         }
 
     @classmethod
-    def from_dict(cls, d: dict) -> "ModelBundle":
+    def from_dict(cls, d: dict) -> ModelBundle:
         return cls(
             dc_elo=DcEloParams.from_dict(d["dc_elo"]),
             dc_attack=DcAttackParams.from_dict(d["dc_attack"]),
@@ -54,7 +54,7 @@ class ModelBundle:
         )
 
     @classmethod
-    def load(cls, path: Path) -> "ModelBundle":
+    def load(cls, path: Path) -> ModelBundle:
         return cls.from_dict(json.loads(path.read_text(encoding="utf-8")))
 
     def build_model(self, elo_by_code: dict[str, float]) -> EnsembleModel:

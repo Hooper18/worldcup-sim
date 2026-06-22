@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from wcsim.tournament.tiebreak import compute_standings, rank_group
 from wcsim.tournament.third_place import Standing, assign_third_slots, rank_third_places
+from wcsim.tournament.tiebreak import compute_standings, rank_group
 
 
 def codes(standings):

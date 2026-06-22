@@ -23,7 +23,7 @@ def test_every_value_is_permutation_of_key():
 
 def test_every_assignment_within_official_candidates():
     candidates = {mid: set(R32_SLOTS[mid][1][1:]) for mid in THIRD_SLOT_MATCHES}
-    for key, val in TABLE.items():
+    for _key, val in TABLE.items():
         for i, mid in enumerate(THIRD_SLOT_MATCHES):
             assert val[i] in candidates[mid]
 

@@ -28,8 +28,12 @@ jobs:
           python-version: '3.12'
       - name: 安装依赖
         run: uv sync
+      - name: ruff lint
+        run: uv run ruff check .
+      - name: ruff format 检查
+        run: uv run ruff format --check .
       - name: pytest
-        run: uv run pytest -q
+        run: uv run pytest -q --cov=wcsim --cov-report=term-missing
 
   web:
     runs-on: ubuntu-latest

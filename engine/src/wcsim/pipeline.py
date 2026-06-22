@@ -10,8 +10,6 @@ import datetime as dt
 import json
 from dataclasses import dataclass
 
-import pandas as pd
-
 from . import config
 from .data import fetch, results_store
 from .data.normalize import code_to_martj42

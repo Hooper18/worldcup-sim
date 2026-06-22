@@ -159,7 +159,7 @@ def _simulate_group(
     pts = np.zeros((4, n), dtype=np.int64)
     gf = np.zeros((4, n), dtype=np.int64)
     ga = np.zeros((4, n), dtype=np.int64)
-    for (hi, ai, _, _), hg, ag in zip(meta, home_goals, away_goals):
+    for (hi, ai, _, _), hg, ag in zip(meta, home_goals, away_goals, strict=True):
         gf[hi] += hg
         ga[hi] += ag
         gf[ai] += ag

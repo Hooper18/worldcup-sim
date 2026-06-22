@@ -8,8 +8,8 @@ import pytest
 
 from wcsim.backtest import metrics
 from wcsim.models import dc_attack
-from wcsim.models.score_model import DcAttackModel, DcEloModel, EnsembleModel
 from wcsim.models.dc_elo import DcEloParams
+from wcsim.models.score_model import DcAttackModel, DcEloModel, EnsembleModel
 
 
 def _synthetic_league(n_teams=12, n_matches=4000, seed=3):

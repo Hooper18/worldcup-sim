@@ -39,7 +39,7 @@ def fit(hist: pd.DataFrame, *, cutoff, half_life_days: float = 730.0, window_yea
     df = hist[(hist["date"] > lo) & (hist["date"] <= cutoff_ts)]
     dz = (df["home_elo_pre"].to_numpy() - df["away_elo_pre"].to_numpy()) / 400.0
     outc = np.array(
-        [metrics.outcome_of(int(h), int(a)) for h, a in zip(df["home_score"], df["away_score"])]
+        [metrics.outcome_of(int(h), int(a)) for h, a in zip(df["home_score"], df["away_score"], strict=True)]
     )
     w = 0.5 ** ((cutoff_ts - df["date"]).dt.days.to_numpy(dtype=float) / half_life_days)
 

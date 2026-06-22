@@ -38,7 +38,7 @@ class DcEloParams:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, d: dict) -> "DcEloParams":
+    def from_dict(cls, d: dict) -> DcEloParams:
         return cls(**d)
 
 

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 
-import numpy as np
 import pytest
 
 from wcsim.export import writer
@@ -13,7 +12,7 @@ from wcsim.models.dc_attack import DcAttackParams
 from wcsim.models.dc_elo import DcEloParams
 from wcsim.models.score_model import DcEloModel
 from wcsim.tournament.simulate import CODES, simulate
-from wcsim.tournament.structure import GROUP_LETTERS, MATCHES, TEAMS
+from wcsim.tournament.structure import GROUP_LETTERS, TEAMS
 
 
 @pytest.fixture(scope="module")
@@ -94,9 +93,9 @@ def test_build_matches_finished_status(bundle, model, elo, sim):
 def test_build_groups_probabilities(sim):
     groups = writer.build_groups({}, sim)
     assert set(groups) == set(GROUP_LETTERS)
-    for g, teams in groups.items():
+    for _g, teams in groups.items():
         assert len(teams) == 4
-        for c, info in teams.items():
+        for _c, info in teams.items():
             assert abs(sum(info["p_rank"]) - 1.0) < 1e-3
             assert info["p_top2"] == pytest.approx(info["p_rank"][0] + info["p_rank"][1], abs=1e-3)
             assert 0 <= info["p_advance"] <= 1
@@ -117,9 +116,9 @@ def test_build_groups_current_standings():
 def test_build_knockout_monotonic(sim):
     ko = writer.build_knockout(sim)
     assert len(ko["teams"]) == 48
-    for c, t in ko["teams"].items():
+    for _c, t in ko["teams"].items():
         seq = [t["p_r32"], t["p_r16"], t["p_qf"], t["p_sf"], t["p_final"], t["p_champion"]]
-        for a, b in zip(seq, seq[1:]):
+        for a, b in zip(seq, seq[1:], strict=False):
             assert a >= b - 1e-9
     # bracket 覆盖全部 32 场淘汰赛
     assert len(ko["bracket"]) == 32
