@@ -280,3 +280,11 @@ test('模型页显示回测对比表', async ({ page }) => {
   await expect(page.getByText('样本外 RPS').first()).toBeVisible() // LOTO 诚实指标卡
   await expect(page.getByText('0.202')).toBeVisible() // 2018 融合 RPS
 })
+
+test('赛程页渲染时间轴、真实比分与夺冠走势', async ({ page }) => {
+  await page.goto('/schedule')
+  await expect(page.getByRole('heading', { name: '赛程' })).toBeVisible()
+  await expect(page.getByText('每打一场 · 夺冠概率走势')).toBeVisible()
+  await expect(page.getByText('2 : 0')).toBeVisible() // M1 真实比分
+  await expect(page.getByRole('button', { name: '全部' })).toBeVisible() // 阶段筛选
+})

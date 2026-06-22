@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import pandas as pd
 import pytest
 
 from wcsim import config
 from wcsim.data import results_store as rs
+from wcsim.data.normalize import code_to_martj42
 
 
 def _feed_row(mid, home, away, hs, as_, winner="", group="Group A"):
@@ -95,3 +97,49 @@ def test_store_round_trip(tmp_path, monkeypatch):
 def test_load_store_missing_file(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "RESULTS_PATH", tmp_path / "nope.json")
     assert rs.load_store() == {}
+
+
+# ---------------------------------------------------------------------------
+# parse_martj42（feed 失败时的回退；当前未接线，测试锁定其行为）
+# ---------------------------------------------------------------------------
+
+
+def _martj42_df(rows):
+    # rows: (tournament, date_str, home_name, away_name, home_score, away_score)
+    return pd.DataFrame(
+        [
+            {
+                "tournament": t,
+                "date": pd.Timestamp(d),
+                "home_team": h,
+                "away_team": a,
+                "home_score": hs,
+                "away_score": as_,
+            }
+            for (t, d, h, a, hs, as_) in rows
+        ]
+    )
+
+
+def test_parse_martj42_group_match():
+    # M1 = 墨西哥 v 南非（开幕日 2026-06-11），martj42 行按队码+日期窗口匹配
+    df = _martj42_df(
+        [("FIFA World Cup", "2026-06-11", code_to_martj42("MEX"), code_to_martj42("RSA"), 2, 0)]
+    )
+    assert rs.parse_martj42(df, {1: ("MEX", "RSA")}) == {1: {"h": 2, "a": 0, "after": "FT"}}
+
+
+def test_parse_martj42_skips_knockout_draw():
+    # 淘汰赛平比分需点球胜者，martj42 主表给不了 ⇒ 跳过等 shootouts/feed
+    df = _martj42_df(
+        [("FIFA World Cup", "2026-06-28", code_to_martj42("MEX"), code_to_martj42("CAN"), 1, 1)]
+    )
+    assert rs.parse_martj42(df, {73: ("MEX", "CAN")}) == {}
+
+
+def test_parse_martj42_ignores_out_of_window():
+    # 日期落在 kickoff ±1 天之外 ⇒ 不匹配
+    df = _martj42_df(
+        [("FIFA World Cup", "2026-06-20", code_to_martj42("MEX"), code_to_martj42("RSA"), 2, 0)]
+    )
+    assert rs.parse_martj42(df, {1: ("MEX", "RSA")}) == {}
