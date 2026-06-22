@@ -27,8 +27,8 @@
         0.6086
       ],
       "p_top2": 0.1616,
-      "p_third_advance": 0.0386,
-      "p_advance": 0.2002,
+      "p_third_advance": 0.0384,
+      "p_advance": 0.2,
       "exp_pts": 1.87,
       "exp_gd": -2.67,
       "current": {
@@ -65,8 +65,8 @@
         0.3516
       ],
       "p_top2": 0.0368,
-      "p_third_advance": 0.1929,
-      "p_advance": 0.2298,
+      "p_third_advance": 0.1931,
+      "p_advance": 0.2299,
       "exp_pts": 1.87,
       "exp_gd": -1.73,
       "current": {
@@ -105,8 +105,8 @@
         0.2749
       ],
       "p_top2": 0.0003,
-      "p_third_advance": 0.4432,
-      "p_advance": 0.4436,
+      "p_third_advance": 0.4434,
+      "p_advance": 0.4438,
       "exp_pts": 2.61,
       "exp_gd": -2.65,
       "current": {
@@ -221,8 +221,8 @@
         0.0
       ],
       "p_top2": 0.1447,
-      "p_third_advance": 0.7023,
-      "p_advance": 0.8469,
+      "p_third_advance": 0.7036,
+      "p_advance": 0.8483,
       "exp_pts": 3.67,
       "exp_gd": -1.06,
       "current": {
@@ -261,8 +261,8 @@
         0.0
       ],
       "p_top2": 0.3178,
-      "p_third_advance": 0.5419,
-      "p_advance": 0.8598,
+      "p_third_advance": 0.5407,
+      "p_advance": 0.8585,
       "exp_pts": 4.29,
       "exp_gd": -2.05,
       "current": {
@@ -280,8 +280,8 @@
         0.0
       ],
       "p_top2": 0.6822,
-      "p_third_advance": 0.2722,
-      "p_advance": 0.9543,
+      "p_third_advance": 0.273,
+      "p_advance": 0.9552,
       "exp_pts": 4.37,
       "exp_gd": 0.05,
       "current": {
@@ -339,8 +339,8 @@
         0.8122
       ],
       "p_top2": 0.0712,
-      "p_third_advance": 0.0284,
-      "p_advance": 0.0996,
+      "p_third_advance": 0.0285,
+      "p_advance": 0.0997,
       "exp_pts": 1.52,
       "exp_gd": -7.27,
       "current": {
@@ -358,8 +358,8 @@
         0.0286
       ],
       "p_top2": 0.9002,
-      "p_third_advance": 0.0596,
-      "p_advance": 0.9598,
+      "p_third_advance": 0.0595,
+      "p_advance": 0.9597,
       "exp_pts": 5.26,
       "exp_gd": 1.27,
       "current": {
@@ -377,8 +377,8 @@
         0.1592
       ],
       "p_top2": 0.0286,
-      "p_third_advance": 0.277,
-      "p_advance": 0.3056,
+      "p_third_advance": 0.2769,
+      "p_advance": 0.3055,
       "exp_pts": 2.19,
       "exp_gd": -1.19,
       "current": {
@@ -436,8 +436,8 @@
         0.0
       ],
       "p_top2": 0.2153,
-      "p_third_advance": 0.7185,
-      "p_advance": 0.9338,
+      "p_third_advance": 0.7205,
+      "p_advance": 0.9359,
       "exp_pts": 3.91,
       "exp_gd": -0.67,
       "current": {
@@ -476,8 +476,8 @@
         0.0691
       ],
       "p_top2": 0.8024,
-      "p_third_advance": 0.1164,
-      "p_advance": 0.9187,
+      "p_third_advance": 0.1166,
+      "p_advance": 0.919,
       "exp_pts": 4.37,
       "exp_gd": 1.5,
       "current": {
@@ -514,8 +514,8 @@
         0.0305
       ],
       "p_top2": 0.4152,
-      "p_third_advance": 0.3062,
-      "p_advance": 0.7215,
+      "p_third_advance": 0.307,
+      "p_advance": 0.7223,
       "exp_pts": 3.43,
       "exp_gd": 0.12,
       "current": {
@@ -533,7 +533,7 @@
         0.9004
       ],
       "p_top2": 0.0504,
-      "p_third_advance": 0.0313,
+      "p_third_advance": 0.0312,
       "p_advance": 0.0817,
       "exp_pts": 1.44,
       "exp_gd": -3.5,
@@ -573,8 +573,8 @@
         0.2892
       ],
       "p_top2": 0.4833,
-      "p_third_advance": 0.1584,
-      "p_advance": 0.6417,
+      "p_third_advance": 0.1596,
+      "p_advance": 0.6429,
       "exp_pts": 3.24,
       "exp_gd": -0.11,
       "current": {
@@ -592,8 +592,8 @@
         0.6345
       ],
       "p_top2": 0.2979,
-      "p_third_advance": 0.064,
-      "p_advance": 0.3619,
+      "p_third_advance": 0.0641,
+      "p_advance": 0.362,
       "exp_pts": 2.42,
       "exp_gd": -3.89,
       "current": {
@@ -611,8 +611,8 @@
         0.0763
       ],
       "p_top2": 0.2729,
-      "p_third_advance": 0.2534,
-      "p_advance": 0.5263,
+      "p_third_advance": 0.2524,
+      "p_advance": 0.5253,
       "exp_pts": 2.83,
       "exp_gd": -0.71,
       "current": {
@@ -632,8 +632,8 @@
         0.0062
       ],
       "p_top2": 0.9688,
-      "p_third_advance": 0.0244,
-      "p_advance": 0.9932,
+      "p_third_advance": 0.0245,
+      "p_advance": 0.9933,
       "exp_pts": 7.16,
       "exp_gd": 4.18,
       "current": {
@@ -651,8 +651,8 @@
         0.1835
       ],
       "p_top2": 0.2037,
-      "p_third_advance": 0.4011,
-      "p_advance": 0.6048,
+      "p_third_advance": 0.4019,
+      "p_advance": 0.6055,
       "exp_pts": 3.07,
       "exp_gd": -1.56,
       "current": {
@@ -671,7 +671,7 @@
       ],
       "p_top2": 0.0196,
       "p_third_advance": 0.0917,
-      "p_advance": 0.1114,
+      "p_advance": 0.1113,
       "exp_pts": 1.1,
       "exp_gd": -5.53,
       "current": {
@@ -689,8 +689,8 @@
         0.007
       ],
       "p_top2": 0.808,
-      "p_third_advance": 0.1792,
-      "p_advance": 0.9871,
+      "p_third_advance": 0.1795,
+      "p_advance": 0.9875,
       "exp_pts": 5.67,
       "exp_gd": 2.91,
       "current": {
@@ -704,35 +704,35 @@
   "J": {
     "ARG": {
       "p_rank": [
-        0.8404,
-        0.1486,
-        0.0086,
-        0.0024
+        0.9944,
+        0.0052,
+        0.0004,
+        0.0
       ],
-      "p_top2": 0.989,
-      "p_third_advance": 0.0086,
-      "p_advance": 0.9976,
-      "exp_pts": 7.69,
-      "exp_gd": 6.09,
+      "p_top2": 0.9996,
+      "p_third_advance": 0.0004,
+      "p_advance": 1.0,
+      "exp_pts": 8.61,
+      "exp_gd": 7.1,
       "current": {
-        "pts": 3,
-        "gd": 3,
-        "gf": 3,
-        "played": 1
+        "pts": 6,
+        "gd": 5,
+        "gf": 5,
+        "played": 2
       }
     },
     "ALG": {
       "p_rank": [
-        0.0115,
-        0.2357,
-        0.5037,
-        0.249
+        0.0,
+        0.2815,
+        0.4898,
+        0.2288
       ],
-      "p_top2": 0.2472,
-      "p_third_advance": 0.3262,
-      "p_advance": 0.5735,
+      "p_top2": 0.2815,
+      "p_third_advance": 0.307,
+      "p_advance": 0.5885,
       "exp_pts": 3.12,
-      "exp_gd": -2.4,
+      "exp_gd": -2.39,
       "current": {
         "pts": 0,
         "gd": -3,
@@ -742,33 +742,33 @@
     },
     "AUT": {
       "p_rank": [
-        0.1439,
-        0.6009,
-        0.2442,
-        0.011
+        0.0003,
+        0.6983,
+        0.2839,
+        0.0175
       ],
-      "p_top2": 0.7448,
-      "p_third_advance": 0.2204,
-      "p_advance": 0.9653,
-      "exp_pts": 5.14,
-      "exp_gd": 1.19,
+      "p_top2": 0.6986,
+      "p_third_advance": 0.2489,
+      "p_advance": 0.9475,
+      "exp_pts": 4.48,
+      "exp_gd": 0.17,
       "current": {
         "pts": 3,
-        "gd": 2,
+        "gd": 0,
         "gf": 3,
-        "played": 1
+        "played": 2
       }
     },
     "JOR": {
       "p_rank": [
-        0.0041,
-        0.0148,
-        0.2435,
-        0.7376
+        0.0053,
+        0.015,
+        0.2259,
+        0.7538
       ],
-      "p_top2": 0.0189,
-      "p_third_advance": 0.1187,
-      "p_advance": 0.1376,
+      "p_top2": 0.0203,
+      "p_third_advance": 0.1089,
+      "p_advance": 0.1292,
       "exp_pts": 1.1,
       "exp_gd": -4.88,
       "current": {
@@ -782,14 +782,14 @@
   "K": {
     "POR": {
       "p_rank": [
-        0.2967,
-        0.4347,
-        0.2006,
-        0.068
+        0.299,
+        0.4326,
+        0.1995,
+        0.0689
       ],
-      "p_top2": 0.7314,
-      "p_third_advance": 0.1316,
-      "p_advance": 0.8629,
+      "p_top2": 0.7316,
+      "p_third_advance": 0.1289,
+      "p_advance": 0.8605,
       "exp_pts": 4.56,
       "exp_gd": 1.19,
       "current": {
@@ -801,16 +801,16 @@
     },
     "COD": {
       "p_rank": [
-        0.0488,
-        0.1992,
-        0.4412,
-        0.3108
+        0.0496,
+        0.1989,
+        0.4356,
+        0.3158
       ],
-      "p_top2": 0.248,
-      "p_third_advance": 0.2555,
-      "p_advance": 0.5035,
-      "exp_pts": 2.93,
-      "exp_gd": -1.04,
+      "p_top2": 0.2485,
+      "p_third_advance": 0.2525,
+      "p_advance": 0.5011,
+      "exp_pts": 2.92,
+      "exp_gd": -1.05,
       "current": {
         "pts": 1,
         "gd": 0,
@@ -820,16 +820,16 @@
     },
     "UZB": {
       "p_rank": [
-        0.0101,
-        0.1153,
-        0.2606,
-        0.6141
+        0.0099,
+        0.1163,
+        0.2656,
+        0.6081
       ],
-      "p_top2": 0.1254,
-      "p_third_advance": 0.1709,
-      "p_advance": 0.2963,
-      "exp_pts": 1.91,
-      "exp_gd": -3.12,
+      "p_top2": 0.1262,
+      "p_third_advance": 0.1754,
+      "p_advance": 0.3016,
+      "exp_pts": 1.93,
+      "exp_gd": -3.1,
       "current": {
         "pts": 0,
         "gd": -2,
@@ -839,16 +839,16 @@
     },
     "COL": {
       "p_rank": [
-        0.6445,
-        0.2508,
-        0.0976,
+        0.6415,
+        0.2521,
+        0.0993,
         0.0071
       ],
-      "p_top2": 0.8953,
-      "p_third_advance": 0.0942,
-      "p_advance": 0.9895,
+      "p_top2": 0.8936,
+      "p_third_advance": 0.0963,
+      "p_advance": 0.99,
       "exp_pts": 6.44,
-      "exp_gd": 2.98,
+      "exp_gd": 2.97,
       "current": {
         "pts": 3,
         "gd": 2,
@@ -860,14 +860,14 @@
   "L": {
     "ENG": {
       "p_rank": [
-        0.9406,
-        0.0529,
+        0.9398,
+        0.0534,
         0.0048,
-        0.0016
+        0.0019
       ],
-      "p_top2": 0.9935,
+      "p_top2": 0.9932,
       "p_third_advance": 0.0048,
-      "p_advance": 0.9983,
+      "p_advance": 0.998,
       "exp_pts": 8.13,
       "exp_gd": 5.98,
       "current": {
@@ -879,16 +879,16 @@
     },
     "CRO": {
       "p_rank": [
-        0.0219,
-        0.692,
-        0.2061,
-        0.08
+        0.0218,
+        0.6937,
+        0.2039,
+        0.0806
       ],
-      "p_top2": 0.7139,
-      "p_third_advance": 0.1472,
-      "p_advance": 0.861,
-      "exp_pts": 4.46,
-      "exp_gd": 0.61,
+      "p_top2": 0.7155,
+      "p_third_advance": 0.1466,
+      "p_advance": 0.8621,
+      "exp_pts": 4.47,
+      "exp_gd": 0.62,
       "current": {
         "pts": 0,
         "gd": -2,
@@ -898,14 +898,14 @@
     },
     "GHA": {
       "p_rank": [
-        0.0323,
-        0.2271,
-        0.6866,
-        0.054
+        0.033,
+        0.2244,
+        0.6872,
+        0.0554
       ],
-      "p_top2": 0.2594,
-      "p_third_advance": 0.4684,
-      "p_advance": 0.7278,
+      "p_top2": 0.2574,
+      "p_third_advance": 0.4694,
+      "p_advance": 0.7268,
       "exp_pts": 3.86,
       "exp_gd": -2.17,
       "current": {
@@ -917,16 +917,16 @@
     },
     "PAN": {
       "p_rank": [
-        0.0052,
-        0.028,
-        0.1025,
-        0.8643
+        0.0054,
+        0.0284,
+        0.104,
+        0.8621
       ],
-      "p_top2": 0.0332,
-      "p_third_advance": 0.0656,
-      "p_advance": 0.0988,
+      "p_top2": 0.0338,
+      "p_third_advance": 0.0674,
+      "p_advance": 0.1012,
       "exp_pts": 0.84,
-      "exp_gd": -4.42,
+      "exp_gd": -4.43,
       "current": {
         "pts": 0,
         "gd": -1,
