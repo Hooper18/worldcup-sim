@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-23T05:57:19Z",
+  "generated_at": "2026-06-23T20:58:43Z",
   "cutoff": "2026-06-11",
-  "n_scored": 40,
-  "n_finished_group": 44,
-  "n_skipped": 4,
+  "n_scored": 44,
+  "n_finished_group": 45,
+  "n_skipped": 1,
   "per_match": [
     {
       "id": 1,
@@ -964,25 +964,121 @@
       },
       "rps": 0.1435,
       "hit": true
+    },
+    {
+      "id": 41,
+      "group": "I",
+      "kickoff_utc": "2026-06-23T00:00:00Z",
+      "home": "NOR",
+      "away": "SEN",
+      "pred": {
+        "p_home": 0.4481,
+        "p_draw": 0.2844,
+        "p_away": 0.2674,
+        "pick": "home",
+        "top_score": {
+          "h": 1,
+          "a": 1
+        }
+      },
+      "actual": {
+        "h": 3,
+        "a": 2,
+        "outcome": "home"
+      },
+      "rps": 0.188,
+      "hit": true
+    },
+    {
+      "id": 42,
+      "group": "I",
+      "kickoff_utc": "2026-06-22T21:00:00Z",
+      "home": "FRA",
+      "away": "IRQ",
+      "pred": {
+        "p_home": 0.7675,
+        "p_draw": 0.1706,
+        "p_away": 0.0619,
+        "pick": "home",
+        "top_score": {
+          "h": 2,
+          "a": 0
+        }
+      },
+      "actual": {
+        "h": 3,
+        "a": 0,
+        "outcome": "home"
+      },
+      "rps": 0.0289,
+      "hit": true
+    },
+    {
+      "id": 43,
+      "group": "J",
+      "kickoff_utc": "2026-06-22T17:00:00Z",
+      "home": "ARG",
+      "away": "AUT",
+      "pred": {
+        "p_home": 0.6092,
+        "p_draw": 0.2594,
+        "p_away": 0.1315,
+        "pick": "home",
+        "top_score": {
+          "h": 1,
+          "a": 0
+        }
+      },
+      "actual": {
+        "h": 2,
+        "a": 0,
+        "outcome": "home"
+      },
+      "rps": 0.085,
+      "hit": true
+    },
+    {
+      "id": 44,
+      "group": "J",
+      "kickoff_utc": "2026-06-23T03:00:00Z",
+      "home": "JOR",
+      "away": "ALG",
+      "pred": {
+        "p_home": 0.1938,
+        "p_draw": 0.2519,
+        "p_away": 0.5543,
+        "pick": "away",
+        "top_score": {
+          "h": 0,
+          "a": 1
+        }
+      },
+      "actual": {
+        "h": 1,
+        "a": 2,
+        "outcome": "away"
+      },
+      "rps": 0.1181,
+      "hit": true
     }
   ],
   "fused": {
-    "rps": 0.1671,
-    "brier": 0.5682,
-    "log_loss": 0.9277,
-    "hit_rate": 0.525
+    "rps": 0.1615,
+    "brier": 0.5411,
+    "log_loss": 0.8923,
+    "hit_rate": 0.5682
   },
   "elo_baseline": {
-    "rps": 0.1907,
-    "brier": 0.6228,
-    "log_loss": 1.0239,
-    "hit_rate": 0.525
+    "rps": 0.1818,
+    "brier": 0.588,
+    "log_loss": 0.9752,
+    "hit_rate": 0.5682
   },
   "climatology": {
-    "rps": 0.2142,
-    "brier": 0.6508,
-    "log_loss": 1.0777,
-    "hit_rate": 0.5
+    "rps": 0.2176,
+    "brier": 0.6441,
+    "log_loss": 1.0674,
+    "hit_rate": 0.5227
   },
   "cumulative": [
     {
@@ -1264,6 +1360,34 @@
       "fused_rps": 0.1671,
       "elo_rps": 0.1907,
       "clim_rps": 0.2142
+    },
+    {
+      "id": 41,
+      "n": 41,
+      "fused_rps": 0.1677,
+      "elo_rps": 0.1901,
+      "clim_rps": 0.2147
+    },
+    {
+      "id": 42,
+      "n": 42,
+      "fused_rps": 0.1644,
+      "elo_rps": 0.1859,
+      "clim_rps": 0.2152
+    },
+    {
+      "id": 43,
+      "n": 43,
+      "fused_rps": 0.1625,
+      "elo_rps": 0.1827,
+      "clim_rps": 0.2156
+    },
+    {
+      "id": 44,
+      "n": 44,
+      "fused_rps": 0.1615,
+      "elo_rps": 0.1818,
+      "clim_rps": 0.2176
     }
   ]
 }
