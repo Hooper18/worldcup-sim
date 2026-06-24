@@ -65,19 +65,20 @@ export default function AppShell() {
   return (
     <div className="min-h-screen bg-paper text-ink">
       <header className="sticky top-0 z-10 border-b border-line bg-paper/90 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <NavLink to="/" className="text-md font-medium">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 py-3">
+          <NavLink to="/" className="shrink-0 text-md font-medium">
             2026 世界杯预测
           </NavLink>
-          <div className="flex items-center gap-1">
-            <nav className="flex gap-1 text-sm">
+          <div className="flex min-w-0 items-center gap-1">
+            {/* 窄屏导航横向滚动（隐藏滚动条），不再换行/溢出 */}
+            <nav className="flex min-w-0 gap-1 overflow-x-auto text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {NAV.map((n) => (
                 <NavLink
                   key={n.to}
                   to={n.to}
                   end={n.end}
                   className={({ isActive }) =>
-                    `rounded-lg px-2.5 py-1 transition-colors ${
+                    `shrink-0 whitespace-nowrap rounded-lg px-2.5 py-1 transition-colors ${
                       isActive
                         ? 'bg-accent-soft text-accent'
                         : 'text-ink-secondary hover:bg-surface'
@@ -91,7 +92,7 @@ export default function AppShell() {
             <button
               onClick={toggleTheme}
               aria-label={dark ? '切换到浅色模式' : '切换到深色模式'}
-              className="ml-1 rounded-lg p-1.5 text-ink-secondary transition-colors hover:bg-surface hover:text-ink"
+              className="ml-1 shrink-0 rounded-lg p-1.5 text-ink-secondary transition-colors hover:bg-surface hover:text-ink"
             >
               {dark ? <SunIcon /> : <MoonIcon />}
             </button>
