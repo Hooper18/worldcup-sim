@@ -69,3 +69,35 @@ def consensus(prob_vectors: list[np.ndarray]) -> np.ndarray:
     avg = logit.mean(axis=0)
     p = 1.0 / (1.0 + np.exp(-avg))
     return p / p.sum()
+
+
+def market_consensus(book_odds: list[np.ndarray], method: str = "shin") -> np.ndarray:
+    """多家 [o_home,o_draw,o_away] 十进制赔率 → 各家去 overround → logit 共识公平概率。
+
+    用公平共识（非"跨家取最优赔率"）：消费者最优价会系统性低估 overround、不是公平概率，
+    本项目要的是市场对真实概率的共识估计。
+    """
+    fair = [fair_probs(np.asarray(o, dtype=float), method) for o in book_odds]
+    return consensus(fair)
+
+
+def blend_with_market(
+    model_probs: np.ndarray, market_probs: np.ndarray | None, weight: float
+) -> np.ndarray:
+    """在 logit 尺度按 weight 线性融合模型 1X2 与市场共识 1X2，归一后返回 (3,)。
+
+    weight=0（默认关）或 market_probs 为空 → 原样返回纯模型概率（机制就绪但默认关）。
+    **仅 1X2 层融合**：绝不反推比分矩阵、不进 EnsembleModel.matrix()/模拟器/夺冠率——避免制造
+    "比分矩阵"与"1X2"两条互相打架的概率路径。融合权重无国家队历史赔率可回测，故未经验证、默认 0。
+    """
+    m = np.asarray(model_probs, dtype=float)
+    m = m / m.sum()
+    if weight <= 0.0 or market_probs is None:
+        return m
+    k = np.asarray(market_probs, dtype=float)
+    k = k / k.sum()
+    a = np.clip(m, 1e-9, 1 - 1e-9)
+    b = np.clip(k, 1e-9, 1 - 1e-9)
+    logit = (1.0 - weight) * np.log(a / (1 - a)) + weight * np.log(b / (1 - b))
+    p = 1.0 / (1.0 + np.exp(-logit))
+    return p / p.sum()

@@ -54,11 +54,19 @@ def match_forecast(
     *,
     host_home: bool = False,
     host_away: bool = False,
+    market: dict | None = None,
+    market_weight: float = 0.0,
 ) -> dict:
+    """单场预测。主 p_home/p_draw/p_away 永远是**纯统计融合模型**（线上/对外口径不变）。
+
+    market（来自 odds_feed 的 {p_home,p_draw,p_away,books}）默认为 None=关；提供时只**并列**记录
+    forecast["market"]（市场共识）与 forecast["blended"]（按 market_weight 在 1X2 层融合，默认权重 0），
+    绝不覆盖主字段、绝不进比分矩阵/模拟器/夺冠率——市场融合权重无国家队历史赔率可回测，未经验证。
+    """
     lh, la = model.lambdas(home, away, host_home=host_home, host_away=host_away)
     mat = model.matrix(home, away, host_home=host_home, host_away=host_away)
     ph, pd_, pa = outcome_probs(mat)
-    return {
+    out = {
         "p_home": _round(ph),
         "p_draw": _round(pd_),
         "p_away": _round(pa),
@@ -69,6 +77,25 @@ def match_forecast(
             [_round(mat[h, a]) for a in range(DISPLAY_GRID)] for h in range(DISPLAY_GRID)
         ],
     }
+    if market is not None:
+        from ..models.odds import blend_with_market
+
+        mp = [market["p_home"], market["p_draw"], market["p_away"]]
+        blended = blend_with_market([ph, pd_, pa], mp, market_weight)
+        out["market"] = {
+            "p_home": _round(mp[0]),
+            "p_draw": _round(mp[1]),
+            "p_away": _round(mp[2]),
+            "books": market.get("books"),
+            "source": "the-odds-api",
+        }
+        out["blended"] = {
+            "p_home": _round(float(blended[0])),
+            "p_draw": _round(float(blended[1])),
+            "p_away": _round(float(blended[2])),
+            "weight": market_weight,
+        }
+    return out
 
 
 def _model_breakdown(
