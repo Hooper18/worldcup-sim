@@ -7,6 +7,7 @@ const NAV = [
   { to: '/groups', label: '小组赛' },
   { to: '/bracket', label: '淘汰赛' },
   { to: '/trends', label: '概率演变' },
+  { to: '/history', label: '历史' },
   { to: '/model', label: '模型' },
 ]
 

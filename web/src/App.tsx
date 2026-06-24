@@ -7,6 +7,7 @@ import BracketPage from './pages/BracketPage'
 import MatchDetail from './pages/MatchDetail'
 import Schedule from './pages/Schedule'
 import Trends from './pages/Trends'
+import History from './pages/History'
 import ModelPage from './pages/ModelPage'
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="bracket" element={<BracketPage />} />
         <Route path="match/:id" element={<MatchDetail />} />
         <Route path="trends" element={<Trends />} />
+        <Route path="history" element={<History />} />
         <Route path="model" element={<ModelPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

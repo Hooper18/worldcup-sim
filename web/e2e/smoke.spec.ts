@@ -319,3 +319,10 @@ test('赛程页渲染时间轴、真实比分与夺冠走势', async ({ page }) 
   await expect(page.getByText('2 : 0')).toBeVisible() // M1 真实比分
   await expect(page.getByRole('button', { name: '全部' })).toBeVisible() // 阶段筛选
 })
+
+test('历史回放页渲染时点排名', async ({ page }) => {
+  await page.goto('/history')
+  await expect(page.getByRole('heading', { name: '历史回放' })).toBeVisible()
+  await expect(page.getByText('场后', { exact: false })).toBeVisible()
+  await expect(page.getByText('西班牙').first()).toBeVisible()
+})
