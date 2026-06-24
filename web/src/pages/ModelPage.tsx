@@ -1,9 +1,11 @@
+import type { ReactNode } from 'react'
 import { useData } from '../hooks/useData'
 import type { Backtest, Meta, Performance } from '../types/data'
 import { Loading, ErrorMsg } from '../components/Loading'
 import Card from '../components/Card'
 import CalibrationSvg from '../components/CalibrationSvg'
 import LineChartSvg from '../components/LineChartSvg'
+import InfoTip from '../components/InfoTip'
 import { seriesColor } from '../lib/chart'
 import { pct } from '../lib/format'
 
@@ -51,13 +53,18 @@ export default function ModelPage() {
 
       <section className="space-y-3">
         <Prose title="怎么预测每场比分">
-          每支球队的实力用历史战绩刻画，转换成两队各自的「预期进球数 λ」，再用泊松分布
-          （Poisson）算出每个具体比分（0:0、2:1……）的概率。低比分（平局）按 Dixon-Coles
+          每支球队的实力用历史战绩刻画，转换成两队各自的「预期进球数 λ」
+          <InfoTip k="lambda" />
+          ，再用泊松分布（Poisson）
+          <InfoTip k="poisson" />
+          算出每个具体比分（0:0、2:1……）的概率。低比分（平局）按 Dixon-Coles
+          <InfoTip k="dixonColes" />
           方法做了修正，让平局概率更贴近真实。
         </Prose>
         <Prose title="两个模型，加权融合">
-          <b>DC-on-Elo</b>：把每队压成一个 Elo 实力分（参考 eloratings.net 算法，世界杯权重最高、
-          友谊赛最低），用实力差预测进球。
+          <b>DC-on-Elo</b>：把每队压成一个 Elo 实力分
+          <InfoTip k="elo" />
+          （参考 eloratings.net 算法，世界杯权重最高、 友谊赛最低），用实力差预测进球。
           <br />
           <b>纯攻防 Dixon-Coles</b>：分别刻画每队的「进攻能力」和「防守漏洞」，比单一 Elo 更细。
           <br />
@@ -68,12 +75,13 @@ export default function ModelPage() {
           融合。融合通常比任一单模型在样本外更稳。
         </Prose>
         <Prose title="模拟整届赛事">
-          把 104 场逐场按概率随机抽一个比分，按真实赛制（含 2026 头对头排名规则、8 个最佳第三的
-          官方落位表）推进到冠军，重复 {(data.n_sims / 10000).toFixed(0)}{' '}
-          万次，统计每队夺冠/出线的频率。
+          <InfoTip k="montecarlo" />把 104 场逐场按概率随机抽一个比分，按真实赛制（含 2026
+          头对头排名规则、8 个最佳第三的 官方落位表）推进到冠军，重复{' '}
+          {(data.n_sims / 10000).toFixed(0)} 万次，统计每队夺冠/出线的频率。
           淘汰赛平局走加时（进球率按比例缩减），仍平则点球——点球胜率由各队历史点球大战战绩
-          （Bradley-Terry 模型，强收缩到接近
-          50:50）微调，而非一律掷硬币。真实赛果出来后固定该场、只重抽未赛场次。
+          （Bradley-Terry 模型
+          <InfoTip k="bradleyTerry" />
+          ，强收缩到接近 50:50）微调，而非一律掷硬币。真实赛果出来后固定该场、只重抽未赛场次。
         </Prose>
       </section>
 
@@ -83,7 +91,9 @@ export default function ModelPage() {
           <p className="mb-3 text-xs text-ink-faint">
             用赛前冻结的模型重建每场<b>开赛前</b>的预测（只回放到该场之前的 Elo，杜绝"已知赛果"
             泄漏），再对真实赛果打分。已评 {perf.n_scored} 场
-            {perf.n_skipped ? `（另 ${perf.n_skipped} 场待数据源回填）` : ''}。RPS 越低越准。
+            {perf.n_skipped ? `（另 ${perf.n_skipped} 场待数据源回填）` : ''}。RPS
+            <InfoTip k="rps" />
+            越低越准。
           </p>
           <Card className="space-y-4 px-4 py-4">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -93,8 +103,16 @@ export default function ModelPage() {
                 value={pct(perf.fused.hit_rate, 0)}
                 hint={`${perf.n_scored} 场`}
               />
-              <Stat label="简单 Elo 基准" value={perf.elo_baseline.rps.toFixed(3)} hint="RPS" />
-              <Stat label="弱基准 climatology" value={perf.climatology.rps.toFixed(3)} hint="RPS" />
+              <Stat
+                label={<>简单 Elo 基准{<InfoTip k="eloBaseline" />}</>}
+                value={perf.elo_baseline.rps.toFixed(3)}
+                hint="RPS"
+              />
+              <Stat
+                label={<>弱基准 climatology{<InfoTip k="climatology" />}</>}
+                value={perf.climatology.rps.toFixed(3)}
+                hint="RPS"
+              />
             </div>
             <div>
               <div className="mb-1 text-xs text-ink-faint">
@@ -131,8 +149,9 @@ export default function ModelPage() {
       <section>
         <h2 className="mb-1 text-lg font-medium">回测验证</h2>
         <p className="mb-3 text-xs text-ink-faint">
-          纳入 2014 年以来世界杯/欧洲杯/美洲杯/非洲杯/亚洲杯各届决赛圈，用<b>留一届交叉验证</b>：
-          每届的参数只在其余赛事上选、在该届做样本外预测，杜绝"同集选参又评估"的乐观偏置。RPS /
+          纳入 2014 年以来世界杯/欧洲杯/美洲杯/非洲杯/亚洲杯各届决赛圈，用<b>留一届交叉验证</b>
+          <InfoTip k="loto" />
+          ：每届的参数只在其余赛事上选、在该届做样本外预测，杜绝"同集选参又评估"的乐观偏置。RPS /
           log-loss 越低越准。
         </p>
         {hasBacktest && bt.loto ? (
@@ -149,7 +168,7 @@ export default function ModelPage() {
                 hint={`弱基准 ${bt.loto.climatology_rps.toFixed(3)}`}
               />
               <Stat
-                label="校准误差 ECE"
+                label={<>校准误差 ECE{<InfoTip k="ece" />}</>}
                 value={bt.loto.oos_ece.toFixed(3)}
                 hint="越接近 0 越可信"
               />
@@ -192,7 +211,8 @@ export default function ModelPage() {
             </div>
 
             <p className="text-xs text-ink-faint">
-              生产参数：时间衰减半衰期 {bt.best.half_life_days} 天，融合权重 DC-Elo{' '}
+              生产参数：时间衰减半衰期
+              <InfoTip k="halfLife" /> {bt.best.half_life_days} 天，融合权重 DC-Elo{' '}
               {(bt.best.weight_dc_elo * 100).toFixed(0)}% / 攻防{' '}
               {(bt.best.weight_dc_attack * 100).toFixed(0)}%。 该选择在{' '}
               {Object.values(bt.loto.selected_H_counts).reduce((a, b) => a + b, 0)} 折中高度一致
@@ -203,7 +223,9 @@ export default function ModelPage() {
             {bt.loto.reliability.length > 0 && (
               <div>
                 <div className="mb-1 text-xs text-ink-faint">
-                  可靠性图（{bt.best.n_events} 届样本外，点贴对角线 + 区间窄 = 概率可信）
+                  可靠性图
+                  <InfoTip k="calibration" />（{bt.best.n_events} 届样本外，点贴对角线 + 区间窄 =
+                  概率可信）
                 </div>
                 <CalibrationSvg points={bt.loto.reliability.map((d) => [d.p_pred, d.freq, d.n])} />
               </div>
@@ -241,7 +263,7 @@ export default function ModelPage() {
   )
 }
 
-function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
+function Stat({ label, value, hint }: { label: ReactNode; value: string; hint?: string }) {
   return (
     <div className="rounded-xl border border-line bg-card/40 px-3 py-2">
       <div className="text-xs text-ink-faint">{label}</div>

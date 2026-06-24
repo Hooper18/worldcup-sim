@@ -110,7 +110,7 @@ npm run dev / test / build
 
 引擎 126 用例（structure/annexe_c/normalize/results_store/elo/penalty/poisson/odds_baseline/odds_feed/gbm/dc_fit/dc_attack/tiebreak/simulate/export/performance）；
 其中 gbm 5 例需可选依赖 `ml`（无 xgboost 时 `pytest.importorskip` 跳过，CI 不装故跳过）。
-前端 vitest 13 用例 + Playwright smoke 7 用例（page.route stub data，测真实构建产物）。CI 双 job 全绿。
+前端 vitest 16 用例（+InfoTip 术语弹窗 3）+ Playwright smoke 7 用例（page.route stub data，测真实构建产物）。CI 双 job 全绿。
 
 ## 坑位
 
@@ -163,5 +163,9 @@ npm run dev / test / build
     - **实时赔率融合「机制就绪但默认关」**（models/odds_feed.py 适配器 + odds.blend_with_market +
       match_forecast 并列 market/blended + `wcsim odds-preview`）：env `ODDS_API_KEY` 门控、默认关、不进 cron、
       绝不碰线上预测/params.json/ECE。诚实边界：无稳定免费的国家队历史 1X2 赔率源 → 融合权重无法回测、未经验证。
+  - **术语小词典（面向球迷，2026-06-24）**：`lib/glossary.ts` 集中维护 Elo/RPS/ECE/泊松/Dixon-Coles/
+    蒙特卡洛/留一届交叉验证/bootstrap 等的大白话解释，`components/InfoTip.tsx` 行内「ⓘ」点开弹出
+    （点按/Esc/点外关闭、CSS 变量主题感知、role=tooltip 无障碍）；接入 ModelPage/Dashboard/MatchDetail。
+    以后新增术语只改 glossary.ts，别在页面里散写解释。
 - **前端 8 页**：仪表盘 / 赛程 / 小组（总览+详情）/ 对阵树 / 单场详情（含赛后复盘）/ 概率演变 / 模型说明（含本届实战表现）/ 历史回放。
 - **可选增强（剩余未做）**：XGBoost 进生产（已评估否决，仅留只读臂）、实时赔率付费历史回测、FIFA 排名字段。

@@ -7,6 +7,7 @@ import Card from '../components/Card'
 import ProbBar from '../components/ProbBar'
 import ScoreHeatGrid from '../components/ScoreHeatGrid'
 import TeamLabel from '../components/TeamLabel'
+import InfoTip from '../components/InfoTip'
 import { AFTER_LABEL, formatKickoff, STAGE_LABEL } from '../lib/format'
 
 const OUTCOME_ZH = { home: '主胜', draw: '平局', away: '客胜' } as const
@@ -104,6 +105,7 @@ export default function MatchDetail() {
                 }`}
               >
                 {recap.hit ? '命中' : '未中'} · RPS {recap.rps.toFixed(2)}
+                <InfoTip k="rps" />
               </span>
             </div>
             <p className="text-xs text-ink-faint">
@@ -155,7 +157,8 @@ export default function MatchDetail() {
                 ]}
               />
               <div className="text-xs text-ink-faint">
-                预期进球 λ：{m.forecast.lambda_home} — {m.forecast.lambda_away}
+                预期进球 λ<InfoTip k="lambda" />：{m.forecast.lambda_home} —{' '}
+                {m.forecast.lambda_away}
               </div>
             </Card>
           </section>

@@ -4,6 +4,7 @@ import { Loading, ErrorMsg } from '../components/Loading'
 import Card from '../components/Card'
 import ChampionBar from '../components/ChampionBar'
 import MatchCard from '../components/MatchCard'
+import InfoTip from '../components/InfoTip'
 import { formatKickoff, kickoffDateKey, todayKey } from '../lib/format'
 
 export default function Dashboard() {
@@ -49,12 +50,16 @@ export default function Dashboard() {
 
       <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
         <section>
-          <h2 className="mb-3 text-lg font-medium">夺冠概率</h2>
+          <h2 className="mb-3 text-lg font-medium">
+            夺冠概率
+            <InfoTip k="montecarlo" />
+          </h2>
           <Card className="px-4 py-4">
             <ChampionBar data={champTop} ci={unc.data?.teams && mapCi(unc.data, 'champion')} />
             {unc.data?.teams && (
               <p className="mt-3 text-xs text-ink-faint">
-                浅色带为 bootstrap 95%
+                浅色带为 bootstrap
+                <InfoTip k="bootstrap" /> 95%
                 区间——历史样本有限，参数本身有不确定性，单点概率不应过度解读。
               </p>
             )}
