@@ -1,6 +1,6 @@
 # worldcup-sim — 2026 世界杯比分预测与全赛程模拟
 
-> 最后校准：2026-06-24（赛中：cron 回填至 48/104；Tier-3 = XGBoost 只读评估 + 实时赔率融合「机制就绪但默认关」）
+> 最后校准：2026-06-25（赛中：cron 回填至 48/104；2026-06-25 完成一轮「大而全」多智能体自我审查——无正确性/泄漏硬伤，详见进度末；Tier-3 = XGBoost 只读评估 + 实时赔率融合「机制就绪但默认关」）
 
 ## 项目概述
 
@@ -24,7 +24,7 @@
 engine/
   src/wcsim/
     config.py            # 路径、数据源 URL、Elo/模型常量
-    cli.py               # fetch/fit/simulate/export/update/backtest/uncertainty 子命令
+    cli.py               # fetch/fit/simulate/export/update/backtest/uncertainty/performance/gbm-eval/odds-preview 子命令
     pipeline.py          # 端到端编排（抓数据→Elo→拟合→刷新赛果→条件模拟→导出）
     data/                # fetch（martj42+feed 缓存）/ normalize（双源队名归一）/ results_store
     ratings/             # elo（全历史重放自算）/ penalty（点球 Bradley-Terry）
@@ -145,7 +145,7 @@ npm run dev / test / build
   - **Tier-1 本届实战表现**：`backtest/performance.py` 用冻结 bundle + 重放到赛前的 Elo
     （replay with_history 取 home_elo_pre）重建每场赛前融合 1X2，对真实赛果算 RPS/Brier/命中率，
     vs Elo-logistic + climatology → `performance.json`（接 pipeline.export + `wcsim performance`）。
-    当前 40 场：融合 RPS **0.167** / 命中率 **52.5%** 优于 Elo 0.191、climatology 0.214。
+    当前 44/48 场（4 场待 martj42 落赛前 Elo 暂跳过）：融合 RPS **0.162** / 命中率 **56.8%** 优于 Elo 0.182、climatology 0.218。
     ModelPage 加「本届实战表现」面板（指标卡 + 累计 RPS 三线），MatchDetail 已完赛加「赛后复盘」（赛前预测 vs 实际 + 命中）。
   - **cron 健壮性**：build_context 不再静默吞 feed 失败（记 refresh_failed + data.feed_ok），
     `wcsim update` 遇 feed 失败发 `::error::` + 非零退出，cron 变红可见。
@@ -167,5 +167,6 @@ npm run dev / test / build
     蒙特卡洛/留一届交叉验证/bootstrap 等的大白话解释，`components/InfoTip.tsx` 行内「ⓘ」点开弹出
     （点按/Esc/点外关闭、CSS 变量主题感知、role=tooltip 无障碍）；接入 ModelPage/Dashboard/MatchDetail。
     以后新增术语只改 glossary.ts，别在页面里散写解释。
+  - **大而全自我审查（2026-06-25，多智能体 fan-out + 对抗复核）**：结论——建模（dc_elo/dc_attack/poisson/score_model/ensemble）、模拟器（simulate 小组+淘汰赛 fixed 代入/加时/点球 BT）、赛制（2026 头对头 tiebreak、annexe_c 含 import 期 495 键校验）、数据管线、回测 LOTO、实战评分 performance.py **无正确性或数据泄漏硬伤**；「诚实优先」叙事经核查成立（performance 用赛前 `home_elo_pre` 重建、baselines 只在 `hist_cut` 拟合、LOTO 仅在其余赛事选 H/权重、metrics RPS/Brier/ECE/Wilson/配对 bootstrap 口径正确）。**顺手修（各独立 commit）**：① baselines sigmoid→`scipy.expit` 消 overflow 警告；② odds_feed 异常日志只记类型，杜绝 `ODDS_API_KEY` 经 requests 异常 URL 进日志（兑现模块「绝不进日志」承诺）；③ useData 失败时清理 inflight（修瞬时网络抖动后该数据键永久卡 rejected promise、无法重试）；④ 文档 drift（fetch 删 eloratings、cli 子命令补全、实战场次）。**待拍板（P1/P2，未改）**：前端 a11y（ⓘ 触达 14px、InfoTip 弹层无碰撞翻转会在边缘/长表格裁切、`ink-faint` 对比度 2.7:1 < AA）、图表暗色调色板对比、odds power/blend 防御、若干回归测试（采样点球 BT、cron feed 失败退出码、useData 重试）。
 - **前端 8 页**：仪表盘 / 赛程 / 小组（总览+详情）/ 对阵树 / 单场详情（含赛后复盘）/ 概率演变 / 模型说明（含本届实战表现）/ 历史回放。
 - **可选增强（剩余未做）**：XGBoost 进生产（已评估否决，仅留只读臂）、实时赔率付费历史回测、FIFA 排名字段。
