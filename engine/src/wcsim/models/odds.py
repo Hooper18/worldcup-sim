@@ -30,7 +30,11 @@ def deoverround_power(odds: np.ndarray) -> np.ndarray:
     """幂方法：求 k 使 Σ(1/o_i)^k = 1。"""
     r = implied(odds)
     f = lambda k: np.sum(r**k) - 1.0  # noqa: E731
-    k = brentq(f, 0.5, 5.0)
+    try:
+        k = brentq(f, 0.5, 5.0)
+    except ValueError:
+        # 极端赔率下根可能落在 [0.5,5] 外（与 shin 一致兜底到 proportional，不抛）
+        return deoverround_proportional(odds)
     p = r**k
     return p / p.sum()
 
@@ -94,6 +98,7 @@ def blend_with_market(
     m = m / m.sum()
     if weight <= 0.0 or market_probs is None:
         return m
+    weight = min(weight, 1.0)  # 夹到 (0,1]：weight>1 会反向外推模型、过度放大市场，非预期
     k = np.asarray(market_probs, dtype=float)
     k = k / k.sum()
     a = np.clip(m, 1e-9, 1 - 1e-9)
