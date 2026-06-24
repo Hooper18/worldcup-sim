@@ -110,6 +110,28 @@ def fit_bundle(
     return bundle
 
 
+def refresh_results_from_feed(
+    results: dict[int, dict], *, force_fetch: bool = False
+) -> tuple[dict[int, dict], bool, str | None]:
+    """用 feed 刷新赛果并并入 store。失败不抛、不静默：返回 (results, failed, error)。
+
+    失败时沿用传入的 results（已有 store），由调用方（wcsim update）据 failed 发 ::error:: 告警
+    + 非零退出让 cron 变红可见——这是"绝不静默吞 stale 数据"的诚实约定。
+    """
+    try:
+        feed = fetch.load_fixture_feed(force=force_fetch)
+        parsed = results_store.parse_feed(feed)
+        new = results_store.new_finished(results, parsed)
+        for mid in new:
+            results[mid] = parsed[mid]
+        if new:
+            results_store.save_store(results)
+        return results, False, None
+    except Exception as e:  # 失败不阻断模拟（用已有 store），但记录状态供 update 告警，不静默吞掉
+        print(f"[pipeline] 警告：刷新赛果失败（{e}），沿用已存赛果")
+        return results, True, str(e)
+
+
 def build_context(*, force_fetch: bool = False, refresh_results: bool = True) -> PipelineContext:
     """准备模拟所需的一切：Elo、参数、真实赛果、数据元信息。"""
     df = fetch.load_results(force=force_fetch)
@@ -132,20 +154,9 @@ def build_context(*, force_fetch: bool = False, refresh_results: bool = True) ->
     refresh_failed = False
     refresh_error: str | None = None
     if refresh_results:
-        try:
-            feed = fetch.load_fixture_feed(force=force_fetch)
-            parsed = results_store.parse_feed(feed)
-            new = results_store.new_finished(results, parsed)
-            for mid in new:
-                results[mid] = parsed[mid]
-            if new:
-                results_store.save_store(results)
-        except (
-            Exception
-        ) as e:  # 失败不阻断模拟（用已有 store），但记录状态供 update 告警，不再静默吞掉
-            refresh_failed = True
-            refresh_error = str(e)
-            print(f"[pipeline] 警告：刷新赛果失败（{e}），沿用已存赛果")
+        results, refresh_failed, refresh_error = refresh_results_from_feed(
+            results, force_fetch=force_fetch
+        )
 
     data_info = {
         "martj42_rows": int(len(df)),
