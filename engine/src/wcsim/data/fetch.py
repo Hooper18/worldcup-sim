@@ -1,4 +1,4 @@
-"""数据抓取：martj42 历史赛果、fixturedownload feed、eloratings TSV。
+"""数据抓取：martj42 历史赛果、fixturedownload feed。
 
 全部带本地缓存（CACHE_DIR），默认 6 小时内不重复下载；写入采用临时文件 + 原子替换，
 避免下载中断留下半截文件。
