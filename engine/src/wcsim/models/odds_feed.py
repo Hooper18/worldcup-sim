@@ -149,5 +149,7 @@ def fetch_worldcup_odds(
         r.raise_for_status()
         return parse_events(r.json(), method=method)
     except (requests.RequestException, ValueError) as e:
-        print(f"[odds] 拉取失败（{e}），返回 None（不回退陈旧赔率）")
+        # 异常串可能含带 apiKey 查询参数的 URL（requests 的 HTTPError/ConnectionError 会带 url）
+        # → 只记异常类型，杜绝 key 经日志泄漏（见模块 docstring 的"绝不进日志"约定）
+        print(f"[odds] 拉取失败（{type(e).__name__}），返回 None（不回退陈旧赔率）")
         return None
