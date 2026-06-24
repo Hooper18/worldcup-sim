@@ -139,5 +139,8 @@ npm run dev / test / build
   - **暗色模式**：色板改 CSS 变量（RGB 三通道，`rgb(var / <alpha-value>)`），tailwind `darkMode:'class'`；
     亮=暖白 / 暗=ChatGPT 风 #212121；AppShell 日/月切换 + localStorage 持久化 + index.html 无闪烁脚本；
     图表硬编码 hex 全改 `rgb(var(--c-*))`（var() 在 SVG presentation 属性可解析）。`bg-white/40`→`bg-card/40`。
+  - **移动端响应式导航**：标题/切换固定，6 项导航窄屏横向可滚（隐藏滚动条），375px 全页零横向溢出。
+  - **淘汰赛纳入实战评分（前瞻）**：`parse_feed` 给淘汰赛 Result 增记实际队码 home/away；
+    `performance.py` 统一评小组（MATCHES 码+主场）+淘汰赛（store 码+中立场），开赛后自动生效。
 - **前端 7 页**：仪表盘 / 赛程 / 小组（总览+详情）/ 对阵树 / 单场详情（含赛后复盘）/ 概率演变 / 模型说明（含本届实战表现）。
-- **可选增强（未做）**：历史快照浏览页、XGBoost 第三模型、实时赔率融合、FIFA 排名字段、移动端打磨、淘汰赛纳入实战评分。
+- **可选增强（未做）**：历史快照浏览页、XGBoost 第三模型、实时赔率融合、FIFA 排名字段。
