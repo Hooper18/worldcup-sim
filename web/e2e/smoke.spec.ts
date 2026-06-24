@@ -237,7 +237,7 @@ const PERFORMANCE = {
   generated_at: '2026-06-12T00:00:00Z',
   cutoff: '2026-06-11',
   n_scored: 2,
-  n_finished_group: 2,
+  n_finished: 2,
   n_skipped: 0,
   fused: { rps: 0.167, brier: 0.64, log_loss: 1.0, hit_rate: 0.525 },
   elo_baseline: { rps: 0.19, brier: 0.7, log_loss: 1.1, hit_rate: 0.45 },

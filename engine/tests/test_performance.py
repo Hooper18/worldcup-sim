@@ -104,6 +104,35 @@ def _synthetic_df():
     )
 
 
+def test_compute_performance_scores_knockout():
+    # 淘汰赛：参赛队码取自 store（parse_feed 记 home/away），中立场，group 为 None
+    df = _synthetic_df()
+    extra = pd.DataFrame(
+        [
+            {
+                "date": pd.Timestamp("2026-06-28"),  # M73 r32 kickoff 当日
+                "home_team": MEX,
+                "away_team": RSA,
+                "home_score": 2,
+                "away_score": 1,
+                "tournament": "FIFA World Cup",
+                "neutral": True,
+            }
+        ]
+    )
+    df = pd.concat([df, extra]).sort_values("date").reset_index(drop=True)
+    out = performance.compute_performance(
+        df=df,
+        bundle=_synthetic_bundle(),
+        results={73: {"h": 2, "a": 1, "after": "FT", "home": "MEX", "away": "RSA"}},
+    )
+    pm = next(p for p in out["per_match"] if p["id"] == 73)
+    assert pm["home"] == "MEX" and pm["away"] == "RSA"
+    assert pm["group"] is None  # 淘汰赛无小组
+    assert pm["actual"] == {"h": 2, "a": 1, "outcome": "home"}
+    assert out["n_scored"] >= 1
+
+
 def test_compute_performance_shape_and_scoring():
     out = performance.compute_performance(
         df=_synthetic_df(),

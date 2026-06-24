@@ -55,7 +55,10 @@ def test_parse_feed_knockout_draw_resolves_pen_winner():
         }
     ]
     out = rs.parse_feed(feed)
-    assert out == {73: {"h": 1, "a": 1, "after": "PEN", "pen_winner": "away"}}
+    # 淘汰赛同时记录实际两队码（供实战评分）
+    assert out == {
+        73: {"h": 1, "a": 1, "after": "PEN", "pen_winner": "away", "home": "MEX", "away": "CAN"}
+    }
 
 
 def test_parse_feed_knockout_draw_without_winner_skipped():

@@ -82,7 +82,7 @@ export default function ModelPage() {
           <h2 className="mb-1 text-lg font-medium">本届实战表现</h2>
           <p className="mb-3 text-xs text-ink-faint">
             用赛前冻结的模型重建每场<b>开赛前</b>的预测（只回放到该场之前的 Elo，杜绝"已知赛果"
-            泄漏），再对真实赛果打分。已评 {perf.n_scored} 场小组赛
+            泄漏），再对真实赛果打分。已评 {perf.n_scored} 场
             {perf.n_skipped ? `（另 ${perf.n_skipped} 场待数据源回填）` : ''}。RPS 越低越准。
           </p>
           <Card className="space-y-4 px-4 py-4">

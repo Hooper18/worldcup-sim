@@ -110,14 +110,12 @@ def _cmd_performance(args: argparse.Namespace) -> int:
     f = out.get("fused")
     if f:
         print(
-            f"[performance] 已评 {out['n_scored']}/{out['n_finished_group']} 场小组赛"
+            f"[performance] 已评 {out['n_scored']}/{out['n_finished']} 场"
             f"（跳过 {out['n_skipped']}）。融合 RPS={f['rps']} 命中率={f['hit_rate']:.1%}"
             f" | Elo 基准 RPS={out['elo_baseline']['rps']} | climatology RPS={out['climatology']['rps']}"
         )
     else:
-        print(
-            f"[performance] 暂无可评场次（已完赛小组赛 {out['n_finished_group']}，跳过 {out['n_skipped']}）"
-        )
+        print(f"[performance] 暂无可评场次（已完赛 {out['n_finished']}，跳过 {out['n_skipped']}）")
     return 0
 
 

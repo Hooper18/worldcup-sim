@@ -8,7 +8,8 @@
 重建赛前预测 → 对真实赛果算 RPS/Brier/命中率，并和 Elo-logistic 基准、climatology 对比。
 
 输出 web/public/data/performance.json：本届汇总 + 每场明细（供单场复盘）+ 累计走势（供折线图）。
-当前只评小组赛（淘汰赛未开打；其参赛队码不在 MATCHES 静态表里，待开赛后另行接入）。
+小组赛队码取自 MATCHES、按主场；淘汰赛参赛队不在静态表（只有 W/L 槽位），队码取自
+results_store（parse_feed 已记 home/away）、按中立场——开赛后自动纳入评分。
 """
 
 from __future__ import annotations
@@ -81,15 +82,23 @@ def compute_performance(
     fused_rows: list[list[float]] = []
     elo_rows: list[list[float]] = []
     outcomes: list[int] = []
-    n_finished_group = 0
+    n_finished = 0
     n_skipped = 0
 
     for mid in sorted(results):
         m = MATCHES[mid]
-        if m["stage"] != "group":
-            continue  # 淘汰赛参赛队码不在静态表，开赛后另行接入
-        n_finished_group += 1
-        home, away = m["home"], m["away"]
+        res = results[mid]
+        if m["stage"] == "group":
+            home, away = m["home"], m["away"]
+            host_h = has_host_advantage(home, m["venue"])
+            host_a = has_host_advantage(away, m["venue"])
+        else:
+            # 淘汰赛：参赛队码取自 store（parse_feed 已记），按中立场（不计主场加成）
+            home, away = res.get("home"), res.get("away")
+            host_h = host_a = False
+            if not home or not away:
+                continue  # 无队码无法评（理论不发生，parse_feed 会记）
+        n_finished += 1
         kickoff = pd.Timestamp(m["kickoff_utc"].replace("Z", ""))
         pre = _find_pre_match_elo(wc, home, away, kickoff)
         if pre is None:
@@ -99,13 +108,10 @@ def compute_performance(
 
         # 冻结 bundle + 赛前 Elo → 融合 1X2 + 预测比分
         model = bundle.build_model({home: elo_h, away: elo_a})
-        host_h = has_host_advantage(home, m["venue"])
-        host_a = has_host_advantage(away, m["venue"])
         mat = model.matrix(home, away, host_home=host_h, host_away=host_a)
         ph, pdr, pa = outcome_probs(mat)
         ts_h, ts_a, _ = top_scores(mat, 1)[0]
 
-        res = results[mid]
         actual_h, actual_a = int(res["h"]), int(res["a"])
         oc = metrics.outcome_of(actual_h, actual_a)
 
@@ -142,7 +148,7 @@ def compute_performance(
         "generated_at": _now_iso(),
         "cutoff": cutoff,
         "n_scored": n,
-        "n_finished_group": n_finished_group,
+        "n_finished": n_finished,
         "n_skipped": n_skipped,
         "per_match": per_match,
     }

@@ -167,7 +167,7 @@ export interface PerfSummary {
 }
 export interface PerfMatch {
   id: number
-  group: string
+  group: string | null
   kickoff_utc: string
   home: string
   away: string
@@ -186,7 +186,7 @@ export interface Performance {
   generated_at: string
   cutoff: string
   n_scored: number
-  n_finished_group: number
+  n_finished: number
   n_skipped: number
   fused: PerfSummary | null
   elo_baseline: PerfSummary | null

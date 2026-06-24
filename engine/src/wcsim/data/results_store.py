@@ -8,6 +8,7 @@ results.json 结构（match_id 为字符串 key，JSON 限制）：
 - h/a：常规时间或加时后的最终比分（点球大战的进球不计入）
 - after："FT"（90 分钟）| "AET"（加时）| "PEN"（点球决胜）
 - pen_winner：仅 after=="PEN" 时存在，"home" | "away"
+- home/away：仅淘汰赛存（其参赛队不在静态赛程表，只有 W/L 槽位），实际两队 3 字码，供实战评分
 
 数据来源以 fixturedownload feed 为主（feed 对加时/点球的具体表示需在 32 强首日实测，
 解析失败的场次会被跳过并告警，绝不写入可疑数据）；martj42 为回退源。
@@ -72,22 +73,26 @@ def parse_feed(feed: list[dict]) -> dict[int, Result]:
 
         result: Result = {"h": int(hs), "a": int(as_), "after": "FT"}
 
-        if m["stage"] != "group" and int(hs) == int(as_):
-            # 淘汰赛平比分 ⇒ 点球决胜。feed 的 Winner 字段给出胜者队名。
-            winner = (row.get("Winner") or "").strip()
-            if not winner:
-                print(f"[results] 警告：M{mid} 淘汰赛平比分但无 Winner，跳过待下轮抓取")
-                continue
-            try:
-                winner_code = feed_to_code(winner)
-            except Exception:
-                print(f"[results] 警告：M{mid} Winner {winner!r} 无法归一，跳过")
-                continue
-            result["after"] = "PEN"
-            result["pen_winner"] = _pen_side(mid, winner_code, row)
-            if result["pen_winner"] is None:
-                print(f"[results] 警告：M{mid} 无法判定点球胜方，跳过")
-                continue
+        if m["stage"] != "group":
+            # 淘汰赛参赛队不在静态赛程表（只有 W/L 槽位），从 feed 记录实际队码（供 performance 评分）
+            result["home"] = feed_to_code(row["HomeTeam"])
+            result["away"] = feed_to_code(row["AwayTeam"])
+            if int(hs) == int(as_):
+                # 平比分 ⇒ 点球决胜。feed 的 Winner 字段给出胜者队名。
+                winner = (row.get("Winner") or "").strip()
+                if not winner:
+                    print(f"[results] 警告：M{mid} 淘汰赛平比分但无 Winner，跳过待下轮抓取")
+                    continue
+                try:
+                    winner_code = feed_to_code(winner)
+                except Exception:
+                    print(f"[results] 警告：M{mid} Winner {winner!r} 无法归一，跳过")
+                    continue
+                result["after"] = "PEN"
+                result["pen_winner"] = _pen_side(mid, winner_code, row)
+                if result["pen_winner"] is None:
+                    print(f"[results] 警告：M{mid} 无法判定点球胜方，跳过")
+                    continue
 
         out[mid] = result
     return out
