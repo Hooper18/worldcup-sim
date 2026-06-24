@@ -15,12 +15,14 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
+from scipy.special import expit
 
 from . import metrics
 
 
 def _sigmoid(x):
-    return 1.0 / (1.0 + np.exp(-x))
+    # expit 即数值稳定的 logistic，等价于 1/(1+exp(-x)) 但大负数不溢出（消除回测时的 overflow 警告）
+    return expit(x)
 
 
 def _probs(b: float, c: float, dz: np.ndarray) -> np.ndarray:
