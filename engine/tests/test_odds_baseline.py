@@ -105,3 +105,42 @@ def test_elo_baseline_probs_normalized():
     assert p.shape == (1, 3)
     assert p.sum() == pytest.approx(1.0)
     assert p[0, 0] > p[0, 2]  # 强队主场更可能赢
+
+
+# ---------------------------------------------------------------------------
+# RPS 显著性工具：逐场 RPS + 配对 bootstrap
+# ---------------------------------------------------------------------------
+
+
+def test_rps_per_match_mean_equals_rps():
+    rng = np.random.default_rng(0)
+    p = rng.dirichlet([1, 1, 1], size=50)
+    outc = rng.integers(0, 3, 50)
+    per = metrics.rps_per_match(p, outc)
+    assert per.shape == (50,)
+    assert per.mean() == pytest.approx(metrics.rps(p, outc))
+
+
+def test_paired_bootstrap_detects_clear_winner():
+    """完美预测 vs climatology：差值 CI 应整体 < 0（a 显著更好）。"""
+    n = 200
+    rng = np.random.default_rng(1)
+    outc = rng.integers(0, 3, n)
+    perfect = np.zeros((n, 3))
+    perfect[np.arange(n), outc] = 1.0
+    clim = np.tile(np.array([0.40, 0.27, 0.33]), (n, 1))
+    res = metrics.paired_bootstrap_rps_diff(perfect, clim, outc)
+    assert res["mean_diff"] < 0
+    assert res["ci_hi"] < 0  # 整个区间在 0 以下
+    assert res["significant"] is True
+
+
+def test_paired_bootstrap_identical_not_significant():
+    """同一组概率 vs 自身：差值恒 0，CI 含 0，不显著。"""
+    n = 120
+    rng = np.random.default_rng(2)
+    p = rng.dirichlet([2, 2, 2], size=n)
+    outc = rng.integers(0, 3, n)
+    res = metrics.paired_bootstrap_rps_diff(p, p, outc)
+    assert res["mean_diff"] == pytest.approx(0.0)
+    assert res["significant"] is False

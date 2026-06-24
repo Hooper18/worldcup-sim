@@ -111,8 +111,15 @@ def _outcomes(matches: pd.DataFrame) -> np.ndarray:
     )
 
 
-def event_probs(results: pd.DataFrame, cutoff, matches: pd.DataFrame, H: float):
-    """在 cutoff 前拟合模型，预测该赛事比赛 W/D/L。返回 (elo_p, att_p, outcomes, elo_baseline_p)。"""
+def event_probs(
+    results: pd.DataFrame, cutoff, matches: pd.DataFrame, H: float, *, with_gbm: bool = False
+):
+    """在 cutoff 前拟合模型，预测该赛事比赛 W/D/L。
+
+    返回 (elo_p, att_p, outcomes, elo_baseline_p, gbm_p)。第 5 臂 gbm_p 仅在 with_gbm=True 时
+    计算（仅 `wcsim gbm-eval` 只读评估用，需可选依赖 xgboost），生产回测默认 None——保证
+    `wcsim backtest`/选参完全不依赖 xgboost、行为不变。
+    """
     train = results[results["date"] <= pd.Timestamp(cutoff)]
     ratings, hist = replay(train, with_history=True)
     elo_params = dc_elo.fit(hist, cutoff=cutoff, half_life_days=H)
@@ -121,20 +128,31 @@ def event_probs(results: pd.DataFrame, cutoff, matches: pd.DataFrame, H: float):
     ridge, _ = dc_attack.select_ridge(train, cutoff=cutoff, half_life_days=H)
     att_params = dc_attack.fit(train, cutoff=cutoff, half_life_days=H, ridge=ridge)
     b, c = baselines.fit(hist, cutoff=cutoff, half_life_days=H)
+    gbm_p = None
+    if with_gbm:
+        from . import gbm  # 惰性：仅 gbm-eval 路径触发，避免顶层引入 xgboost 依赖
+
+        gbm_params = gbm.fit(hist, cutoff=cutoff, half_life_days=H)
+        gbm_p = gbm.probs(gbm_params, ratings, matches)
     return (
         _elo_probs(elo_params, ratings, matches),
         _attack_probs(att_params, matches),
         _outcomes(matches),
         baselines.probs(b, c, ratings, matches),
+        gbm_p,
     )
 
 
-def build_cache(results: pd.DataFrame, events: list[dict], half_lives: list[float]) -> dict:
-    """预计算每 (赛事, H) 的逐场概率与结果（最贵的一步：events × H 次双模型拟合）。"""
+def build_cache(
+    results: pd.DataFrame, events: list[dict], half_lives: list[float], *, with_gbm: bool = False
+) -> dict:
+    """预计算每 (赛事, H) 的逐场概率与结果（最贵的一步：events × H 次模型拟合）。"""
     cache: dict[tuple[str, float], tuple] = {}
     for ev in events:
         for H in half_lives:
-            cache[(ev["name"], H)] = event_probs(results, ev["cutoff"], ev["matches"], H)
+            cache[(ev["name"], H)] = event_probs(
+                results, ev["cutoff"], ev["matches"], H, with_gbm=with_gbm
+            )
     return cache
 
 
@@ -161,24 +179,30 @@ def _best_hw(cache, names, half_lives, weight_grid) -> tuple[float, float, float
 
 
 def loto_cv(cache, events, half_lives, weight_grid) -> dict:
-    """留一届交叉验证：每折在其余赛事上选 (H,w)，留出赛事上样本外评估。"""
+    """留一届交叉验证：每折在其余赛事上选 (H,w)，留出赛事上样本外评估。
+
+    若 cache 含第 5 臂 gbm_p（with_gbm=True 构建），额外用**逐折选中的 H** 给 GBM 打分（GBM
+    不进融合权重网格，只作去相关的独立基准），并报告 GBM vs 融合 / vs Elo 基准的配对 bootstrap CI。
+    """
     names = [e["name"] for e in events]
     per_fold = []
-    oos_probs, oos_outc, oos_base = [], [], []
+    oos_probs, oos_outc, oos_base, oos_gbm = [], [], [], []
     for test in events:
         others = [n for n in names if n != test["name"]]
         H, w, _ = _best_hw(cache, others, half_lives, weight_grid)
-        elo_p, att_p, outc, base_p = cache[(test["name"], H)]
+        elo_p, att_p, outc, base_p, gbm_p = cache[(test["name"], H)]
         ens = w * elo_p + (1 - w) * att_p
-        per_fold.append(
-            {
-                "event": test["name"],
-                "n": int(len(outc)),
-                "selected_H": H,
-                "selected_w": round(w, 3),
-                "oos_rps": round(metrics.rps(ens, outc), 4),
-            }
-        )
+        fold = {
+            "event": test["name"],
+            "n": int(len(outc)),
+            "selected_H": H,
+            "selected_w": round(w, 3),
+            "oos_rps": round(metrics.rps(ens, outc), 4),
+        }
+        if gbm_p is not None:
+            fold["gbm_rps"] = round(metrics.rps(gbm_p, outc), 4)
+            oos_gbm.append(gbm_p)
+        per_fold.append(fold)
         oos_probs.append(ens)
         oos_outc.append(outc)
         oos_base.append(base_p)
@@ -188,7 +212,7 @@ def loto_cv(cache, events, half_lives, weight_grid) -> dict:
     sel_H = Counter(f["selected_H"] for f in per_fold)
     sel_w = Counter(f["selected_w"] for f in per_fold)
     clim = np.tile(BASE_RATE, (len(all_outc), 1))
-    return {
+    out = {
         "oos_rps": round(metrics.rps(all_probs, all_outc), 4),
         "oos_logloss": round(metrics.log_loss(all_probs, all_outc), 4),
         "oos_brier": round(metrics.brier_score(all_probs, all_outc), 4),
@@ -206,6 +230,14 @@ def loto_cv(cache, events, half_lives, weight_grid) -> dict:
         "selected_H_counts": dict(sel_H),
         "selected_w_counts": {str(k): v for k, v in sel_w.items()},
     }
+    if oos_gbm:
+        all_gbm = np.vstack(oos_gbm)
+        out["gbm_rps"] = round(metrics.rps(all_gbm, all_outc), 4)
+        out["gbm_logloss"] = round(metrics.log_loss(all_gbm, all_outc), 4)
+        # 显著性：GBM 与融合/Elo 基准的逐场 RPS 差的配对 bootstrap 95% 区间（含 0 = 无可测差异）
+        out["gbm_vs_fused_ci"] = metrics.paired_bootstrap_rps_diff(all_gbm, all_probs, all_outc)
+        out["gbm_vs_elo_ci"] = metrics.paired_bootstrap_rps_diff(all_gbm, all_base, all_outc)
+    return out
 
 
 def select_best(
@@ -246,7 +278,7 @@ def select_best(
     for dn in detail_events:
         if dn not in ev_by_name:
             continue
-        elo_p, att_p, outc, base_p = cache[(dn, H_star)]
+        elo_p, att_p, outc, base_p, _gbm = cache[(dn, H_star)]
         ens = w_star * elo_p + (1 - w_star) * att_p
         clim = np.tile(BASE_RATE, (len(outc), 1))
         yr = ev_by_name[dn]["year"]
@@ -276,4 +308,39 @@ def select_best(
         "years": years,
         "loto": loto,
         "events": [{"name": e["name"], "n": int(len(e["matches"]))} for e in events],
+    }
+
+
+# ---------------------------------------------------------------------------
+# XGBoost 只读评估（不进生产；需可选依赖 xgboost）
+# ---------------------------------------------------------------------------
+
+
+def gbm_eval(
+    results: pd.DataFrame,
+    *,
+    half_lives: list[float] = DEFAULT_HALF_LIVES,
+    weight_grid: list[float] = DEFAULT_WEIGHT_GRID,
+) -> dict:
+    """只读评估 GBM 第三模型：与生产融合、Elo-logistic 基准同口径并排比 LOTO 样本外 RPS。
+
+    构建带第 5 臂的缓存（with_gbm=True，触发 xgboost），跑 LOTO——GBM 用逐折选中的 H 作独立基准，
+    **不进**融合权重网格、**不改** params.json。返回供 CLI 并排打印 + 配对 bootstrap 显著性判定。
+    """
+    events = list_events(results)
+    if not events:
+        raise RuntimeError("无可用回测赛事")
+    cache = build_cache(results, events, half_lives, with_gbm=True)
+    loto = loto_cv(cache, events, half_lives, weight_grid)
+    return {
+        "n_events": len(events),
+        "n_matches": loto["n_matches"],
+        "gbm_rps": loto["gbm_rps"],
+        "elo_baseline_rps": loto["elo_baseline_rps"],
+        "fused_oos_rps": loto["oos_rps"],
+        "gbm_logloss": loto["gbm_logloss"],
+        "gbm_vs_fused_ci": loto["gbm_vs_fused_ci"],
+        "gbm_vs_elo_ci": loto["gbm_vs_elo_ci"],
+        "selected_H_counts": loto["selected_H_counts"],
+        "per_fold": loto["per_fold"],
     }

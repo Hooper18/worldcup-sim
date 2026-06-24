@@ -10,6 +10,10 @@ dependencies = [
     "requests>=2.32",
 ]
 
+# 可选依赖：仅 `wcsim gbm-eval` 只读评估需要 xgboost（生产/CI 不装；测试用 importorskip 跳过）
+[project.optional-dependencies]
+ml = ["xgboost>=2.0"]
+
 [dependency-groups]
 dev = [
     "pytest>=8.3",

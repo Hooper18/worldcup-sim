@@ -16,12 +16,8 @@ def outcome_of(home_goals: int, away_goals: int) -> int:
     return 2
 
 
-def rps(probs: np.ndarray, outcomes: np.ndarray) -> float:
-    """Ranked Probability Score（越低越好）。
-
-    probs: (N, 3) 主胜/平/客胜概率；outcomes: (N,) ∈ {0,1,2}。
-    有序 RPS = 1/(K-1) · Σ_k (CDF_pred_k − CDF_obs_k)²，K=3。
-    """
+def rps_per_match(probs: np.ndarray, outcomes: np.ndarray) -> np.ndarray:
+    """逐场 RPS（不取均值），供配对 bootstrap 等显著性分析。返回 (N,)。"""
     probs = np.asarray(probs, dtype=float)
     k = probs.shape[1]
     cdf_pred = np.cumsum(probs, axis=1)[:, : k - 1]  # 前 K-1 个累积（最后一个恒为 1）
@@ -29,7 +25,45 @@ def rps(probs: np.ndarray, outcomes: np.ndarray) -> float:
     obs[np.arange(len(outcomes)), outcomes] = 1.0
     cdf_obs = np.cumsum(obs, axis=1)[:, : k - 1]
     # 归一化除以 (K-1)，使完全错误的确定性预测 RPS=1、完美预测 RPS=0
-    return float(np.mean(np.sum((cdf_pred - cdf_obs) ** 2, axis=1)) / (k - 1))
+    return np.sum((cdf_pred - cdf_obs) ** 2, axis=1) / (k - 1)
+
+
+def rps(probs: np.ndarray, outcomes: np.ndarray) -> float:
+    """Ranked Probability Score（越低越好）。
+
+    probs: (N, 3) 主胜/平/客胜概率；outcomes: (N,) ∈ {0,1,2}。
+    有序 RPS = 1/(K-1) · Σ_k (CDF_pred_k − CDF_obs_k)²，K=3。
+    """
+    return float(np.mean(rps_per_match(probs, outcomes)))
+
+
+def paired_bootstrap_rps_diff(
+    probs_a: np.ndarray,
+    probs_b: np.ndarray,
+    outcomes: np.ndarray,
+    *,
+    n_boot: int = 2000,
+    seed: int = 0,
+) -> dict:
+    """配对 bootstrap：mean(RPS_a − RPS_b) 的点估计与 95% 区间（负=a 更好）。
+
+    对**同一批比赛**重抽（保留 a/b 在每场上的配对），得到差值均值的抽样分布。
+    `significant=True` 当且仅当 95% 区间不含 0——这是把"A 比 B 好 0.003"从噪声里区分出来
+    所需的显著性工具（此前 repo 缺它，故所有"提升"声明都不可证）。
+    """
+    da = rps_per_match(probs_a, outcomes)
+    db = rps_per_match(probs_b, outcomes)
+    diff = da - db
+    n = len(diff)
+    rng = np.random.default_rng(seed)
+    means = np.array([diff[rng.integers(0, n, n)].mean() for _ in range(n_boot)])
+    lo, hi = np.percentile(means, [2.5, 97.5])
+    return {
+        "mean_diff": round(float(diff.mean()), 4),
+        "ci_lo": round(float(lo), 4),
+        "ci_hi": round(float(hi), 4),
+        "significant": bool(lo > 0 or hi < 0),
+    }
 
 
 def log_loss(probs: np.ndarray, outcomes: np.ndarray) -> float:
