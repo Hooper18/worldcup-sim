@@ -336,6 +336,11 @@ def _fixed_ko_winner(h: np.ndarray, a: np.ndarray, res: dict) -> tuple[np.ndarra
     return (h, a) if home_wins else (a, h)
 
 
+def penalty_home_prob(theta_home, theta_away):
+    """点球大战主队胜率 = logistic(θ_home − θ_away)（Bradley-Terry 能力）。标量或数组皆可。"""
+    return 1.0 / (1.0 + np.exp(-(theta_home - theta_away)))
+
+
 def _decide(
     sampler: ScoreSampler,
     h: np.ndarray,
@@ -356,7 +361,7 @@ def _decide(
         ag = ag + np.where(draw, eg_a, 0)
     home_win = hg > ag
     away_win = hg < ag
-    p_home = 1.0 / (1.0 + np.exp(-(pen_theta[h] - pen_theta[a])))
+    p_home = penalty_home_prob(pen_theta[h], pen_theta[a])
     pen_home = rng.random(h.shape[0]) < p_home
     w = np.where(home_win, h, np.where(away_win, a, np.where(pen_home, h, a)))
     return w, np.where(w == h, a, h)

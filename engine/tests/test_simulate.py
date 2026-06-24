@@ -153,6 +153,22 @@ def test_fixed_knockout_penalty_winner(params, elo):
     assert res.stage_counts[home_team]["r16"] == 0
 
 
+def test_penalty_home_prob_monotonic_and_symmetric():
+    # 采样点球大战用的 Bradley-Terry 胜率（_decide 里调用的就是它）
+    import numpy as np
+
+    from wcsim.tournament.simulate import penalty_home_prob
+
+    assert abs(penalty_home_prob(0.0, 0.0) - 0.5) < 1e-12  # θ 相等 → 50:50
+    assert penalty_home_prob(1.0, 0.0) > 0.5  # 主队更强 → 胜率 > 0.5
+    assert penalty_home_prob(2.0, 0.0) > penalty_home_prob(1.0, 0.0)  # 随差值单调
+    # 反对称：交换主客 → 1 − p
+    assert abs(penalty_home_prob(0.7, -0.3) + penalty_home_prob(-0.3, 0.7) - 1.0) < 1e-12
+    # 数组输入逐元素
+    p = penalty_home_prob(np.array([0.0, 1.0]), np.array([0.0, -1.0]))
+    assert p.shape == (2,) and p[0] == 0.5 and p[1] > 0.5
+
+
 def test_fully_fixed_group_is_deterministic(params, elo):
     # 固定 A 组全部 6 场，让 rank 小的队 1-0 取胜 → 积分 9/6/3/0 严格区分，名次完全确定
     tk = {c: elo[c] for c in CODES}
