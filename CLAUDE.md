@@ -1,6 +1,6 @@
 # worldcup-sim — 2026 世界杯比分预测与全赛程模拟
 
-> 最后校准：2026-06-22（赛中：cron 回填至 40/104；新增赛程页 + 折线图 hover；修淘汰赛回填 bug）
+> 最后校准：2026-06-24（赛中：cron 回填至 48/104；Tier-3 = XGBoost 只读评估 + 实时赔率融合「机制就绪但默认关」）
 
 ## 项目概述
 
@@ -28,10 +28,12 @@ engine/
     pipeline.py          # 端到端编排（抓数据→Elo→拟合→刷新赛果→条件模拟→导出）
     data/                # fetch（martj42+feed 缓存）/ normalize（双源队名归一）/ results_store
     ratings/             # elo（全历史重放自算）/ penalty（点球 Bradley-Terry）
-    models/              # poisson / dc_elo / dc_attack / score_model（融合接口）/ bundle / odds（去 overround，插桩未接）
+    models/              # poisson / dc_elo / dc_attack / score_model（融合接口）/ bundle /
+                         #   odds（去 overround + 共识 + 1X2 融合机械）/ odds_feed（the-odds-api 适配器，env 门控默认关）
     tournament/          # structure（赛制硬数据）/ annexe_c（495 行第三名落位）/
                          #   tiebreak（2026 头对头）/ third_place / simulate（蒙特卡洛，小组+淘汰赛均代入 fixed）
-    backtest/            # runner（跨赛事 LOTO CV）/ metrics（RPS/Brier/ECE/可靠性）/ baselines（Elo-logistic）
+    backtest/            # runner（跨赛事 LOTO CV）/ metrics（RPS/Brier/ECE/可靠性 + 配对 bootstrap 显著性）/
+                         #   baselines（Elo-logistic）/ gbm（XGBoost 只读评估臂，可选依赖 ml，不进生产）
     backtest/performance.py  # 本届实战表现：重建赛前预测对赛果打分 → performance.json
     export/writer.py     # 写 6 类前端 JSON（meta/teams/matches/groups/knockout/evolution）+ history 快照；uncertainty.json / performance.json 由 pipeline 另写
   scripts/gen_static_data.py  # 一次性生成 fixtures_data.py + annexe_c_data.py（留档）
@@ -63,8 +65,16 @@ web/
   写 uncertainty.json，update 在有新赛果时刷新；前端夺冠条叠 95% 误差带。
 - **常数数据驱动**：dc_attack 的 RIDGE 经时序 CV 选定（0.005，模型对该值不敏感）；经验主场优势验证 Elo +100。
   注：penalty.py 另有独立 RIDGE=3.0（硬编码、非 CV 选，勿与攻防 ridge 混淆）。
-- **赔率机械**：models/odds.py 去 overround（proportional/power/Shin）+ logit 共识，留插桩；
-  **默认不接实时赔率**（免费稳定的国家队大赛历史 1X2 赔率源不存在，不把脆弱爬虫塞进 cron）。
+- **赔率机械（实时赔率融合：机制就绪但默认关）**：models/odds.py 去 overround（proportional/power/Shin）
+  + logit 共识 + `blend_with_market`（1X2 层融合）；models/odds_feed.py = the-odds-api v4 适配器
+  （env `ODDS_API_KEY` 门控、**默认关、不进 cron**、失败不静默回退）。`wcsim odds-preview` 只读并排打印
+  模型/市场/融合。**诚实边界**：没有稳定免费的国家队大赛历史 1X2 赔率源（the-odds-api 历史付费 + 10x 倍率、
+  football-data.co.uk 只含俱乐部、Kaggle martj42 只有比分）→ 融合权重无法进 LOTO 回测、未经验证；
+  **绝不碰线上预测/params.json/ECE**（match_forecast 只并列写 market/blended，主 1X2 永远是纯统计模型）。
+- **XGBoost 第三模型（只读评估，不进生产）**：backtest/gbm.py 仿 baselines 的 fit/probs，`wcsim gbm-eval`
+  并排比 GBM/Elo 基准/融合的 LOTO 样本外 RPS + 配对 bootstrap CI。实跑结论（21 届/939 场）：GBM 0.1934
+  与 Elo 基准 0.1914 无显著差异、显著劣于融合 0.1877（ΔCI 排除 0）→ 净增益不可测、且只出 1X2 进不了
+  比分矩阵融合，故 production 不接、params.json 不动。xgboost 为可选依赖 `ml`（CI 不装、测试 importorskip 跳过）。
 - `wcsim backtest --apply`（约数分钟）重跑回测+选参重拟合；`wcsim uncertainty` 算区间。
 
 ## 赛制（已多源核验，写死进 structure.py / annexe_c.py）
@@ -88,7 +98,9 @@ web/
 uv run wcsim fit                 # 拟合（赛前一次性，落 params.json）
 uv run wcsim export -n 100000    # 模拟 + 导出 JSON
 uv run wcsim update -n 100000    # 一条龙：刷新赛果→有新完赛才重模拟→导出（cron 用）
-uv run pytest                    # 101 用例
+uv run --extra ml wcsim gbm-eval # XGBoost 只读评估（需 ml 可选依赖；不改 params.json）
+ODDS_API_KEY=… uv run wcsim odds-preview  # 只读预览市场共识与融合（默认关、不进 cron）
+uv run pytest                    # 126 用例（gbm 5 例需 ml，无 xgboost 时 importorskip 跳过）
 
 # 前端（web/ 下）
 npm run dev / test / build
@@ -96,8 +108,9 @@ npm run dev / test / build
 
 ## 测试
 
-引擎 101 用例（structure/annexe_c/normalize/results_store/elo/penalty/poisson/odds_baseline/dc_fit/dc_attack/tiebreak/simulate/export）；
-前端 vitest 7 用例 + Playwright smoke 5 用例（page.route stub data，测真实构建产物）。CI 双 job 全绿。
+引擎 126 用例（structure/annexe_c/normalize/results_store/elo/penalty/poisson/odds_baseline/odds_feed/gbm/dc_fit/dc_attack/tiebreak/simulate/export/performance）；
+其中 gbm 5 例需可选依赖 `ml`（无 xgboost 时 `pytest.importorskip` 跳过，CI 不装故跳过）。
+前端 vitest 13 用例 + Playwright smoke 7 用例（page.route stub data，测真实构建产物）。CI 双 job 全绿。
 
 ## 坑位
 
@@ -120,7 +133,7 @@ npm run dev / test / build
 - **M0 + M1 已上线**（2026-06-12）：引擎全链路（数据→Elo→DC-on-Elo+纯攻防融合→蒙特卡洛→JSON）+ 前端 +
   GitHub Actions CI（双 job）+ 自动回填 cron（5 班）+ Vercel/Cloudflare 域名。
 - **赛中迭代（2026-06-21/22）**：
-  - cron 持续回填，当前 **40/104**（小组赛进行中）。
+  - cron 持续回填，当前 **48/104**（小组赛进行中）。
   - 新增第 7 页 `/schedule` 赛程页：全 104 场按阶段/日期时间轴 + 真实比分 + 阶段筛选 +
     淘汰赛对阵位中文描述 + 顶部「每打一场夺冠率走势」折线图（按 matches_played 去重）。
   - 折线图加 hover：竖直参考线 + 各队该场次具体数值（概率演变页与赛程页共用 LineChartSvg）。
@@ -142,5 +155,13 @@ npm run dev / test / build
   - **移动端响应式导航**：标题/切换固定，6 项导航窄屏横向可滚（隐藏滚动条），375px 全页零横向溢出。
   - **淘汰赛纳入实战评分（前瞻）**：`parse_feed` 给淘汰赛 Result 增记实际队码 home/away；
     `performance.py` 统一评小组（MATCHES 码+主场）+淘汰赛（store 码+中立场），开赛后自动生效。
-- **前端 7 页**：仪表盘 / 赛程 / 小组（总览+详情）/ 对阵树 / 单场详情（含赛后复盘）/ 概率演变 / 模型说明（含本届实战表现）。
-- **可选增强（未做）**：历史快照浏览页、XGBoost 第三模型、实时赔率融合、FIFA 排名字段。
+  - **Tier-3（2026-06-24，引擎 108→126 测试、CI 绿、两件独立 commit）**：
+    - **XGBoost 第三模型「只读评估」**（backtest/gbm.py + `wcsim gbm-eval`）：go/no-go 已定生产不加，
+      只做只读评估。metrics 补 `paired_bootstrap_rps_diff`（repo 此前缺 RPS 显著性工具）。实跑 21 届/939 场：
+      GBM 0.1934 与 Elo 基准 0.1914 无显著差异、显著劣于融合 0.1877（ΔCI 排除 0）→ 净增益不可测、
+      只出 1X2 进不了比分矩阵融合，params.json 一行不动；xgboost 为可选依赖 `ml`。
+    - **实时赔率融合「机制就绪但默认关」**（models/odds_feed.py 适配器 + odds.blend_with_market +
+      match_forecast 并列 market/blended + `wcsim odds-preview`）：env `ODDS_API_KEY` 门控、默认关、不进 cron、
+      绝不碰线上预测/params.json/ECE。诚实边界：无稳定免费的国家队历史 1X2 赔率源 → 融合权重无法回测、未经验证。
+- **前端 8 页**：仪表盘 / 赛程 / 小组（总览+详情）/ 对阵树 / 单场详情（含赛后复盘）/ 概率演变 / 模型说明（含本届实战表现）/ 历史回放。
+- **可选增强（剩余未做）**：XGBoost 进生产（已评估否决，仅留只读臂）、实时赔率付费历史回测、FIFA 排名字段。
