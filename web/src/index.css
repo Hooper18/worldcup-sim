@@ -10,10 +10,17 @@
   --c-card: 255 255 255; /* 卡片基色（多以 /40 透明度使用） */
   --c-ink: 31 31 31; /* #1F1F1F */
   --c-ink-secondary: 107 107 107;
-  --c-ink-faint: 156 154 150; /* #9C9A96 */
+  --c-ink-faint: 122 120 116; /* #7A7874：对比度 ~4:1(AA-Large)，仍较 secondary 更淡 */
   --c-accent: 47 107 79; /* #2F6B4F 草皮深绿 */
   --c-accent-soft: 232 240 235; /* #E8F0EB 选中浅底 */
   --c-line: 231 228 222; /* #E7E4DE 分隔线 */
+  /* 折线图 6 色（亮色版，白底） */
+  --chart-1: #2f6b4f;
+  --chart-2: #b5651d;
+  --chart-3: #3a5a8c;
+  --chart-4: #7a4e8c;
+  --chart-5: #8c5a3a;
+  --chart-6: #4a7a6a;
   color-scheme: light;
 }
 
@@ -23,10 +30,17 @@
   --c-card: 70 70 70; /* /40 叠在深底上得到微亮卡片 */
   --c-ink: 236 236 236; /* #ECECEC */
   --c-ink-secondary: 176 176 176;
-  --c-ink-faint: 124 124 124;
+  --c-ink-faint: 150 150 150; /* 提升深底对比（~5:1），仍较 secondary 更淡 */
   --c-accent: 90 170 130; /* 深底上更清晰的草绿 */
   --c-accent-soft: 36 51 41; /* 深绿选中底 */
   --c-line: 64 64 64; /* #404040 */
+  /* 折线图 6 色（暗色版：更亮/更饱和，保证 #212121 上对比） */
+  --chart-1: #5aaa82;
+  --chart-2: #e0944a;
+  --chart-3: #6e9bd6;
+  --chart-4: #b083c9;
+  --chart-5: #c0906a;
+  --chart-6: #6fb3a0;
   color-scheme: dark;
 }
 

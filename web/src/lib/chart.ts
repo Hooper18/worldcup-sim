@@ -6,6 +6,8 @@ export interface Series {
   values: number[]
 }
 
-const PALETTE = ['#2F6B4F', '#B5651D', '#3A5A8C', '#7A4E8C', '#8C5A3A', '#4A7A6A']
+// 6 色折线调色板走 CSS 变量（index.css 的 :root/.dark 各一套），暗色模式下用更亮的版本
+// 以保证在 #212121 上的对比；var() 在 SVG presentation 属性与内联 style 均可解析。
+const PALETTE_N = 6
 
-export const seriesColor = (i: number): string => PALETTE[i % PALETTE.length]
+export const seriesColor = (i: number): string => `var(--chart-${(i % PALETTE_N) + 1})`
