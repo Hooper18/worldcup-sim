@@ -100,7 +100,7 @@ uv run wcsim export -n 100000    # 模拟 + 导出 JSON
 uv run wcsim update -n 100000    # 一条龙：刷新赛果→有新完赛才重模拟→导出（cron 用）
 uv run --extra ml wcsim gbm-eval # XGBoost 只读评估（需 ml 可选依赖；不改 params.json）
 ODDS_API_KEY=… uv run wcsim odds-preview  # 只读预览市场共识与融合（默认关、不进 cron）
-uv run pytest                    # 126 用例（gbm 5 例需 ml，无 xgboost 时 importorskip 跳过）
+uv run pytest                    # 130 用例（gbm 5 例需 ml，无 xgboost 时 importorskip 跳过）
 
 # 前端（web/ 下）
 npm run dev / test / build
@@ -108,7 +108,7 @@ npm run dev / test / build
 
 ## 测试
 
-引擎 126 用例（structure/annexe_c/normalize/results_store/elo/penalty/poisson/odds_baseline/odds_feed/gbm/dc_fit/dc_attack/tiebreak/simulate/export/performance）；
+引擎 130 用例（structure/annexe_c/normalize/results_store/elo/penalty/poisson/odds_baseline/odds_feed/gbm/dc_fit/dc_attack/tiebreak/simulate/export/performance/pipeline）；
 其中 gbm 5 例需可选依赖 `ml`（无 xgboost 时 `pytest.importorskip` 跳过，CI 不装故跳过）。
 前端 vitest 16 用例（+InfoTip 术语弹窗 3）+ Playwright smoke 7 用例（page.route stub data，测真实构建产物）。CI 双 job 全绿。
 
@@ -167,6 +167,6 @@ npm run dev / test / build
     蒙特卡洛/留一届交叉验证/bootstrap 等的大白话解释，`components/InfoTip.tsx` 行内「ⓘ」点开弹出
     （点按/Esc/点外关闭、CSS 变量主题感知、role=tooltip 无障碍）；接入 ModelPage/Dashboard/MatchDetail。
     以后新增术语只改 glossary.ts，别在页面里散写解释。
-  - **大而全自我审查（2026-06-25，多智能体 fan-out + 对抗复核）**：结论——建模（dc_elo/dc_attack/poisson/score_model/ensemble）、模拟器（simulate 小组+淘汰赛 fixed 代入/加时/点球 BT）、赛制（2026 头对头 tiebreak、annexe_c 含 import 期 495 键校验）、数据管线、回测 LOTO、实战评分 performance.py **无正确性或数据泄漏硬伤**；「诚实优先」叙事经核查成立（performance 用赛前 `home_elo_pre` 重建、baselines 只在 `hist_cut` 拟合、LOTO 仅在其余赛事选 H/权重、metrics RPS/Brier/ECE/Wilson/配对 bootstrap 口径正确）。**顺手修（各独立 commit）**：① baselines sigmoid→`scipy.expit` 消 overflow 警告；② odds_feed 异常日志只记类型，杜绝 `ODDS_API_KEY` 经 requests 异常 URL 进日志（兑现模块「绝不进日志」承诺）；③ useData 失败时清理 inflight（修瞬时网络抖动后该数据键永久卡 rejected promise、无法重试）；④ 文档 drift（fetch 删 eloratings、cli 子命令补全、实战场次）。**待拍板（P1/P2，未改）**：前端 a11y（ⓘ 触达 14px、InfoTip 弹层无碰撞翻转会在边缘/长表格裁切、`ink-faint` 对比度 2.7:1 < AA）、图表暗色调色板对比、odds power/blend 防御、若干回归测试（采样点球 BT、cron feed 失败退出码、useData 重试）。
+  - **大而全自我审查（2026-06-25，多智能体 fan-out + 对抗复核）**：结论——建模（dc_elo/dc_attack/poisson/score_model/ensemble）、模拟器（simulate 小组+淘汰赛 fixed 代入/加时/点球 BT）、赛制（2026 头对头 tiebreak、annexe_c 含 import 期 495 键校验）、数据管线、回测 LOTO、实战评分 performance.py **无正确性或数据泄漏硬伤**；「诚实优先」叙事经核查成立（performance 用赛前 `home_elo_pre` 重建、baselines 只在 `hist_cut` 拟合、LOTO 仅在其余赛事选 H/权重、metrics RPS/Brier/ECE/Wilson/配对 bootstrap 口径正确）。**顺手修（各独立 commit）**：① baselines sigmoid→`scipy.expit` 消 overflow 警告；② odds_feed 异常日志只记类型，杜绝 `ODDS_API_KEY` 经 requests 异常 URL 进日志（兑现模块「绝不进日志」承诺）；③ useData 失败时清理 inflight（修瞬时网络抖动后该数据键永久卡 rejected promise、无法重试）；④ 文档 drift（fetch 删 eloratings、cli 子命令补全、实战场次）。**第二批已做（6 独立 commit `2d96ffb..bab676a`，引擎 126→130 测试）**：odds `deoverround_power` 根失败回退 + `blend_with_market` weight 夹 [0,1]；点球 BT 抽成 `penalty_home_prob`+单调/对称测试；抽 `refresh_results_from_feed`+cron feed 失败 3 例回归测试；删 `TeamLabel` 死 prop `showFlag`；折线图调色板改 CSS 变量 `--chart-1..6` 暗色自适应（蓝 #3a5a8c→#6e9bd6 等深底变亮）+ `ink-faint` 对比度↑(2.7→~4:1 AA-Large)；**`InfoTip` 弹层改 portal+fixed 定位**（preview 实测最右收到 right=367 / 最左 left=8 零裁切、escape `overflow-x-auto` 表格）+ ⓘ 触达扩到 26px + 描边字色 `ink-faint`→`ink-secondary`。**仍未做（低优先/需实测/需方向）**：淘汰赛 AET 比分 label 失真与「赛果被修正不触发重模拟」（待淘汰赛首日 ~6/28 真数据实测）、tiebreak 同分回落的 Python 热循环向量化（结果正确、纯性能、改动有回归风险）、几处 P2 前端打磨（页面缺 `<h1>` 层级、ScoreHeatGrid 硬编码 `#fff`、移动端导航无滚动提示、History 滑块 focus 环、跨页图例/排序去重）。
 - **前端 8 页**：仪表盘 / 赛程 / 小组（总览+详情）/ 对阵树 / 单场详情（含赛后复盘）/ 概率演变 / 模型说明（含本届实战表现）/ 历史回放。
 - **可选增强（剩余未做）**：XGBoost 进生产（已评估否决，仅留只读臂）、实时赔率付费历史回测、FIFA 排名字段。
