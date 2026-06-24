@@ -17,6 +17,11 @@ async function load<T>(name: string): Promise<T> {
         inflight.delete(name)
         return j
       })
+      .catch((e) => {
+        // 失败也要清理 inflight，否则该 key 永久卡在 rejected promise，瞬时网络抖动后再也不会重试
+        inflight.delete(name)
+        throw e
+      })
     inflight.set(name, p)
   }
   return inflight.get(name) as Promise<T>
