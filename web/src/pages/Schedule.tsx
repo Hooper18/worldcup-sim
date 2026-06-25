@@ -2,10 +2,11 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useData } from '../hooks/useData'
 import { useTeams } from '../hooks/useTeams'
-import type { Evolution, Knockout, Match, Stage } from '../types/data'
+import type { Evolution, Knockout, Match, Stage, Teams } from '../types/data'
 import { Loading, ErrorMsg } from '../components/Loading'
 import Card from '../components/Card'
 import TeamLabel from '../components/TeamLabel'
+import ProbBar from '../components/ProbBar'
 import LineChartSvg from '../components/LineChartSvg'
 import ChartLegend from '../components/ChartLegend'
 import { seriesColor, type Series } from '../lib/chart'
@@ -164,6 +165,7 @@ export default function Schedule() {
                           bracket={ko.bracket}
                           resolved={(c) => !!(c && teams?.[c])}
                           round={m.stage === 'group' ? groupRound[m.id] : undefined}
+                          teams={teams}
                         />
                       ))}
                     </div>
@@ -205,45 +207,107 @@ function ScheduleRow({
   bracket,
   resolved,
   round,
+  teams,
 }: {
   match: Match
   bracket: Knockout['bracket']
   resolved: (c: string | null) => boolean
   round?: number
+  teams: Teams | null
 }) {
-  const { result, status } = match
+  const [open, setOpen] = useState(false)
+  const { result, status, forecast } = match
   return (
-    <Link
-      to={`/match/${match.id}`}
-      className="flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-surface"
-    >
-      <div className="w-11 shrink-0 text-xs tabular-nums text-ink-faint">
-        {formatTime(match.kickoff_utc)}
-      </div>
-      <div className="grid flex-1 grid-cols-[1fr_auto_1fr] items-center gap-2">
-        <div className="flex justify-end">
-          <Side match={match} side="home" bracket={bracket} resolved={resolved} align="right" />
-        </div>
-        <div className="min-w-[3.5rem] text-center text-sm tabular-nums">
-          {result ? (
-            <span className="font-medium">
-              {result.h} : {result.a}
-              {result.after !== 'FT' && (
-                <span className="ml-0.5 text-xs text-ink-faint">{AFTER_LABEL[result.after]}</span>
+    <div>
+      <div className="flex items-center transition-colors hover:bg-surface">
+        <Link to={`/match/${match.id}`} className="flex flex-1 items-center gap-3 px-3 py-2.5">
+          <div className="w-11 shrink-0 text-xs tabular-nums text-ink-faint">
+            {formatTime(match.kickoff_utc)}
+          </div>
+          <div className="grid flex-1 grid-cols-[1fr_auto_1fr] items-center gap-2">
+            <div className="flex justify-end">
+              <Side match={match} side="home" bracket={bracket} resolved={resolved} align="right" />
+            </div>
+            <div className="min-w-[3.5rem] text-center text-sm tabular-nums">
+              {result ? (
+                <span className="font-medium">
+                  {result.h} : {result.a}
+                  {result.after !== 'FT' && (
+                    <span className="ml-0.5 text-xs text-ink-faint">
+                      {AFTER_LABEL[result.after]}
+                    </span>
+                  )}
+                </span>
+              ) : (
+                <span className="text-ink-faint">vs</span>
               )}
+            </div>
+            <div className="flex justify-start">
+              <Side match={match} side="away" bracket={bracket} resolved={resolved} align="left" />
+            </div>
+          </div>
+          <div className="hidden w-28 shrink-0 text-right text-xs text-ink-faint sm:block">
+            {round ? <span className="mr-1.5 text-ink-faint/80">第{round}轮</span> : null}
+            {status === 'finished' ? '' : venueCity(match.venue)}
+          </div>
+        </Link>
+        {forecast ? (
+          <button
+            type="button"
+            aria-label={open ? '收起胜率' : '展开胜率'}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="mr-1.5 shrink-0 rounded-md p-1.5 text-ink-faint transition-colors hover:text-accent"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className={`transition-transform ${open ? 'rotate-180' : ''}`}
+            >
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+        ) : (
+          <span className="mr-1.5 w-[26px] shrink-0" aria-hidden="true" />
+        )}
+      </div>
+      {open && forecast && (
+        <div className="border-t border-line bg-surface/40 px-4 py-3">
+          <ProbBar
+            pHome={forecast.p_home}
+            pDraw={forecast.p_draw}
+            pAway={forecast.p_away}
+            labels={[
+              teams?.[match.home ?? '']?.name_zh ?? '主',
+              teams?.[match.away ?? '']?.name_zh ?? '客',
+            ]}
+          />
+          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-faint">
+            <span>
+              预测最可能比分{' '}
+              <span className="tabular-nums text-ink-secondary">
+                {forecast.top_scores[0].h}:{forecast.top_scores[0].a}
+              </span>
             </span>
-          ) : (
-            <span className="text-ink-faint">vs</span>
-          )}
+            <span>
+              预期进球 λ{' '}
+              <span className="tabular-nums text-ink-secondary">
+                {forecast.lambda_home}–{forecast.lambda_away}
+              </span>
+            </span>
+            {status === 'finished' && (
+              <span className="text-ink-faint/80">（模型当前评估，含赛果更新的 Elo）</span>
+            )}
+          </div>
         </div>
-        <div className="flex justify-start">
-          <Side match={match} side="away" bracket={bracket} resolved={resolved} align="left" />
-        </div>
-      </div>
-      <div className="hidden w-32 shrink-0 text-right text-xs text-ink-faint sm:block">
-        {round ? <span className="mr-1.5 text-ink-faint/80">第{round}轮</span> : null}
-        {status === 'finished' ? '' : venueCity(match.venue)}
-      </div>
-    </Link>
+      )}
+    </div>
   )
 }

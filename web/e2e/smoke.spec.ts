@@ -318,6 +318,9 @@ test('赛程页渲染时间轴、真实比分与夺冠走势', async ({ page }) 
   await expect(page.getByText('每打一场 · 夺冠概率走势')).toBeVisible()
   await expect(page.getByText('2 : 0')).toBeVisible() // M1 真实比分
   await expect(page.getByRole('button', { name: '全部' })).toBeVisible() // 阶段筛选
+  // 每场旁的开关：展开后下方显示胜率图（ProbBar + 预测比分）
+  await page.getByRole('button', { name: '展开胜率' }).first().click()
+  await expect(page.getByText('预测最可能比分').first()).toBeVisible()
 })
 
 test('历史回放页渲染时点排名', async ({ page }) => {
