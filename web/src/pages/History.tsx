@@ -61,7 +61,7 @@ export default function History() {
           value={sel}
           onChange={(e) => setIdx(Number(e.target.value))}
           aria-label="选择赛事时点"
-          className="w-full"
+          className="w-full rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
           style={{ accentColor: 'rgb(var(--c-accent))' }}
         />
         <div className="flex justify-between text-xs text-ink-faint">

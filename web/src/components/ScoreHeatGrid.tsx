@@ -30,7 +30,8 @@ export default function ScoreHeatGrid({ matrix, homeCode, awayCode }: Props) {
                   className="flex aspect-square w-9 items-center justify-center rounded text-xs tabular-nums"
                   style={{
                     backgroundColor: `rgb(var(--c-accent) / ${0.06 + 0.94 * (p / max)})`,
-                    color: p / max > 0.5 ? '#fff' : 'rgb(var(--c-ink-secondary))',
+                    color:
+                      p / max > 0.5 ? 'rgb(var(--c-on-accent))' : 'rgb(var(--c-ink-secondary))',
                   }}
                 >
                   {h}:{a}

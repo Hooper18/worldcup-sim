@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 
 const NAV = [
   { to: '/', label: '总览', end: true },
@@ -63,6 +63,15 @@ export default function AppShell() {
     }
   }
 
+  // 窄屏导航横向滚动时，切页后把当前项滚到可见处（兼作"可滚动"的提示，无需渐变遮罩）
+  const navRef = useRef<HTMLElement>(null)
+  const { pathname } = useLocation()
+  useEffect(() => {
+    navRef.current
+      ?.querySelector('[aria-current="page"]')
+      ?.scrollIntoView({ inline: 'center', block: 'nearest' })
+  }, [pathname])
+
   return (
     <div className="min-h-screen bg-paper text-ink">
       <header className="sticky top-0 z-10 border-b border-line bg-paper/90 backdrop-blur">
@@ -72,14 +81,17 @@ export default function AppShell() {
           </NavLink>
           <div className="flex min-w-0 items-center gap-1">
             {/* 窄屏导航横向滚动（隐藏滚动条），不再换行/溢出 */}
-            <nav className="flex min-w-0 gap-1 overflow-x-auto text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <nav
+              ref={navRef}
+              className="flex min-w-0 gap-1 overflow-x-auto text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
               {NAV.map((n) => (
                 <NavLink
                   key={n.to}
                   to={n.to}
                   end={n.end}
                   className={({ isActive }) =>
-                    `shrink-0 whitespace-nowrap rounded-lg px-2.5 py-1 transition-colors ${
+                    `shrink-0 whitespace-nowrap rounded-lg px-2 py-1 transition-colors ${
                       isActive
                         ? 'bg-accent-soft text-accent'
                         : 'text-ink-secondary hover:bg-surface'
