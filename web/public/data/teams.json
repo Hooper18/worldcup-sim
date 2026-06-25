@@ -323,7 +323,7 @@
     "name_zh": "葡萄牙",
     "name_en": "Portugal",
     "group": "K",
-    "elo": 2024,
+    "elo": 2050,
     "fifa_rank": null,
     "host": false
   },
@@ -331,7 +331,7 @@
     "name_zh": "刚果（金）",
     "name_en": "Congo DR",
     "group": "K",
-    "elo": 1783,
+    "elo": 1774,
     "fifa_rank": null,
     "host": false
   },
@@ -339,7 +339,7 @@
     "name_zh": "乌兹别克斯坦",
     "name_en": "Uzbekistan",
     "group": "K",
-    "elo": 1802,
+    "elo": 1776,
     "fifa_rank": null,
     "host": false
   },
@@ -347,7 +347,7 @@
     "name_zh": "哥伦比亚",
     "name_en": "Colombia",
     "group": "K",
-    "elo": 2079,
+    "elo": 2088,
     "fifa_rank": null,
     "host": false
   },
@@ -355,7 +355,7 @@
     "name_zh": "英格兰",
     "name_en": "England",
     "group": "L",
-    "elo": 2119,
+    "elo": 2093,
     "fifa_rank": null,
     "host": false
   },
@@ -363,7 +363,7 @@
     "name_zh": "克罗地亚",
     "name_en": "Croatia",
     "group": "L",
-    "elo": 1938,
+    "elo": 1956,
     "fifa_rank": null,
     "host": false
   },
@@ -371,7 +371,7 @@
     "name_zh": "加纳",
     "name_en": "Ghana",
     "group": "L",
-    "elo": 1671,
+    "elo": 1697,
     "fifa_rank": null,
     "host": false
   },
@@ -379,7 +379,7 @@
     "name_zh": "巴拿马",
     "name_en": "Panama",
     "group": "L",
-    "elo": 1793,
+    "elo": 1775,
     "fifa_rank": null,
     "host": false
   }

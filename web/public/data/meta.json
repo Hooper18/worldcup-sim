@@ -1,12 +1,12 @@
 {
-  "run_id": "20260624T0556Z",
-  "generated_at": "2026-06-24T05:56:52Z",
+  "run_id": "20260625T0000Z",
+  "generated_at": "2026-06-25T00:00:55Z",
   "n_sims": 100000,
-  "matches_played": 48,
+  "matches_played": 50,
   "data": {
-    "martj42_rows": 49449,
-    "elo_through": "2026-06-22",
-    "results_count": 48,
+    "martj42_rows": 49453,
+    "elo_through": "2026-06-23",
+    "results_count": 50,
     "feed_ok": true
   },
   "models": {
