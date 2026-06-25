@@ -43,6 +43,22 @@ def test_refresh_results_from_feed_merges_and_saves(monkeypatch):
     assert saved.get("called") is True  # 有新完赛才写盘
 
 
+def test_refresh_results_from_feed_warns_on_changed_score(monkeypatch, capsys):
+    # feed 与已存比分不一致：按「赛果不可变」保留旧值，但必须响亮告警（不静默）
+    existing = {1: {"h": 1, "a": 0, "after": "FT"}}
+    monkeypatch.setattr(pipeline.fetch, "load_fixture_feed", lambda **_kw: [])
+    monkeypatch.setattr(
+        pipeline.results_store, "parse_feed", lambda _feed: {1: {"h": 2, "a": 2, "after": "FT"}}
+    )
+    monkeypatch.setattr(pipeline.results_store, "save_store", lambda _store: None)
+
+    results, failed, error = pipeline.refresh_results_from_feed(dict(existing), force_fetch=False)
+
+    assert failed is False
+    assert results[1] == existing[1]  # 保留旧值（赛果不可变）
+    assert "::warning::" in capsys.readouterr().out  # 但响亮告警
+
+
 def test_refresh_results_from_feed_no_new_skips_save(monkeypatch):
     existing = {1: {"h": 1, "a": 0, "after": "FT"}}
     monkeypatch.setattr(pipeline.fetch, "load_fixture_feed", lambda **_kw: [])

@@ -121,6 +121,15 @@ def refresh_results_from_feed(
     try:
         feed = fetch.load_fixture_feed(force=force_fetch)
         parsed = results_store.parse_feed(feed)
+        changed = [
+            mid
+            for mid in parsed
+            if mid in results
+            and (parsed[mid]["h"], parsed[mid]["a"]) != (results[mid]["h"], results[mid]["a"])
+        ]
+        if changed:
+            # 按「赛果不可变」保留旧值，但把 feed 与已存比分不一致响亮记出来供人工核对（不静默）
+            print(f"::warning::feed 与已存赛果比分不一致，保留旧值待人工核对：{changed}")
         new = results_store.new_finished(results, parsed)
         for mid in new:
             results[mid] = parsed[mid]
