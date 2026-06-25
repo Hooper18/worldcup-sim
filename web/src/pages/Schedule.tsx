@@ -7,10 +7,12 @@ import { Loading, ErrorMsg } from '../components/Loading'
 import Card from '../components/Card'
 import TeamLabel from '../components/TeamLabel'
 import LineChartSvg from '../components/LineChartSvg'
+import ChartLegend from '../components/ChartLegend'
 import { seriesColor, type Series } from '../lib/chart'
 import { AFTER_LABEL, formatDay, formatTime, kickoffDateKey } from '../lib/format'
 import { koSide } from '../lib/bracket'
 import { dedupeEvolution, pickSeries } from '../lib/evolution'
+import { topChampions } from '../lib/rank'
 
 const STAGES: { key: Stage; label: string }[] = [
   { key: 'group', label: '小组赛' },
@@ -59,10 +61,7 @@ export default function Schedule() {
   const chart = useMemo(() => {
     if (!evo || !ko) return null
     const { keepIdx, xLabels } = dedupeEvolution(evo)
-    const top = Object.entries(ko.teams)
-      .sort((a, b) => b[1].p_champion - a[1].p_champion)
-      .slice(0, 6)
-      .map(([c]) => c)
+    const top = topChampions(ko.teams, 6).map((x) => x.code)
     const series: Series[] = top.map((code, i) => ({
       label: teams?.[code]?.name_zh ?? code,
       color: seriesColor(i),
@@ -98,17 +97,7 @@ export default function Schedule() {
             </Link>
           </div>
           <LineChartSvg series={chart.series} xLabels={chart.xLabels} />
-          <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1.5">
-            {chart.series.map((s, i) => (
-              <span key={i} className="flex items-center gap-1.5 text-xs text-ink-secondary">
-                <span
-                  className="inline-block h-2 w-3 rounded"
-                  style={{ backgroundColor: s.color }}
-                />
-                {s.label}
-              </span>
-            ))}
-          </div>
+          <ChartLegend series={chart.series} className="mt-3" />
           <p className="mt-2 text-xs text-ink-faint">
             横轴为已赛场数；每回填一批真实赛果即条件化重模拟 10 万次，追踪夺冠概率的变化
           </p>

@@ -29,6 +29,10 @@ export default function MatchDetail() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
+      <h1 className="sr-only">
+        {teams?.[homeName]?.name_zh ?? homeName} vs {teams?.[awayName]?.name_zh ?? awayName} ·
+        比赛详情
+      </h1>
       <div>
         <Link to="/bracket" className="text-sm text-ink-faint hover:text-ink-secondary">
           ← 返回

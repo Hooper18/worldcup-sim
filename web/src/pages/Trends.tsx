@@ -6,8 +6,10 @@ import { Loading, ErrorMsg } from '../components/Loading'
 import Card from '../components/Card'
 import Flag from '../components/Flag'
 import LineChartSvg from '../components/LineChartSvg'
+import ChartLegend from '../components/ChartLegend'
 import { seriesColor, type Series } from '../lib/chart'
 import { dedupeEvolution, pickSeries } from '../lib/evolution'
+import { topChampions } from '../lib/rank'
 
 type Metric = 'champion' | 'sf' | 'advance'
 const METRIC_LABEL: Record<Metric, string> = { champion: '夺冠', sf: '进四强', advance: '出线' }
@@ -19,13 +21,10 @@ export default function Trends() {
   const [metric, setMetric] = useState<Metric>('champion')
 
   // 默认选中：当前夺冠概率 Top6
-  const defaultSel = useMemo(() => {
-    if (!ko.data) return []
-    return Object.entries(ko.data.teams)
-      .sort((a, b) => b[1].p_champion - a[1].p_champion)
-      .slice(0, 6)
-      .map(([c]) => c)
-  }, [ko.data])
+  const defaultSel = useMemo(
+    () => (ko.data ? topChampions(ko.data.teams, 6).map((x) => x.code) : []),
+    [ko.data],
+  )
   const [selected, setSelected] = useState<string[] | null>(null)
   const sel = selected ?? defaultSel
 
@@ -41,10 +40,7 @@ export default function Trends() {
     values: pickSeries(evo.data!.teams[code]?.[metric], keepIdx),
   }))
 
-  const candidates = Object.entries(ko.data.teams)
-    .sort((a, b) => b[1].p_champion - a[1].p_champion)
-    .slice(0, 16)
-    .map(([c]) => c)
+  const candidates = topChampions(ko.data.teams, 16).map((x) => x.code)
 
   return (
     <div className="space-y-6">
@@ -77,14 +73,7 @@ export default function Trends() {
         ) : (
           <LineChartSvg series={series} xLabels={xLabels} />
         )}
-        <div className="mt-3 flex flex-wrap gap-2">
-          {series.map((s, i) => (
-            <span key={i} className="flex items-center gap-1.5 text-xs">
-              <span className="inline-block h-2 w-3 rounded" style={{ backgroundColor: s.color }} />
-              {s.label}
-            </span>
-          ))}
-        </div>
+        <ChartLegend series={series} className="mt-3" />
       </Card>
 
       <section>

@@ -7,6 +7,7 @@ import CalibrationSvg from '../components/CalibrationSvg'
 import LineChartSvg from '../components/LineChartSvg'
 import InfoTip from '../components/InfoTip'
 import { seriesColor } from '../lib/chart'
+import ChartLegend from '../components/ChartLegend'
 import { pct } from '../lib/format'
 
 export default function ModelPage() {
@@ -124,17 +125,7 @@ export default function ModelPage() {
                 valueFmt={(v) => v.toFixed(3)}
                 yFmt={(v) => v.toFixed(2)}
               />
-              <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-ink-secondary">
-                {perfSeries.map((s, i) => (
-                  <span key={i} className="flex items-center gap-1.5">
-                    <span
-                      className="inline-block h-2 w-3 rounded"
-                      style={{ backgroundColor: s.color }}
-                    />
-                    {s.label}
-                  </span>
-                ))}
-              </div>
+              <ChartLegend series={perfSeries} className="mt-2" />
             </div>
             <p className="text-xs text-ink-faint">
               融合本届 RPS {perf.fused.rps.toFixed(3)}{' '}

@@ -6,6 +6,7 @@ import ChampionBar from '../components/ChampionBar'
 import MatchCard from '../components/MatchCard'
 import InfoTip from '../components/InfoTip'
 import { formatKickoff, kickoffDateKey, todayKey } from '../lib/format'
+import { topChampions } from '../lib/rank'
 
 export default function Dashboard() {
   const meta = useData<Meta>('meta')
@@ -18,10 +19,7 @@ export default function Dashboard() {
     return <ErrorMsg msg={meta.error || ko.error || matches.error || '加载失败'} />
   if (!meta.data || !ko.data || !matches.data) return <ErrorMsg msg="无数据" />
 
-  const champTop = Object.entries(ko.data.teams)
-    .map(([code, t]) => ({ code, p: t.p_champion }))
-    .sort((a, b) => b.p - a.p)
-    .slice(0, 10)
+  const champTop = topChampions(ko.data.teams, 10)
 
   // 今日 / 下一个比赛日的赛程
   const today = todayKey()
@@ -46,6 +44,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      <h1 className="sr-only">2026 世界杯预测 · 赛事总览</h1>
       <StatusBar meta={meta.data} />
 
       <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
