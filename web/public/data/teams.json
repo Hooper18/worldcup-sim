@@ -3,7 +3,7 @@
     "name_zh": "墨西哥",
     "name_en": "Mexico",
     "group": "A",
-    "elo": 1983,
+    "elo": 1998,
     "fifa_rank": null,
     "host": true
   },
@@ -11,7 +11,7 @@
     "name_zh": "南非",
     "name_en": "South Africa",
     "group": "A",
-    "elo": 1664,
+    "elo": 1711,
     "fifa_rank": null,
     "host": false
   },
@@ -19,7 +19,7 @@
     "name_zh": "韩国",
     "name_en": "Korea Republic",
     "group": "A",
-    "elo": 1886,
+    "elo": 1839,
     "fifa_rank": null,
     "host": false
   },
@@ -27,7 +27,7 @@
     "name_zh": "捷克",
     "name_en": "Czechia",
     "group": "A",
-    "elo": 1767,
+    "elo": 1752,
     "fifa_rank": null,
     "host": false
   },
@@ -35,7 +35,7 @@
     "name_zh": "加拿大",
     "name_en": "Canada",
     "group": "B",
-    "elo": 1888,
+    "elo": 1855,
     "fifa_rank": null,
     "host": true
   },
@@ -43,7 +43,7 @@
     "name_zh": "波黑",
     "name_en": "Bosnia and Herzegovina",
     "group": "B",
-    "elo": 1654,
+    "elo": 1689,
     "fifa_rank": null,
     "host": false
   },
@@ -51,7 +51,7 @@
     "name_zh": "卡塔尔",
     "name_en": "Qatar",
     "group": "B",
-    "elo": 1578,
+    "elo": 1542,
     "fifa_rank": null,
     "host": false
   },
@@ -59,7 +59,7 @@
     "name_zh": "瑞士",
     "name_en": "Switzerland",
     "group": "B",
-    "elo": 1950,
+    "elo": 1983,
     "fifa_rank": null,
     "host": false
   },
@@ -67,7 +67,7 @@
     "name_zh": "巴西",
     "name_en": "Brazil",
     "group": "C",
-    "elo": 2071,
+    "elo": 2094,
     "fifa_rank": null,
     "host": false
   },
@@ -75,7 +75,7 @@
     "name_zh": "摩洛哥",
     "name_en": "Morocco",
     "group": "C",
-    "elo": 2010,
+    "elo": 2022,
     "fifa_rank": null,
     "host": false
   },
@@ -83,7 +83,7 @@
     "name_zh": "海地",
     "name_en": "Haiti",
     "group": "C",
-    "elo": 1686,
+    "elo": 1674,
     "fifa_rank": null,
     "host": false
   },
@@ -91,7 +91,7 @@
     "name_zh": "苏格兰",
     "name_en": "Scotland",
     "group": "C",
-    "elo": 1843,
+    "elo": 1821,
     "fifa_rank": null,
     "host": false
   },
