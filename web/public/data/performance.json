@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-26T05:59:09Z",
+  "generated_at": "2026-06-26T23:57:24Z",
   "cutoff": "2026-06-11",
-  "n_scored": 54,
-  "n_finished": 60,
-  "n_skipped": 6,
+  "n_scored": 60,
+  "n_finished": 62,
+  "n_skipped": 2,
   "per_match": [
     {
       "id": 1,
@@ -1300,25 +1300,169 @@
       },
       "rps": 0.4576,
       "hit": false
+    },
+    {
+      "id": 55,
+      "group": "E",
+      "kickoff_utc": "2026-06-25T20:00:00Z",
+      "home": "CUW",
+      "away": "CIV",
+      "pred": {
+        "p_home": 0.1001,
+        "p_draw": 0.2211,
+        "p_away": 0.6788,
+        "pick": "away",
+        "top_score": {
+          "h": 0,
+          "a": 1
+        }
+      },
+      "actual": {
+        "h": 0,
+        "a": 2,
+        "outcome": "away"
+      },
+      "rps": 0.0566,
+      "hit": true
+    },
+    {
+      "id": 56,
+      "group": "E",
+      "kickoff_utc": "2026-06-25T20:00:00Z",
+      "home": "ECU",
+      "away": "GER",
+      "pred": {
+        "p_home": 0.2891,
+        "p_draw": 0.3223,
+        "p_away": 0.3885,
+        "pick": "away",
+        "top_score": {
+          "h": 0,
+          "a": 0
+        }
+      },
+      "actual": {
+        "h": 2,
+        "a": 1,
+        "outcome": "home"
+      },
+      "rps": 0.3281,
+      "hit": false
+    },
+    {
+      "id": 57,
+      "group": "F",
+      "kickoff_utc": "2026-06-25T23:00:00Z",
+      "home": "JPN",
+      "away": "SWE",
+      "pred": {
+        "p_home": 0.5274,
+        "p_draw": 0.2575,
+        "p_away": 0.2151,
+        "pick": "home",
+        "top_score": {
+          "h": 1,
+          "a": 1
+        }
+      },
+      "actual": {
+        "h": 1,
+        "a": 1,
+        "outcome": "draw"
+      },
+      "rps": 0.1622,
+      "hit": false
+    },
+    {
+      "id": 58,
+      "group": "F",
+      "kickoff_utc": "2026-06-25T23:00:00Z",
+      "home": "TUN",
+      "away": "NED",
+      "pred": {
+        "p_home": 0.1259,
+        "p_draw": 0.2302,
+        "p_away": 0.6439,
+        "pick": "away",
+        "top_score": {
+          "h": 0,
+          "a": 1
+        }
+      },
+      "actual": {
+        "h": 1,
+        "a": 3,
+        "outcome": "away"
+      },
+      "rps": 0.0713,
+      "hit": true
+    },
+    {
+      "id": 59,
+      "group": "D",
+      "kickoff_utc": "2026-06-26T02:00:00Z",
+      "home": "TUR",
+      "away": "USA",
+      "pred": {
+        "p_home": 0.3739,
+        "p_draw": 0.2549,
+        "p_away": 0.3712,
+        "pick": "home",
+        "top_score": {
+          "h": 1,
+          "a": 1
+        }
+      },
+      "actual": {
+        "h": 3,
+        "a": 2,
+        "outcome": "home"
+      },
+      "rps": 0.2649,
+      "hit": true
+    },
+    {
+      "id": 60,
+      "group": "D",
+      "kickoff_utc": "2026-06-26T02:00:00Z",
+      "home": "PAR",
+      "away": "AUS",
+      "pred": {
+        "p_home": 0.3162,
+        "p_draw": 0.341,
+        "p_away": 0.3428,
+        "pick": "away",
+        "top_score": {
+          "h": 0,
+          "a": 0
+        }
+      },
+      "actual": {
+        "h": 0,
+        "a": 0,
+        "outcome": "draw"
+      },
+      "rps": 0.1087,
+      "hit": false
     }
   ],
   "fused": {
-    "rps": 0.1615,
-    "brier": 0.5241,
-    "log_loss": 0.8712,
-    "hit_rate": 0.6111
+    "rps": 0.1619,
+    "brier": 0.5257,
+    "log_loss": 0.8755,
+    "hit_rate": 0.6
   },
   "elo_baseline": {
-    "rps": 0.1809,
-    "brier": 0.5693,
-    "log_loss": 0.9532,
-    "hit_rate": 0.6111
+    "rps": 0.1815,
+    "brier": 0.5717,
+    "log_loss": 0.9558,
+    "hit_rate": 0.5833
   },
   "climatology": {
-    "rps": 0.2228,
-    "brier": 0.6377,
-    "log_loss": 1.0574,
-    "hit_rate": 0.537
+    "rps": 0.223,
+    "brier": 0.6415,
+    "log_loss": 1.0628,
+    "hit_rate": 0.5167
   },
   "cumulative": [
     {
@@ -1423,7 +1567,7 @@
       "id": 15,
       "n": 15,
       "fused_rps": 0.2097,
-      "elo_rps": 0.2397,
+      "elo_rps": 0.2396,
       "clim_rps": 0.1925
     },
     {
@@ -1698,6 +1842,48 @@
       "fused_rps": 0.1615,
       "elo_rps": 0.1809,
       "clim_rps": 0.2228
+    },
+    {
+      "id": 55,
+      "n": 55,
+      "fused_rps": 0.1596,
+      "elo_rps": 0.179,
+      "clim_rps": 0.2243
+    },
+    {
+      "id": 56,
+      "n": 56,
+      "fused_rps": 0.1626,
+      "elo_rps": 0.1825,
+      "clim_rps": 0.2245
+    },
+    {
+      "id": 57,
+      "n": 57,
+      "fused_rps": 0.1626,
+      "elo_rps": 0.1829,
+      "clim_rps": 0.2229
+    },
+    {
+      "id": 58,
+      "n": 58,
+      "fused_rps": 0.1611,
+      "elo_rps": 0.1802,
+      "clim_rps": 0.2243
+    },
+    {
+      "id": 59,
+      "n": 59,
+      "fused_rps": 0.1628,
+      "elo_rps": 0.1825,
+      "clim_rps": 0.2245
+    },
+    {
+      "id": 60,
+      "n": 60,
+      "fused_rps": 0.1619,
+      "elo_rps": 0.1815,
+      "clim_rps": 0.223
     }
   ]
 }

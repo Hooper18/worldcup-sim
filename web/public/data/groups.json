@@ -46,8 +46,8 @@
         0.0
       ],
       "p_top2": 0.0,
-      "p_third_advance": 0.635,
-      "p_advance": 0.635,
+      "p_third_advance": 0.3676,
+      "p_advance": 0.3676,
       "exp_pts": 3.0,
       "exp_gd": -1.0,
       "current": {
@@ -221,8 +221,8 @@
         0.0
       ],
       "p_top2": 0.0,
-      "p_third_advance": 0.0931,
-      "p_advance": 0.0931,
+      "p_third_advance": 0.0221,
+      "p_advance": 0.0221,
       "exp_pts": 3.0,
       "exp_gd": -3.0,
       "current": {
@@ -261,8 +261,8 @@
         0.0
       ],
       "p_top2": 0.0,
-      "p_third_advance": 0.9989,
-      "p_advance": 0.9989,
+      "p_third_advance": 0.9991,
+      "p_advance": 0.9991,
       "exp_pts": 4.0,
       "exp_gd": -2.0,
       "current": {
@@ -476,8 +476,8 @@
         0.0695
       ],
       "p_top2": 0.8043,
-      "p_third_advance": 0.1086,
-      "p_advance": 0.9129,
+      "p_third_advance": 0.0867,
+      "p_advance": 0.891,
       "exp_pts": 4.37,
       "exp_gd": 1.5,
       "current": {
@@ -514,8 +514,8 @@
         0.0307
       ],
       "p_top2": 0.4123,
-      "p_third_advance": 0.2646,
-      "p_advance": 0.6769,
+      "p_third_advance": 0.2188,
+      "p_advance": 0.6311,
       "exp_pts": 3.43,
       "exp_gd": 0.11,
       "current": {
@@ -573,8 +573,8 @@
         0.2887
       ],
       "p_top2": 0.4838,
-      "p_third_advance": 0.1426,
-      "p_advance": 0.6264,
+      "p_third_advance": 0.1089,
+      "p_advance": 0.5927,
       "exp_pts": 3.24,
       "exp_gd": -0.11,
       "current": {
@@ -592,8 +592,8 @@
         0.6338
       ],
       "p_top2": 0.2982,
-      "p_third_advance": 0.0644,
-      "p_advance": 0.3626,
+      "p_third_advance": 0.0643,
+      "p_advance": 0.3624,
       "exp_pts": 2.43,
       "exp_gd": -3.89,
       "current": {
@@ -611,8 +611,8 @@
         0.0775
       ],
       "p_top2": 0.2722,
-      "p_third_advance": 0.1855,
-      "p_advance": 0.4577,
+      "p_third_advance": 0.1545,
+      "p_advance": 0.4267,
       "exp_pts": 2.82,
       "exp_gd": -0.71,
       "current": {
@@ -626,78 +626,78 @@
   "I": {
     "FRA": {
       "p_rank": [
-        0.7404,
-        0.2596,
+        1.0,
+        0.0,
         0.0,
         0.0
       ],
       "p_top2": 1.0,
       "p_third_advance": 0.0,
       "p_advance": 1.0,
-      "exp_pts": 7.69,
-      "exp_gd": 5.46,
+      "exp_pts": 9.0,
+      "exp_gd": 8.0,
       "current": {
-        "pts": 6,
-        "gd": 5,
-        "gf": 6,
-        "played": 2
+        "pts": 9,
+        "gd": 8,
+        "gf": 10,
+        "played": 3
       }
     },
     "SEN": {
       "p_rank": [
         0.0,
         0.0,
-        0.844,
-        0.156
+        1.0,
+        0.0
       ],
       "p_top2": 0.0,
-      "p_third_advance": 0.3434,
-      "p_advance": 0.3434,
-      "exp_pts": 1.97,
-      "exp_gd": -2.2,
+      "p_third_advance": 0.9554,
+      "p_advance": 0.9554,
+      "exp_pts": 3.0,
+      "exp_gd": 2.0,
       "current": {
-        "pts": 0,
-        "gd": -3,
-        "gf": 3,
-        "played": 2
+        "pts": 3,
+        "gd": 2,
+        "gf": 8,
+        "played": 3
       }
     },
     "IRQ": {
       "p_rank": [
         0.0,
         0.0,
-        0.156,
-        0.844
+        0.0,
+        1.0
       ],
       "p_top2": 0.0,
-      "p_third_advance": 0.0033,
-      "p_advance": 0.0033,
-      "exp_pts": 0.75,
-      "exp_gd": -6.8,
+      "p_third_advance": 0.0,
+      "p_advance": 0.0,
+      "exp_pts": 0.0,
+      "exp_gd": -11.0,
       "current": {
         "pts": 0,
-        "gd": -6,
+        "gd": -11,
         "gf": 1,
-        "played": 2
+        "played": 3
       }
     },
     "NOR": {
       "p_rank": [
-        0.2596,
-        0.7404,
+        0.0,
+        1.0,
         0.0,
         0.0
       ],
       "p_top2": 1.0,
       "p_third_advance": 0.0,
       "p_advance": 1.0,
-      "exp_pts": 7.05,
-      "exp_gd": 3.54,
+      "exp_pts": 6.0,
+      "exp_gd": 1.0,
       "current": {
         "pts": 6,
-        "gd": 4,
-        "gf": 7,
-        "played": 2
+        "gd": 1,
+        "gf": 8,
+        "played": 3
       }
     }
   },
@@ -712,8 +712,8 @@
       "p_top2": 1.0,
       "p_third_advance": 0.0,
       "p_advance": 1.0,
-      "exp_pts": 8.63,
-      "exp_gd": 7.16,
+      "exp_pts": 8.62,
+      "exp_gd": 7.14,
       "current": {
         "pts": 6,
         "gd": 5,
@@ -724,15 +724,15 @@
     "ALG": {
       "p_rank": [
         0.0,
-        0.3122,
-        0.6878,
+        0.3136,
+        0.6864,
         0.0
       ],
-      "p_top2": 0.3122,
-      "p_third_advance": 0.3685,
-      "p_advance": 0.6807,
-      "exp_pts": 4.23,
-      "exp_gd": -2.16,
+      "p_top2": 0.3136,
+      "p_third_advance": 0.3222,
+      "p_advance": 0.6359,
+      "exp_pts": 4.24,
+      "exp_gd": -2.15,
       "current": {
         "pts": 3,
         "gd": -2,
@@ -743,15 +743,15 @@
     "AUT": {
       "p_rank": [
         0.0,
-        0.6878,
-        0.3122,
+        0.6864,
+        0.3136,
         0.0
       ],
-      "p_top2": 0.6878,
-      "p_third_advance": 0.1927,
-      "p_advance": 0.8805,
+      "p_top2": 0.6864,
+      "p_third_advance": 0.1212,
+      "p_advance": 0.8076,
       "exp_pts": 4.47,
-      "exp_gd": 0.16,
+      "exp_gd": 0.15,
       "current": {
         "pts": 3,
         "gd": 0,
@@ -769,8 +769,8 @@
       "p_top2": 0.0,
       "p_third_advance": 0.0,
       "p_advance": 0.0,
-      "exp_pts": 0.24,
-      "exp_gd": -5.16,
+      "exp_pts": 0.25,
+      "exp_gd": -5.14,
       "current": {
         "pts": 0,
         "gd": -3,
@@ -782,15 +782,15 @@
   "K": {
     "POR": {
       "p_rank": [
-        0.3757,
-        0.6234,
-        0.0009,
+        0.3771,
+        0.6222,
+        0.0008,
         0.0
       ],
-      "p_top2": 0.9991,
-      "p_third_advance": 0.0009,
+      "p_top2": 0.9993,
+      "p_third_advance": 0.0008,
       "p_advance": 1.0,
-      "exp_pts": 5.41,
+      "exp_pts": 5.42,
       "exp_gd": 5.08,
       "current": {
         "pts": 4,
@@ -802,14 +802,14 @@
     "COD": {
       "p_rank": [
         0.0,
-        0.0009,
-        0.6844,
-        0.3147
+        0.0008,
+        0.686,
+        0.3132
       ],
-      "p_top2": 0.0009,
-      "p_third_advance": 0.3074,
-      "p_advance": 0.3083,
-      "exp_pts": 2.3,
+      "p_top2": 0.0008,
+      "p_third_advance": 0.3093,
+      "p_advance": 0.3101,
+      "exp_pts": 2.31,
       "exp_gd": -1.01,
       "current": {
         "pts": 1,
@@ -822,12 +822,12 @@
       "p_rank": [
         0.0,
         0.0,
-        0.3147,
-        0.6853
+        0.3132,
+        0.6868
       ],
       "p_top2": 0.0,
-      "p_third_advance": 0.0016,
-      "p_advance": 0.0016,
+      "p_third_advance": 0.0004,
+      "p_advance": 0.0004,
       "exp_pts": 1.32,
       "exp_gd": -6.99,
       "current": {
@@ -839,8 +839,8 @@
     },
     "COL": {
       "p_rank": [
-        0.6243,
-        0.3757,
+        0.6229,
+        0.3771,
         0.0,
         0.0
       ],
@@ -860,13 +860,13 @@
   "L": {
     "ENG": {
       "p_rank": [
-        0.8403,
-        0.1592,
-        0.0006,
+        0.8411,
+        0.1584,
+        0.0005,
         0.0
       ],
       "p_top2": 0.9995,
-      "p_third_advance": 0.0006,
+      "p_third_advance": 0.0005,
       "p_advance": 1.0,
       "exp_pts": 6.57,
       "exp_gd": 4.06,
@@ -880,15 +880,15 @@
     "CRO": {
       "p_rank": [
         0.1247,
-        0.5375,
-        0.3378,
+        0.5398,
+        0.3355,
         0.0
       ],
-      "p_top2": 0.6622,
-      "p_third_advance": 0.2761,
-      "p_advance": 0.9383,
-      "exp_pts": 5.2,
-      "exp_gd": 0.23,
+      "p_top2": 0.6645,
+      "p_third_advance": 0.2533,
+      "p_advance": 0.9178,
+      "exp_pts": 5.21,
+      "exp_gd": 0.25,
       "current": {
         "pts": 3,
         "gd": -1,
@@ -898,16 +898,16 @@
     },
     "GHA": {
       "p_rank": [
-        0.035,
-        0.3033,
-        0.6617,
+        0.0342,
+        0.3018,
+        0.664,
         0.0
       ],
-      "p_top2": 0.3383,
-      "p_third_advance": 0.6611,
+      "p_top2": 0.336,
+      "p_third_advance": 0.6635,
       "p_advance": 0.9995,
-      "exp_pts": 4.58,
-      "exp_gd": -0.23,
+      "exp_pts": 4.57,
+      "exp_gd": -0.25,
       "current": {
         "pts": 4,
         "gd": 1,

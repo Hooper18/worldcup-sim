@@ -99,7 +99,7 @@
     "name_zh": "美国",
     "name_en": "USA",
     "group": "D",
-    "elo": 1916,
+    "elo": 1875,
     "fifa_rank": null,
     "host": true
   },
@@ -107,7 +107,7 @@
     "name_zh": "巴拉圭",
     "name_en": "Paraguay",
     "group": "D",
-    "elo": 1899,
+    "elo": 1900,
     "fifa_rank": null,
     "host": false
   },
@@ -115,7 +115,7 @@
     "name_zh": "澳大利亚",
     "name_en": "Australia",
     "group": "D",
-    "elo": 1911,
+    "elo": 1910,
     "fifa_rank": null,
     "host": false
   },
@@ -123,7 +123,7 @@
     "name_zh": "土耳其",
     "name_en": "Türkiye",
     "group": "D",
-    "elo": 1880,
+    "elo": 1921,
     "fifa_rank": null,
     "host": false
   },
@@ -131,7 +131,7 @@
     "name_zh": "德国",
     "name_en": "Germany",
     "group": "E",
-    "elo": 2032,
+    "elo": 1996,
     "fifa_rank": null,
     "host": false
   },
@@ -139,7 +139,7 @@
     "name_zh": "库拉索",
     "name_en": "Curaçao",
     "group": "E",
-    "elo": 1621,
+    "elo": 1601,
     "fifa_rank": null,
     "host": false
   },
@@ -147,7 +147,7 @@
     "name_zh": "科特迪瓦",
     "name_en": "Côte d'Ivoire",
     "group": "E",
-    "elo": 1843,
+    "elo": 1863,
     "fifa_rank": null,
     "host": false
   },
@@ -155,7 +155,7 @@
     "name_zh": "厄瓜多尔",
     "name_en": "Ecuador",
     "group": "E",
-    "elo": 1954,
+    "elo": 1991,
     "fifa_rank": null,
     "host": false
   },
@@ -163,7 +163,7 @@
     "name_zh": "荷兰",
     "name_en": "Netherlands",
     "group": "F",
-    "elo": 2036,
+    "elo": 2046,
     "fifa_rank": null,
     "host": false
   },
@@ -171,7 +171,7 @@
     "name_zh": "日本",
     "name_en": "Japan",
     "group": "F",
-    "elo": 2009,
+    "elo": 1992,
     "fifa_rank": null,
     "host": false
   },
@@ -179,7 +179,7 @@
     "name_zh": "瑞典",
     "name_en": "Sweden",
     "group": "F",
-    "elo": 1792,
+    "elo": 1809,
     "fifa_rank": null,
     "host": false
   },
@@ -187,7 +187,7 @@
     "name_zh": "突尼斯",
     "name_en": "Tunisia",
     "group": "F",
-    "elo": 1670,
+    "elo": 1660,
     "fifa_rank": null,
     "host": false
   },
