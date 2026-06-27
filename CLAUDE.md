@@ -119,7 +119,7 @@ npm run dev / test / build
 - **日期**：kickoff 全存 UTC，前端 `format.ts` 按本地时区显示，**禁用 toISOString 切日期**。
 - **JSON 导出**：`ensure_ascii=False` + `newline='\n'`；.gitattributes 强制 LF。
 - 母仓 `.gitignore` 已登记 `worldcup-sim/` 为嵌套独立仓。
-- **本地常落后 cron**：远端每天 5 班 cron 直推 main 回填数据。本地开工先 `git pull --ff-only`；
+- **本地常落后 cron**：远端比赛时段每 2h 一班 cron（UTC 16/18/20/22/00/02/04/06，即北京 00:00–14:00 窗口，8 班/日）直推 main 回填数据。本地开工先 `git pull --ff-only`；
   push 撞车时 `git pull --rebase`（代码改动与数据文件不冲突，rebase 即可），勿强推。
 
 ## 部署
@@ -131,7 +131,7 @@ npm run dev / test / build
 ## 进度
 
 - **M0 + M1 已上线**（2026-06-12）：引擎全链路（数据→Elo→DC-on-Elo+纯攻防融合→蒙特卡洛→JSON）+ 前端 +
-  GitHub Actions CI（双 job）+ 自动回填 cron（5 班）+ Vercel/Cloudflare 域名。
+  GitHub Actions CI（双 job）+ 自动回填 cron（比赛时段每 2h 一班，8 班/日；2026-06-27 由 5 班固定时刻改）+ Vercel/Cloudflare 域名。
 - **赛中迭代（2026-06-21/22）**：
   - cron 持续回填，当前 **48/104**（小组赛进行中）。
   - 新增第 7 页 `/schedule` 赛程页：全 104 场按阶段/日期时间轴 + 真实比分 + 阶段筛选 +
