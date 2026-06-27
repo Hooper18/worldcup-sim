@@ -28,3 +28,61 @@ export function koSide(bracket: Knockout['bracket'], id: number, side: 'home' | 
   if (src) return srcLabel(src)
   return '待定'
 }
+
+// ---------------------------------------------------------------------------
+// 对阵树列顺序：按 bracket 的 home_src/away_src 从决赛中序遍历，让每个父场次恰好
+// 夹在喂给它的两场子场次中间（修「列按 id 顺序排、上下游对不齐」的错位）。
+// ---------------------------------------------------------------------------
+
+type KoColumn = { stage: string; label: string; ids: number[] }
+
+function range(a: number, b: number): number[] {
+  return Array.from({ length: b - a + 1 }, (_, i) => a + i)
+}
+
+// id 缺失/不完整时回退到此静态顺序，保证健壮（如 e2e stub 的残缺 bracket）
+const STATIC_KO_COLUMNS: KoColumn[] = [
+  { stage: 'r32', label: '32 强', ids: range(73, 88) },
+  { stage: 'r16', label: '16 强', ids: range(89, 96) },
+  { stage: 'qf', label: '8 强', ids: range(97, 100) },
+  { stage: 'sf', label: '半决赛', ids: [101, 102] },
+  { stage: 'final', label: '决赛', ids: [104] },
+]
+const KO_EXPECTED: Record<string, number> = { r32: 16, r16: 8, qf: 4, sf: 2, final: 1 }
+
+function koStageOf(id: number): string | null {
+  if (id >= 73 && id <= 88) return 'r32'
+  if (id >= 89 && id <= 96) return 'r16'
+  if (id >= 97 && id <= 100) return 'qf'
+  if (id === 101 || id === 102) return 'sf'
+  if (id === 104) return 'final'
+  return null // 季军赛 103 不进主对阵树
+}
+
+function koFeeders(bracket: Knockout['bracket'], id: number): number[] {
+  const b = bracket[String(id)]
+  if (!b) return []
+  return [b.home_src, b.away_src]
+    .filter((s): s is string => !!s)
+    .map((s) => Number(s.slice(1))) // "W74" → 74, "L101" → 101
+    .filter((n) => Number.isFinite(n))
+}
+
+export function bracketColumns(bracket?: Knockout['bracket']): KoColumn[] {
+  if (!bracket || !bracket['104']) return STATIC_KO_COLUMNS
+  const buckets = new Map<string, number[]>()
+  const seen = new Set<number>()
+  const visit = (id: number) => {
+    if (seen.has(id)) return // 防御异常结构里的环
+    seen.add(id)
+    const kids = koFeeders(bracket, id)
+    if (kids.length === 2) visit(kids[0]) // 中序：先左子树
+    const st = koStageOf(id)
+    if (st) buckets.set(st, [...(buckets.get(st) ?? []), id])
+    if (kids.length === 2) visit(kids[1]) // 再右子树
+  }
+  visit(104)
+  const cols = STATIC_KO_COLUMNS.map((c) => ({ ...c, ids: buckets.get(c.stage) ?? [] }))
+  // 任一轮数目不符（结构异常/残缺）就整体回退，避免半成品错位
+  return cols.some((c) => c.ids.length !== KO_EXPECTED[c.stage]) ? STATIC_KO_COLUMNS : cols
+}

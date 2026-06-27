@@ -1,23 +1,12 @@
 import { Link } from 'react-router-dom'
-import type { Match } from '../types/data'
+import type { Knockout, Match } from '../types/data'
 import { useTeams } from '../hooks/useTeams'
 import { pct } from '../lib/format'
+import { bracketColumns } from '../lib/bracket'
 import Flag from './Flag'
 
-// 自绘对阵树：CSS grid 分 5 列（32强→决赛），未定槽位显示最可能队伍+概率。
-// 移动端横向滚动。连接线用极淡边框近似（避免图表库画 bracket 的复杂度）。
-
-const COLUMNS: { stage: string; label: string; ids: number[] }[] = [
-  { stage: 'r32', label: '32 强', ids: range(73, 88) },
-  { stage: 'r16', label: '16 强', ids: range(89, 96) },
-  { stage: 'qf', label: '8 强', ids: range(97, 100) },
-  { stage: 'sf', label: '半决赛', ids: [101, 102] },
-  { stage: 'final', label: '决赛', ids: [104] },
-]
-
-function range(a: number, b: number): number[] {
-  return Array.from({ length: b - a + 1 }, (_, i) => a + i)
-}
+// 自绘对阵树：分 5 列（32强→决赛），未定槽位显示最可能队伍+概率。
+// 列顺序按对阵树（bracketColumns）排，使父场次恰好夹在两场上游中间；移动端横向滚动。
 
 function topSlot(
   m: Match | undefined,
@@ -47,12 +36,19 @@ function SlotCell({ code, p }: { code: string | null; p: number | null }) {
   )
 }
 
-export default function BracketView({ matches }: { matches: Match[] }) {
+export default function BracketView({
+  matches,
+  bracket,
+}: {
+  matches: Match[]
+  bracket?: Knockout['bracket']
+}) {
   const byId = new Map(matches.map((m) => [m.id, m]))
+  const columns = bracketColumns(bracket)
   return (
     <div className="overflow-x-auto pb-4">
       <div className="flex min-w-[760px] gap-4">
-        {COLUMNS.map((col) => (
+        {columns.map((col) => (
           <div key={col.stage} className="flex flex-1 flex-col">
             <div className="mb-2 text-center text-xs font-medium text-ink-secondary">
               {col.label}
