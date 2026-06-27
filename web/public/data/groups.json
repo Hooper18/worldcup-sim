@@ -46,8 +46,8 @@
         0.0
       ],
       "p_top2": 0.0,
-      "p_third_advance": 0.5512,
-      "p_advance": 0.5512,
+      "p_third_advance": 0.4152,
+      "p_advance": 0.4152,
       "exp_pts": 3.0,
       "exp_gd": -1.0,
       "current": {
@@ -221,8 +221,8 @@
         0.0
       ],
       "p_top2": 0.0,
-      "p_third_advance": 0.0399,
-      "p_advance": 0.0399,
+      "p_third_advance": 0.0008,
+      "p_advance": 0.0008,
       "exp_pts": 3.0,
       "exp_gd": -3.0,
       "current": {
@@ -470,78 +470,78 @@
   "G": {
     "BEL": {
       "p_rank": [
-        0.2409,
-        0.5634,
-        0.1262,
-        0.0695
+        1.0,
+        0.0,
+        0.0,
+        0.0
       ],
-      "p_top2": 0.8043,
-      "p_third_advance": 0.1053,
-      "p_advance": 0.9097,
-      "exp_pts": 4.37,
-      "exp_gd": 1.5,
+      "p_top2": 1.0,
+      "p_third_advance": 0.0,
+      "p_advance": 1.0,
+      "exp_pts": 5.0,
+      "exp_gd": 4.0,
       "current": {
-        "pts": 2,
-        "gd": 0,
-        "gf": 1,
-        "played": 2
+        "pts": 5,
+        "gd": 4,
+        "gf": 6,
+        "played": 3
       }
     },
     "EGY": {
       "p_rank": [
-        0.5433,
-        0.1896,
-        0.2671,
+        0.0,
+        1.0,
+        0.0,
         0.0
       ],
-      "p_top2": 0.7329,
-      "p_third_advance": 0.2671,
+      "p_top2": 1.0,
+      "p_third_advance": 0.0,
       "p_advance": 1.0,
-      "exp_pts": 5.25,
-      "exp_gd": 1.89,
+      "exp_pts": 5.0,
+      "exp_gd": 2.0,
       "current": {
-        "pts": 4,
+        "pts": 5,
         "gd": 2,
-        "gf": 4,
-        "played": 2
+        "gf": 5,
+        "played": 3
       }
     },
     "IRN": {
       "p_rank": [
-        0.2158,
-        0.1965,
-        0.557,
-        0.0307
+        0.0,
+        0.0,
+        1.0,
+        0.0
       ],
-      "p_top2": 0.4123,
-      "p_third_advance": 0.256,
-      "p_advance": 0.6682,
-      "exp_pts": 3.43,
-      "exp_gd": 0.11,
+      "p_top2": 0.0,
+      "p_third_advance": 0.9195,
+      "p_advance": 0.9195,
+      "exp_pts": 3.0,
+      "exp_gd": 0.0,
       "current": {
-        "pts": 2,
+        "pts": 3,
         "gd": 0,
-        "gf": 2,
-        "played": 2
+        "gf": 3,
+        "played": 3
       }
     },
     "NZL": {
       "p_rank": [
         0.0,
-        0.0505,
-        0.0497,
-        0.8998
+        0.0,
+        0.0,
+        1.0
       ],
-      "p_top2": 0.0505,
-      "p_third_advance": 0.0302,
-      "p_advance": 0.0807,
-      "exp_pts": 1.44,
-      "exp_gd": -3.5,
+      "p_top2": 0.0,
+      "p_third_advance": 0.0,
+      "p_advance": 0.0,
+      "exp_pts": 1.0,
+      "exp_gd": -6.0,
       "current": {
         "pts": 1,
-        "gd": -2,
-        "gf": 3,
-        "played": 2
+        "gd": -6,
+        "gf": 4,
+        "played": 3
       }
     }
   },
@@ -651,8 +651,8 @@
         0.0
       ],
       "p_top2": 0.0,
-      "p_third_advance": 0.976,
-      "p_advance": 0.976,
+      "p_third_advance": 1.0,
+      "p_advance": 1.0,
       "exp_pts": 3.0,
       "exp_gd": 2.0,
       "current": {
@@ -724,15 +724,15 @@
     "ALG": {
       "p_rank": [
         0.0,
-        0.3138,
-        0.6862,
+        0.3148,
+        0.6852,
         0.0
       ],
-      "p_top2": 0.3138,
-      "p_third_advance": 0.3453,
-      "p_advance": 0.6591,
+      "p_top2": 0.3148,
+      "p_third_advance": 0.2983,
+      "p_advance": 0.6131,
       "exp_pts": 4.24,
-      "exp_gd": -2.15,
+      "exp_gd": -2.14,
       "current": {
         "pts": 3,
         "gd": -2,
@@ -743,15 +743,15 @@
     "AUT": {
       "p_rank": [
         0.0,
-        0.6862,
-        0.3138,
+        0.6852,
+        0.3148,
         0.0
       ],
-      "p_top2": 0.6862,
-      "p_third_advance": 0.1818,
-      "p_advance": 0.868,
+      "p_top2": 0.6852,
+      "p_third_advance": 0.1412,
+      "p_advance": 0.8264,
       "exp_pts": 4.46,
-      "exp_gd": 0.15,
+      "exp_gd": 0.14,
       "current": {
         "pts": 3,
         "gd": 0,
@@ -769,7 +769,7 @@
       "p_top2": 0.0,
       "p_third_advance": 0.0,
       "p_advance": 0.0,
-      "exp_pts": 0.25,
+      "exp_pts": 0.24,
       "exp_gd": -5.15,
       "current": {
         "pts": 0,
@@ -782,13 +782,13 @@
   "K": {
     "POR": {
       "p_rank": [
-        0.3768,
-        0.6224,
-        0.0008,
+        0.376,
+        0.623,
+        0.001,
         0.0
       ],
-      "p_top2": 0.9992,
-      "p_third_advance": 0.0008,
+      "p_top2": 0.999,
+      "p_third_advance": 0.001,
       "p_advance": 1.0,
       "exp_pts": 5.41,
       "exp_gd": 5.08,
@@ -802,15 +802,15 @@
     "COD": {
       "p_rank": [
         0.0,
-        0.0008,
-        0.6869,
-        0.3123
+        0.001,
+        0.6836,
+        0.3154
       ],
-      "p_top2": 0.0008,
-      "p_third_advance": 0.3077,
-      "p_advance": 0.3085,
+      "p_top2": 0.001,
+      "p_third_advance": 0.3049,
+      "p_advance": 0.3059,
       "exp_pts": 2.3,
-      "exp_gd": -1.01,
+      "exp_gd": -1.02,
       "current": {
         "pts": 1,
         "gd": -1,
@@ -822,14 +822,14 @@
       "p_rank": [
         0.0,
         0.0,
-        0.3123,
-        0.6877
+        0.3154,
+        0.6846
       ],
       "p_top2": 0.0,
-      "p_third_advance": 0.0007,
-      "p_advance": 0.0007,
+      "p_third_advance": 0.0002,
+      "p_advance": 0.0002,
       "exp_pts": 1.32,
-      "exp_gd": -6.99,
+      "exp_gd": -6.98,
       "current": {
         "pts": 0,
         "gd": -7,
@@ -839,15 +839,15 @@
     },
     "COL": {
       "p_rank": [
-        0.6232,
-        0.3768,
+        0.624,
+        0.376,
         0.0,
         0.0
       ],
       "p_top2": 1.0,
       "p_third_advance": 0.0,
       "p_advance": 1.0,
-      "exp_pts": 7.31,
+      "exp_pts": 7.3,
       "exp_gd": 2.92,
       "current": {
         "pts": 6,
@@ -860,13 +860,13 @@
   "L": {
     "ENG": {
       "p_rank": [
-        0.8415,
-        0.1581,
-        0.0004,
+        0.8419,
+        0.1576,
+        0.0005,
         0.0
       ],
-      "p_top2": 0.9996,
-      "p_third_advance": 0.0004,
+      "p_top2": 0.9995,
+      "p_third_advance": 0.0005,
       "p_advance": 1.0,
       "exp_pts": 6.58,
       "exp_gd": 4.06,
@@ -879,16 +879,16 @@
     },
     "CRO": {
       "p_rank": [
-        0.1243,
-        0.5406,
-        0.3351,
+        0.1238,
+        0.5396,
+        0.3367,
         0.0
       ],
-      "p_top2": 0.6649,
-      "p_third_advance": 0.2731,
-      "p_advance": 0.938,
+      "p_top2": 0.6634,
+      "p_third_advance": 0.2556,
+      "p_advance": 0.9189,
       "exp_pts": 5.21,
-      "exp_gd": 0.25,
+      "exp_gd": 0.24,
       "current": {
         "pts": 3,
         "gd": -1,
@@ -898,16 +898,16 @@
     },
     "GHA": {
       "p_rank": [
-        0.0342,
-        0.3014,
-        0.6645,
+        0.0343,
+        0.3028,
+        0.6629,
         0.0
       ],
-      "p_top2": 0.3356,
-      "p_third_advance": 0.6645,
+      "p_top2": 0.3371,
+      "p_third_advance": 0.6629,
       "p_advance": 1.0,
       "exp_pts": 4.57,
-      "exp_gd": -0.25,
+      "exp_gd": -0.24,
       "current": {
         "pts": 4,
         "gd": 1,
