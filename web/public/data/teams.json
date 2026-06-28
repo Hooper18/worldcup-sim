@@ -195,7 +195,7 @@
     "name_zh": "比利时",
     "name_en": "Belgium",
     "group": "G",
-    "elo": 1938,
+    "elo": 1961,
     "fifa_rank": null,
     "host": false
   },
@@ -203,7 +203,7 @@
     "name_zh": "埃及",
     "name_en": "Egypt",
     "group": "G",
-    "elo": 1857,
+    "elo": 1860,
     "fifa_rank": null,
     "host": false
   },
@@ -211,7 +211,7 @@
     "name_zh": "伊朗",
     "name_en": "IR Iran",
     "group": "G",
-    "elo": 1888,
+    "elo": 1885,
     "fifa_rank": null,
     "host": false
   },
@@ -219,7 +219,7 @@
     "name_zh": "新西兰",
     "name_en": "New Zealand",
     "group": "G",
-    "elo": 1709,
+    "elo": 1685,
     "fifa_rank": null,
     "host": false
   },
@@ -227,7 +227,7 @@
     "name_zh": "西班牙",
     "name_en": "Spain",
     "group": "H",
-    "elo": 2196,
+    "elo": 2207,
     "fifa_rank": null,
     "host": false
   },
@@ -243,7 +243,7 @@
     "name_zh": "沙特阿拉伯",
     "name_en": "Saudi Arabia",
     "group": "H",
-    "elo": 1710,
+    "elo": 1709,
     "fifa_rank": null,
     "host": false
   },
@@ -251,7 +251,7 @@
     "name_zh": "乌拉圭",
     "name_en": "Uruguay",
     "group": "H",
-    "elo": 1933,
+    "elo": 1922,
     "fifa_rank": null,
     "host": false
   },
@@ -259,7 +259,7 @@
     "name_zh": "法国",
     "name_en": "France",
     "group": "I",
-    "elo": 2152,
+    "elo": 2185,
     "fifa_rank": null,
     "host": false
   },
@@ -267,7 +267,7 @@
     "name_zh": "塞内加尔",
     "name_en": "Senegal",
     "group": "I",
-    "elo": 1870,
+    "elo": 1904,
     "fifa_rank": null,
     "host": false
   },
@@ -275,7 +275,7 @@
     "name_zh": "伊拉克",
     "name_en": "Iraq",
     "group": "I",
-    "elo": 1707,
+    "elo": 1674,
     "fifa_rank": null,
     "host": false
   },
@@ -283,7 +283,7 @@
     "name_zh": "挪威",
     "name_en": "Norway",
     "group": "I",
-    "elo": 2014,
+    "elo": 1981,
     "fifa_rank": null,
     "host": false
   },
@@ -291,7 +291,7 @@
     "name_zh": "阿根廷",
     "name_en": "Argentina",
     "group": "J",
-    "elo": 2220,
+    "elo": 2225,
     "fifa_rank": null,
     "host": false
   },
@@ -299,7 +299,7 @@
     "name_zh": "阿尔及利亚",
     "name_en": "Algeria",
     "group": "J",
-    "elo": 1888,
+    "elo": 1889,
     "fifa_rank": null,
     "host": false
   },
@@ -307,7 +307,7 @@
     "name_zh": "奥地利",
     "name_en": "Austria",
     "group": "J",
-    "elo": 1905,
+    "elo": 1904,
     "fifa_rank": null,
     "host": false
   },
@@ -315,7 +315,7 @@
     "name_zh": "约旦",
     "name_en": "Jordan",
     "group": "J",
-    "elo": 1724,
+    "elo": 1719,
     "fifa_rank": null,
     "host": false
   },
@@ -323,7 +323,7 @@
     "name_zh": "葡萄牙",
     "name_en": "Portugal",
     "group": "K",
-    "elo": 2050,
+    "elo": 2054,
     "fifa_rank": null,
     "host": false
   },
@@ -331,7 +331,7 @@
     "name_zh": "刚果（金）",
     "name_en": "Congo DR",
     "group": "K",
-    "elo": 1774,
+    "elo": 1819,
     "fifa_rank": null,
     "host": false
   },
@@ -339,7 +339,7 @@
     "name_zh": "乌兹别克斯坦",
     "name_en": "Uzbekistan",
     "group": "K",
-    "elo": 1776,
+    "elo": 1730,
     "fifa_rank": null,
     "host": false
   },
@@ -347,7 +347,7 @@
     "name_zh": "哥伦比亚",
     "name_en": "Colombia",
     "group": "K",
-    "elo": 2088,
+    "elo": 2085,
     "fifa_rank": null,
     "host": false
   },
@@ -355,7 +355,7 @@
     "name_zh": "英格兰",
     "name_en": "England",
     "group": "L",
-    "elo": 2093,
+    "elo": 2105,
     "fifa_rank": null,
     "host": false
   },
@@ -363,7 +363,7 @@
     "name_zh": "克罗地亚",
     "name_en": "Croatia",
     "group": "L",
-    "elo": 1956,
+    "elo": 1967,
     "fifa_rank": null,
     "host": false
   },
@@ -371,7 +371,7 @@
     "name_zh": "加纳",
     "name_en": "Ghana",
     "group": "L",
-    "elo": 1697,
+    "elo": 1686,
     "fifa_rank": null,
     "host": false
   },
@@ -379,7 +379,7 @@
     "name_zh": "巴拿马",
     "name_en": "Panama",
     "group": "L",
-    "elo": 1775,
+    "elo": 1762,
     "fifa_rank": null,
     "host": false
   }
