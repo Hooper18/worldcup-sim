@@ -514,8 +514,8 @@
         0.0
       ],
       "p_top2": 0.0,
-      "p_third_advance": 0.7028,
-      "p_advance": 0.7028,
+      "p_third_advance": 0.0,
+      "p_advance": 0.0,
       "exp_pts": 3.0,
       "exp_gd": 0.0,
       "current": {
@@ -712,51 +712,51 @@
       "p_top2": 1.0,
       "p_third_advance": 0.0,
       "p_advance": 1.0,
-      "exp_pts": 8.63,
-      "exp_gd": 7.15,
+      "exp_pts": 9.0,
+      "exp_gd": 7.0,
       "current": {
-        "pts": 6,
-        "gd": 5,
-        "gf": 5,
-        "played": 2
+        "pts": 9,
+        "gd": 7,
+        "gf": 8,
+        "played": 3
       }
     },
     "ALG": {
       "p_rank": [
         0.0,
-        0.3148,
-        0.6852,
+        0.0,
+        1.0,
         0.0
       ],
-      "p_top2": 0.3148,
-      "p_third_advance": 0.2972,
-      "p_advance": 0.612,
-      "exp_pts": 4.24,
-      "exp_gd": -2.14,
+      "p_top2": 0.0,
+      "p_third_advance": 1.0,
+      "p_advance": 1.0,
+      "exp_pts": 4.0,
+      "exp_gd": -2.0,
       "current": {
-        "pts": 3,
+        "pts": 4,
         "gd": -2,
-        "gf": 2,
-        "played": 2
+        "gf": 5,
+        "played": 3
       }
     },
     "AUT": {
       "p_rank": [
         0.0,
-        0.6852,
-        0.3148,
+        1.0,
+        0.0,
         0.0
       ],
-      "p_top2": 0.6852,
+      "p_top2": 1.0,
       "p_third_advance": 0.0,
-      "p_advance": 0.6852,
-      "exp_pts": 4.46,
-      "exp_gd": 0.14,
+      "p_advance": 1.0,
+      "exp_pts": 4.0,
+      "exp_gd": 0.0,
       "current": {
-        "pts": 3,
+        "pts": 4,
         "gd": 0,
-        "gf": 3,
-        "played": 2
+        "gf": 6,
+        "played": 3
       }
     },
     "JOR": {
@@ -769,13 +769,13 @@
       "p_top2": 0.0,
       "p_third_advance": 0.0,
       "p_advance": 0.0,
-      "exp_pts": 0.24,
-      "exp_gd": -5.15,
+      "exp_pts": 0.0,
+      "exp_gd": -5.0,
       "current": {
         "pts": 0,
-        "gd": -3,
-        "gf": 2,
-        "played": 2
+        "gd": -5,
+        "gf": 3,
+        "played": 3
       }
     }
   },
