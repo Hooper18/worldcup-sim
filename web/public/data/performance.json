@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-27T08:44:40Z",
+  "generated_at": "2026-06-28T03:58:29Z",
   "cutoff": "2026-06-11",
   "n_scored": 60,
-  "n_finished": 66,
-  "n_skipped": 6,
+  "n_finished": 70,
+  "n_skipped": 10,
   "per_match": [
     {
       "id": 1,
