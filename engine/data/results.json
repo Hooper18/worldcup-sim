@@ -365,5 +365,12 @@
     "after": "FT",
     "home": "RSA",
     "away": "CAN"
+  },
+  "76": {
+    "h": 2,
+    "a": 1,
+    "after": "FT",
+    "home": "BRA",
+    "away": "JPN"
   }
 }

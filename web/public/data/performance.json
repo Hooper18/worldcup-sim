@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-28T23:00:14Z",
+  "generated_at": "2026-06-29T21:24:06Z",
   "cutoff": "2026-06-11",
-  "n_scored": 72,
-  "n_finished": 73,
+  "n_scored": 73,
+  "n_finished": 74,
   "n_skipped": 1,
   "per_match": [
     {
@@ -1732,25 +1732,49 @@
       },
       "rps": 0.288,
       "hit": false
+    },
+    {
+      "id": 73,
+      "group": null,
+      "kickoff_utc": "2026-06-28T19:00:00Z",
+      "home": "RSA",
+      "away": "CAN",
+      "pred": {
+        "p_home": 0.2067,
+        "p_draw": 0.2947,
+        "p_away": 0.4986,
+        "pick": "away",
+        "top_score": {
+          "h": 0,
+          "a": 1
+        }
+      },
+      "actual": {
+        "h": 0,
+        "a": 1,
+        "outcome": "away"
+      },
+      "rps": 0.1471,
+      "hit": true
     }
   ],
   "fused": {
     "rps": 0.1531,
-    "brier": 0.5078,
-    "log_loss": 0.8537,
-    "hit_rate": 0.5972
+    "brier": 0.5061,
+    "log_loss": 0.8516,
+    "hit_rate": 0.6027
   },
   "elo_baseline": {
-    "rps": 0.1684,
-    "brier": 0.5429,
-    "log_loss": 0.9161,
-    "hit_rate": 0.5833
+    "rps": 0.1678,
+    "brier": 0.54,
+    "log_loss": 0.9122,
+    "hit_rate": 0.589
   },
   "climatology": {
-    "rps": 0.2242,
-    "brier": 0.649,
-    "log_loss": 1.0736,
-    "hit_rate": 0.4722
+    "rps": 0.2253,
+    "brier": 0.6495,
+    "log_loss": 1.074,
+    "hit_rate": 0.4658
   },
   "cumulative": [
     {
@@ -2256,6 +2280,13 @@
       "fused_rps": 0.1531,
       "elo_rps": 0.1684,
       "clim_rps": 0.2242
+    },
+    {
+      "id": 73,
+      "n": 73,
+      "fused_rps": 0.1531,
+      "elo_rps": 0.1678,
+      "clim_rps": 0.2253
     }
   ]
 }
