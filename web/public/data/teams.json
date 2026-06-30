@@ -67,7 +67,7 @@
     "name_zh": "巴西",
     "name_en": "Brazil",
     "group": "C",
-    "elo": 2094,
+    "elo": 2115,
     "fifa_rank": null,
     "host": false
   },
@@ -75,7 +75,7 @@
     "name_zh": "摩洛哥",
     "name_en": "Morocco",
     "group": "C",
-    "elo": 2022,
+    "elo": 2024,
     "fifa_rank": null,
     "host": false
   },
@@ -107,7 +107,7 @@
     "name_zh": "巴拉圭",
     "name_en": "Paraguay",
     "group": "D",
-    "elo": 1900,
+    "elo": 1908,
     "fifa_rank": null,
     "host": false
   },
@@ -131,7 +131,7 @@
     "name_zh": "德国",
     "name_en": "Germany",
     "group": "E",
-    "elo": 1996,
+    "elo": 1987,
     "fifa_rank": null,
     "host": false
   },
@@ -163,7 +163,7 @@
     "name_zh": "荷兰",
     "name_en": "Netherlands",
     "group": "F",
-    "elo": 2046,
+    "elo": 2044,
     "fifa_rank": null,
     "host": false
   },
@@ -171,7 +171,7 @@
     "name_zh": "日本",
     "name_en": "Japan",
     "group": "F",
-    "elo": 1992,
+    "elo": 1971,
     "fifa_rank": null,
     "host": false
   },

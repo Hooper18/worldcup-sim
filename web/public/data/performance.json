@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-30T03:47:52Z",
+  "generated_at": "2026-06-30T07:55:45Z",
   "cutoff": "2026-06-11",
-  "n_scored": 73,
-  "n_finished": 75,
-  "n_skipped": 2,
+  "n_scored": 76,
+  "n_finished": 76,
+  "n_skipped": 0,
   "per_match": [
     {
       "id": 1,
@@ -1756,25 +1756,97 @@
       },
       "rps": 0.1471,
       "hit": true
+    },
+    {
+      "id": 74,
+      "group": null,
+      "kickoff_utc": "2026-06-29T20:30:00Z",
+      "home": "GER",
+      "away": "PAR",
+      "pred": {
+        "p_home": 0.5226,
+        "p_draw": 0.2721,
+        "p_away": 0.2053,
+        "pick": "home",
+        "top_score": {
+          "h": 1,
+          "a": 0
+        }
+      },
+      "actual": {
+        "h": 1,
+        "a": 1,
+        "outcome": "draw"
+      },
+      "rps": 0.1576,
+      "hit": false
+    },
+    {
+      "id": 75,
+      "group": null,
+      "kickoff_utc": "2026-06-30T01:00:00Z",
+      "home": "NED",
+      "away": "MAR",
+      "pred": {
+        "p_home": 0.3368,
+        "p_draw": 0.326,
+        "p_away": 0.3372,
+        "pick": "away",
+        "top_score": {
+          "h": 0,
+          "a": 0
+        }
+      },
+      "actual": {
+        "h": 1,
+        "a": 1,
+        "outcome": "draw"
+      },
+      "rps": 0.1136,
+      "hit": false
+    },
+    {
+      "id": 76,
+      "group": null,
+      "kickoff_utc": "2026-06-29T17:00:00Z",
+      "home": "BRA",
+      "away": "JPN",
+      "pred": {
+        "p_home": 0.4703,
+        "p_draw": 0.2895,
+        "p_away": 0.2402,
+        "pick": "home",
+        "top_score": {
+          "h": 1,
+          "a": 0
+        }
+      },
+      "actual": {
+        "h": 2,
+        "a": 1,
+        "outcome": "home"
+      },
+      "rps": 0.1691,
+      "hit": true
     }
   ],
   "fused": {
-    "rps": 0.1531,
-    "brier": 0.5061,
-    "log_loss": 0.8516,
-    "hit_rate": 0.6027
+    "rps": 0.1528,
+    "brier": 0.5118,
+    "log_loss": 0.8598,
+    "hit_rate": 0.5921
   },
   "elo_baseline": {
-    "rps": 0.1678,
-    "brier": 0.54,
-    "log_loss": 0.9122,
-    "hit_rate": 0.589
+    "rps": 0.1668,
+    "brier": 0.5437,
+    "log_loss": 0.9175,
+    "hit_rate": 0.5789
   },
   "climatology": {
-    "rps": 0.2253,
-    "brier": 0.6495,
-    "log_loss": 1.074,
-    "hit_rate": 0.4658
+    "rps": 0.223,
+    "brier": 0.6521,
+    "log_loss": 1.0782,
+    "hit_rate": 0.4605
   },
   "cumulative": [
     {
@@ -1879,7 +1951,7 @@
       "id": 15,
       "n": 15,
       "fused_rps": 0.2097,
-      "elo_rps": 0.2396,
+      "elo_rps": 0.2397,
       "clim_rps": 0.1925
     },
     {
@@ -2287,6 +2359,27 @@
       "fused_rps": 0.1531,
       "elo_rps": 0.1678,
       "clim_rps": 0.2253
+    },
+    {
+      "id": 74,
+      "n": 74,
+      "fused_rps": 0.1531,
+      "elo_rps": 0.1674,
+      "clim_rps": 0.224
+    },
+    {
+      "id": 75,
+      "n": 75,
+      "fused_rps": 0.1526,
+      "elo_rps": 0.1668,
+      "clim_rps": 0.2229
+    },
+    {
+      "id": 76,
+      "n": 76,
+      "fused_rps": 0.1528,
+      "elo_rps": 0.1668,
+      "clim_rps": 0.223
     }
   ]
 }
