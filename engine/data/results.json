@@ -366,6 +366,14 @@
     "home": "RSA",
     "away": "CAN"
   },
+  "74": {
+    "h": 1,
+    "a": 1,
+    "after": "PEN",
+    "home": "GER",
+    "away": "PAR",
+    "pen_winner": "away"
+  },
   "76": {
     "h": 2,
     "a": 1,
