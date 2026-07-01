@@ -402,5 +402,12 @@
     "after": "FT",
     "home": "CIV",
     "away": "NOR"
+  },
+  "79": {
+    "h": 2,
+    "a": 0,
+    "after": "FT",
+    "home": "MEX",
+    "away": "ECU"
   }
 }

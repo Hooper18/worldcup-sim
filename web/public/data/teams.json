@@ -3,7 +3,7 @@
     "name_zh": "墨西哥",
     "name_en": "Mexico",
     "group": "A",
-    "elo": 1998,
+    "elo": 2029,
     "fifa_rank": null,
     "host": true
   },
@@ -147,7 +147,7 @@
     "name_zh": "科特迪瓦",
     "name_en": "Côte d'Ivoire",
     "group": "E",
-    "elo": 1863,
+    "elo": 1843,
     "fifa_rank": null,
     "host": false
   },
@@ -155,7 +155,7 @@
     "name_zh": "厄瓜多尔",
     "name_en": "Ecuador",
     "group": "E",
-    "elo": 1991,
+    "elo": 1959,
     "fifa_rank": null,
     "host": false
   },
@@ -179,7 +179,7 @@
     "name_zh": "瑞典",
     "name_en": "Sweden",
     "group": "F",
-    "elo": 1809,
+    "elo": 1798,
     "fifa_rank": null,
     "host": false
   },
@@ -259,7 +259,7 @@
     "name_zh": "法国",
     "name_en": "France",
     "group": "I",
-    "elo": 2185,
+    "elo": 2196,
     "fifa_rank": null,
     "host": false
   },
@@ -283,7 +283,7 @@
     "name_zh": "挪威",
     "name_en": "Norway",
     "group": "I",
-    "elo": 1981,
+    "elo": 2001,
     "fifa_rank": null,
     "host": false
   },
