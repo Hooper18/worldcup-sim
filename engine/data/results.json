@@ -389,6 +389,13 @@
     "home": "BRA",
     "away": "JPN"
   },
+  "77": {
+    "h": 3,
+    "a": 0,
+    "after": "FT",
+    "home": "FRA",
+    "away": "SWE"
+  },
   "78": {
     "h": 1,
     "a": 2,
